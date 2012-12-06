@@ -1,32 +1,42 @@
-var app = angular.module('projectplan', ['mongolab_service']);
+var app = angular.module('projectplan', ['mongorest_service','mongo_stats_service']);
 
 app.config(function($routeProvider) {
   
-  $routeProvider.when('/add/project', {
+  $routeProvider.when('/project/create', {
     controller:CreateProjectController, 
     templateUrl:'static/project_form.html'
   });    	
   
-  
-  $routeProvider.when('/edit/project/:projectId', {
+  $routeProvider.when('/project/edit/:projectId', {
     controller:ProjectController, 
     templateUrl:'static/project_form.html'
-  });    	
+  });    
   
+  $routeProvider.when('/project/list', {
+    controller:ProjectListController, 
+    templateUrl:'static/project_list.html'
+  });
+  	
   $routeProvider.when('/projects/:year', {
     controller:ProjectListByYearController, 
-    templateUrl:'static/index.html'
+    templateUrl:'static/project_list.html'
   });    	
-  
+
   $routeProvider.when('/', {
-    controller:ProjectListController, 
+    controller:DBController,  
     templateUrl:'static/index.html'
-  });    	
+  }); 
+  
 });
+
+function DBController($scope, $routeParams, MongoStats) {
+  $scope.db = MongoStats.info();
+};
 
 function ProjectController($scope, $routeParams, $location, Project) {
   var self = this;
   
+  /*
   Project.get({id:$routeParams.projectId}, function(response) {
     self.original = response;
     $scope.project = new Project(self.original);
@@ -45,23 +55,65 @@ function ProjectController($scope, $routeParams, $location, Project) {
       $location.path('/');
     });
   };
-}
+  */
+  
+  
+  Project.get({document:$routeParams.projectId}, function(response) {
+    $scope.project = response; 
+  });
 
-
-function CreateProjectController($scope, $location, Project) {
-  $scope.save = function() {    
-    Project.save($scope.project, function(response) {
-      $location.path('/');
+  /*
+  $scope.add_field = function() { 
+    console.log("add_field");
+    $scope.schema.fields.push({'name':'', 'title':''});
+    
+  }
+  */
+  
+  $scope.save = function () {		
+    Project.update({      
+      document:$routeParams.projectId
+    }, angular.extend({}, $scope.project,
+      {_id:undefined}), function(result) {
+      $scope.save_result = result;
+      if(result.ok) {
+        //var obj = angular.extend({},$scope.schema,{_id:$routeParams.id});
+        //angular.copy(obj,self.currentDocument);
+        $location.path('/project/list');
+      } else {
+        console.log("not");
+      }
     });    
-  };  
+  };
+  
+  /*
+  $scope.del_field = function(idx) {
+    $scope.schema.fields.splice(idx,1);
+  }
+  */
+  
 }
 
-
-function ProjectListController($scope, Project) {
-  $scope.project_list = Project.query();    
+function CreateProjectController($scope, $location, Project, $routeParams) {
+  var self=this;
+  
+  $scope.save = function () {
+    Project.save($scope.project,function(result) { 
+      console.log(result);
+      $location.path('/project/list');
+    });
+  }; 
 }
 
-function ProjectListByYearController($scope, $routeParams, Project) {
+function ProjectListController($scope, $routeParams, Project, MongoStats) {
+  
+  $scope.project_list = Project.query(); 
+  console.log($scope.project_list );
+  $scope.stats = MongoStats.info();
+     
+}
+
+function ProjectListByYearController($scope, $routeParams, Project, MongoStats) {
   Project.query(function(response) {
     var project_list = [];
     for(var idx=0;idx<response.length;idx++) {      
@@ -75,7 +127,7 @@ function ProjectListByYearController($scope, $routeParams, Project) {
 }
 
 
-function YearListController($scope, $location, Project) {
+function YearListController($scope, $location, $routeParams,Project, MongoStats) {
   Project.query(function(response) {
     var years = {}; // {'2556':1}
     var year_list = [];

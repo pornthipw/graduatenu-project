@@ -1,7 +1,11 @@
 var express = require("express");
 var handlebars = require("hbs");
+var mongodb = require('mongodb');
+var _ = require('underscore');
 
+var routes = require('./routes');
 var config = require('./config');
+//var utils = require('./utils');
 
 
 var app = express();

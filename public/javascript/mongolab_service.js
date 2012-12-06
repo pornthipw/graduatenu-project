@@ -1,5 +1,5 @@
 var app = angular.module('mongolab_service', ['ngResource']);
-
+/*
 app.factory('Project', function($resource) {
     var Project  = $resource('https://api.mongolab.com/api/1/databases/projectplan/collections/project/:id', {
       id:'@id',
@@ -17,4 +17,21 @@ app.factory('Project', function($resource) {
       };
     
     return Project;
+});
+*/
+factory('Project', function($resource) {
+  var Project = $resource('http://www.db.grad.nu.ac.th/apps/mongodb/databases/projectplan/collections/project/:document', {    
+    document: '@document'
+  },
+  {update: { method:'PUT' }});
+  return MongoDB;
+});
+
+angular.module('mongo_stats_service', ['ngResource']).
+factory('MongoStats', function($resource) {
+  var MongoStats = $resource('http://www.db.grad.nu.ac.th/apps/mongodb/stats/projectplan/project', {
+    collection: '@collection'
+  },
+  {info: { method:'GET' }});
+  return MongoStats;
 });

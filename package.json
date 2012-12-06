@@ -3,7 +3,10 @@
   "version" : "0.0.1",
   "dependencies" : {
     "express" : "*",        
-    "hbs" : "*"    
+    "hbs" : "*" ,
+    "underscore" : "*",
+    "mongodb" : "*",
+    "underscore" : "*"
   }
 }
 
