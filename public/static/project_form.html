@@ -6,6 +6,13 @@
       <input type="text" id="inputYear" placeholder="Year" ng-model="project.year">
     </div>
   </div>
+  
+  <div class="control-group">
+    <label class="control-label" for="inputPid">รหัสโครงการ: </label>
+    <div class="controls">
+      <input type="text" id="inputPid" placeholder="Name" ng-model="project.pid">
+    </div>
+  </div>
 
   <div class="control-group">
     <label class="control-label" for="inputName">ชื่อโครงการ: </label>
@@ -137,7 +144,7 @@
   <div class="control-group">
         <div class="controls">
           <button ng-click="save()" class="btn btn-primary" type="submit"> <i class="icon-ok icon-white"></i> Save</button>
-          <button ng-click="destroy()" ng-show="project._id" class="btn btn-success"><i class="icon-remove icon-white"></i> Delete</button>
+          <button ng-click="del()"  class="btn btn-success"><i class="icon-remove icon-white"></i> Delete</button>
               <a href="#/" class="btn btn-danger"><i class="icon-ban-circle icon-white"></i> Cancel</a> 
          </div>
   </div>

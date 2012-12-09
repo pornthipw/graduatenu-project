@@ -5,7 +5,12 @@ app.config(function($routeProvider) {
   $routeProvider.when('/project/create', {
     controller:CreateProjectController, 
     templateUrl:'static/project_form.html'
-  });    	
+  });    
+  
+  $routeProvider.when('/project/task/:projectId', {
+    controller:TaskController, 
+    templateUrl:'static/task_form.html'
+  }); 	
   
   $routeProvider.when('/project/edit/:projectId', {
     controller:ProjectController, 
@@ -29,16 +34,61 @@ app.config(function($routeProvider) {
   
 });
 
+function TaskController($scope, $routeParams, $location, Project) {
+  
+  var self = this;
+  Project.get({document:$routeParams.projectId},function (response) {
+        $scope.project = response;
+    console.log($scope.project._id);
+    if (response) {
+      //Project.query({query:'{"docID":"$scope.doc ._id"}'}, function (result) {
+        Project.query({docID:$scope.project._id}, function (result) {
+          $scope.task_list = result;
+        });
+    }
+  });
+  
+  $scope.task_save = function () {    
+    if(!$scope.task._id) {
+      Project.save({_id:undefined},angular.extend({}, 
+        $scope.task,
+        {_id:undefined,docID:$routeParams.projectId}),function(result) { 
+        console.log(result);
+        if(result.ok) {
+          Project.query({docID:$scope.project._id}, function (result) {
+            $scope.task_list = result;
+          });
+        }
+      });
+    } else {
+      
+    }
+
+  };
+  
+  $scope.remove_task = function (task_id) {
+    Project.delete({
+      document:task_id
+    },function(result) {            
+      if(result.ok) { 
+         Project.query({docID:$scope.project._id}, function (result) {
+          $scope.task_list = result;
+        });
+      }
+    });
+  };
+  
+    //$scope.task_list = Project.quey({query:'{}'});
+    
+}
+
 function DBController($scope, $routeParams, MongoStats) {
   $scope.db = MongoStats.info();
 };
 
 function ProjectController($scope, $routeParams, $location, Project) {
   var self = this;
-  
-  Project.get({document:$routeParams.projectId}, function(response) {
-    $scope.project = response; 
-  });
+   $scope.project = Project.get({document:$routeParams.projectId});
 
   /*
   $scope.add_field = function() { 
@@ -69,6 +119,15 @@ function ProjectController($scope, $routeParams, $location, Project) {
     $scope.schema.fields.splice(idx,1);
   }
   */
+  $scope.del = function(){
+    Project.delete({
+      document:$routeParams.projectId
+    },function(result) {            
+      if(result.ok) {        
+        $location.path('/project/list');
+      }
+    });
+  };
   
 }
 
@@ -81,6 +140,7 @@ function CreateProjectController($scope, $location, Project, $routeParams) {
       $location.path('/project/list');
     });
   }; 
+
 }
 
 function ProjectListController($scope, $routeParams, Project, MongoStats) {

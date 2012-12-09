@@ -17,8 +17,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="project in project_list |  filter:search ">
-          <td><a href="#/project/edit/{{project._id}}">{{project.name}}</a></td>        
+        <tr ng-repeat="project in project_list |  filter:search " ng-hide="project.docID" >
+          <td><a href="#/project/edit/{{project._id}}" >{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-tasks"></i></a></td>        
           <td>{{project.date_manage}}</td>  
           <td>{{project.place}}</td>     
           <td>{{project.money_use}}</td>    
