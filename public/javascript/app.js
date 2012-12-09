@@ -36,28 +36,6 @@ function DBController($scope, $routeParams, MongoStats) {
 function ProjectController($scope, $routeParams, $location, Project) {
   var self = this;
   
-  /*
-  Project.get({id:$routeParams.projectId}, function(response) {
-    self.original = response;
-    $scope.project = new Project(self.original);
-    //console.log(response);
-  }); 
-  
-  $scope.save = function() {        
-    $scope.project.update(function() {
-      $location.path('/');
-    });    
-  };     
-  
-  $scope.destroy = function() {
-    self.original.destroy(function(response) {
-      console.log(response);
-      $location.path('/');
-    });
-  };
-  */
-  
-  
   Project.get({document:$routeParams.projectId}, function(response) {
     $scope.project = response; 
   });
