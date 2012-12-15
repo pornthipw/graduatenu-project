@@ -58,40 +58,33 @@ var UserProfile = function(config) {
     });
   };   
   
-  this.addrole = function(identifier,role_name,callback) {
-    spec = {'identifier':identifier}; 
-    console.log(spec);
-    var name = role_name;
+  this.addrole = function(user,role, callback) {
+    var name = role;
     pool.acquire(function(err,db) {
       db.collection(config.collection_name, function(err, collection) {
-         collection.findOne(spec, function(err, profile) {
-            if(!profile) {
-              spec['role'] = [name];
-              collection.insert(spec, function(err, result) {               
-                if(callback) {                        
-                  pool.release(db);
-                  callback(profile);
-                }
-              });
-            } else {                                       
-             if(profile.role.indexOf(name) == -1) {
-               profile.role.push(name);
-               collection.save(profile, function(err, result) {
-                 if(callback) {
-                   pool.release(db);
-                   callback(profile);
-                 }
-               });
-             } else {
-               if(callback) {
-                 pool.release(db);
-                 callback(profile);
-               }
-             }             
-           } 
-          }); 
+        collection.findOne({'identifier':user.identifier}, function(err, profile) {
+          if(profile) {  
+            var idx = profile.role.indexOf(name);
+            if(idx != -1) {
+              user['role'] = [name];
+              collection.update({'identifier':user.identifier}, user, function(err, result) { 
+                pool.release(db);           
+                if(result) {                        
+                  callback(true,result);
+                } else {
+                  callback(false, null);                        
+                }   
+              }); 
+            }
+              
+          } else { 
+            pool.release(db);
+            callback(false, null);
+             } 
         });
-    });
+      });
+    });    
+
   };
 
   

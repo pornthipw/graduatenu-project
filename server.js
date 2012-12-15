@@ -133,13 +133,16 @@ app.get('/', function(req, res) {
 });
 
 app.get('/addrole', function(req, res) {
-  console.log(req.user);
-  userprofile.addrole(req.user.identifier, req.body.role_name,function(error) {
-      if (!error)  {
-        console.log("OK");
-      } else {
-        console.log("No-OK");
-      }
+  //console.log(req.user);
+  console.log(req.user.identifier);
+  userprofile.addrole(req.user, 'admin', function(exists, profile) {
+    if(profile) {
+      console.log(profile);
+      //done(null, profile);
+    } else {
+      //done(null, null);
+      console.log("OK");
+    }
   });
   
 });
