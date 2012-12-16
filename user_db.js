@@ -58,24 +58,22 @@ var UserProfile = function(config) {
     });
   };   
   
-  this.addrole = function(user,role, callback) {
-    var name = role;
+  this.addrole = function(user,role_name, callback) {
+    var name = role_name;
     pool.acquire(function(err,db) {
       db.collection(config.collection_name, function(err, collection) {
         collection.findOne({'identifier':user.identifier}, function(err, profile) {
           if(profile) {  
             var idx = profile.role.indexOf(name);
-            if(idx != -1) {
-              user['role'] = [name];
-              collection.update({'identifier':user.identifier}, user, function(err, result) { 
-                pool.release(db);           
-                if(result) {                        
-                  callback(true,result);
-                } else {
-                  callback(false, null);                        
-                }   
-              }); 
-            }
+            user['role'] = [name];
+            collection.update({'identifier':user.identifier}, user, function(err, result) { 
+              pool.release(db);           
+              if(result) {                        
+                callback(true,result);
+              } else {
+                callback(false, null);                        
+              }   
+            }); 
               
           } else { 
             pool.release(db);

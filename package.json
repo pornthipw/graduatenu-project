@@ -10,7 +10,8 @@
     "mongo-ac" : "*",
     "passport" : "*",
     "passport-openid" : "*",
-    "generic-pool" : "*"
+    "generic-pool" : "*",
+    "mongo-connect":"*"
   }
 }
 

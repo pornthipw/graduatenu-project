@@ -1,9 +1,11 @@
 var express = require("express");
 var handlebars = require("hbs");
-var mongodb = require('mongodb');
+//var mongodb = require('mongodb');
 var _ = require('underscore');
 var passport = require('passport');
 var mongoac = require("mongo-ac");
+var mongo_con = require("mongo-connect");
+
 
 var userdb = require('./user_db');
 
@@ -28,9 +30,16 @@ var access_control = new mongoac.MongoAC({
   	collection_name:config.authorization.mongodb.collection
 });
 
+var mongo = mongo_con.Mongo({
+  //host:'10.10.20.75',
+  host:'localhost',
+  db:'projectplan'
+});
+
 app.configure(function() {
 	app.use(express.cookieParser());
   	app.use(express.bodyParser());
+    app.use(express.favicon());
   	app.use(express.static(__dirname + '/public'));    
   	app.set('views', __dirname + '/views');
   	app.engine('html', handlebars.__express);  
@@ -146,6 +155,11 @@ app.get('/addrole', function(req, res) {
   });
   
 });
+
+app.get('/query/:collection', mongo.query);
+app.post('/query/:collection', mongo.insert);
+app.put('/query/:collection/:id', mongo.update);
+app.del('/query/:collection/:id', mongo.delete);
 
 app.listen(config.site.port || 3000);
 

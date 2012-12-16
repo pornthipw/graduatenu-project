@@ -1,4 +1,4 @@
-var app = angular.module('projectplan', ['mongorest_service','mongo_stats_service']);
+var app = angular.module('projectplan', ['mongorest_service']);
 
 app.config(function($routeProvider) {
   
@@ -34,16 +34,13 @@ app.config(function($routeProvider) {
   
 });
 
-
-
-
 function TaskController($scope, $routeParams, $location, Project) {
 	$scope.views = {
    	project_form : 'static/project_form.html'
   	}  
   	
   	var self = this;
-		Project.get({document:$routeParams.projectId},function (response) {
+		Project.get({id:$routeParams.projectId},function (response) {
       	$scope.project = response;
     		console.log($scope.project._id);
     		if (response) {
@@ -83,7 +80,7 @@ function TaskController($scope, $routeParams, $location, Project) {
   
   	$scope.save = function () {		
    	Project.update({      
-      	document:$routeParams.projectId
+      	id:$routeParams.projectId
     		}, angular.extend({}, $scope.project,
       		{_id:undefined}), function(result) {
       			$scope.save_result = result;
@@ -99,7 +96,7 @@ function TaskController($scope, $routeParams, $location, Project) {
   
 	$scope.del = function() {
    	Project.delete({
-      	document:$routeParams.projectId
+      	id:$routeParams.projectId
     		},function(result) {
       		console.log(result);        
       		if(result.ok) {        
@@ -111,8 +108,8 @@ function TaskController($scope, $routeParams, $location, Project) {
     
 }
 
-function DBController($scope, $routeParams, MongoStats,$http ) {
-	$scope.db = MongoStats.info();
+function DBController($scope, $routeParams,$http ) {
+	//$scope.db = MongoStats.info();
 	 //$scope.user = {username:'pk'};
   $scope.allow= function() {        
     $http.post('mongo-ac/allow', {user:$scope.user, url:$scope.url, method:$scope.method}).success(function(result) {
@@ -153,7 +150,7 @@ function DBController($scope, $routeParams, MongoStats,$http ) {
   }; 
 	};
 
-function ProjectController($scope, $routeParams, $location, Project, User) {
+function ProjectController($scope, $routeParams, $location, Project) {
 	var self = this;
    $scope.project = Project.get({document:$routeParams.projectId});
 
@@ -166,7 +163,7 @@ function ProjectController($scope, $routeParams, $location, Project, User) {
   
 	$scope.save = function () {		
    	Project.update({      
-      	document:$routeParams.projectId
+      	id:$routeParams.projectId
     		}, angular.extend({}, $scope.project,
       		{_id:undefined}), function(result) {
       			$scope.save_result = result;
@@ -209,15 +206,15 @@ function CreateProjectController($scope, $location, Project, $routeParams) {
   		}; 
 }
 
-function ProjectListController($scope, $routeParams, Project, MongoStats) {
+function ProjectListController($scope, $routeParams, Project) {
   
   $scope.project_list = Project.query(); 
   console.log($scope.project_list );
-  $scope.stats = MongoStats.info();
+  //$scope.stats = MongoStats.info();
      
 }
 
-function ProjectListByYearController($scope, $routeParams, Project, MongoStats) {
+function ProjectListByYearController($scope, $routeParams, Project) {
   Project.query(function(response) {
     var project_list = [];
     for(var idx=0;idx<response.length;idx++) {      
@@ -231,7 +228,7 @@ function ProjectListByYearController($scope, $routeParams, Project, MongoStats) 
 }
 
 
-function YearListController($scope, $location, $routeParams,Project, MongoStats) {
+function YearListController($scope, $location, $routeParams,Project) {
 	Project.query(function(response) {
     var years = {}; // {'2556':1}
     var year_list = [];
