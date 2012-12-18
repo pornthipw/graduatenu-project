@@ -2,8 +2,7 @@ var mongodb = require('mongodb');
 var BSON = require('mongodb').pure().BSON;
 var generic_pool = require('generic-pool');
 
-var UserProfile = function(config) {
-  
+var UserProfile = function(config) {  
   var pool = generic_pool.Pool({
     name: 'mongodb',
     max: 2,
@@ -35,7 +34,8 @@ var UserProfile = function(config) {
           } else {            
             collection.insert(user, function(err, result) {                            
               pool.release(db);
-              callback(false, result);
+              console.log(result);
+              callback(false, user);
             });
           }                    
         });
@@ -58,40 +58,62 @@ var UserProfile = function(config) {
     });
   };   
   
-  this.addrole = function(user,role_name, callback) {
-    var name = role_name;
+  this.add_role = function(identifier,role_name, callback) {    
     pool.acquire(function(err,db) {
       db.collection(config.collection_name, function(err, collection) {
-        collection.findOne({'identifier':user.identifier}, function(err, profile) {
-          if(profile) {  
-            var idx = profile.role.indexOf(name);
-            user['role'] = [name];
-            collection.update({'identifier':user.identifier}, user, function(err, result) { 
-              pool.release(db);           
-              if(result) {                        
-                callback(true,result);
-              } else {
-                callback(false, null);                        
-              }   
-            }); 
-              
-          } else { 
+        collection.findOne({'identifier':identifier}, function(err, profile) {                                                  
+          if(profile) {              
+            var idx = 0;
+            if(!profile.role) {            
+              profile['role'] = [];
+            }
+            idx = profile.role.indexOf(role_name);
+            if(idx == -1) {                      
+              profile['role'].push(role_name);            
+              collection.update({'identifier':identifier}, profile, function(err, result) { 
+                pool.release(db);           
+                callback(profile);                
+              });                           
+            } else { 
+              pool.release(db);
+              callback(profile);
+            }           
+          } else {
             pool.release(db);
-            callback(false, null);
-             } 
+            callback(null);
+          }
         });
       });
     });    
-
   };
 
-  
-  this.check_role = function(user, role, callback) {
+  this.check_role = function(identifier, role_names, callback) {
+    pool.acquire(function(err,db) {
+      db.collection(config.collection_name, function(err, collection) {
+        collection.findOne({'identifier':identifier}, function(err, profile) {                                                  
+          if(!profile.role) {   
+            callback(false);
+          } else {  
+            var found = false;
+            for(var i=0;i<role_names.length;i++) {
+              idx = profile.role.indexOf(role_names[i]);
+              if(idx == -1) { 
+                found = true;                
+                break;
+              } 
+            }
+            if(found) {
+              callback(true);
+            } else {
+              callback(false);
+            }
+          }
+        });
+      });
+    });    
   };
   
 };
 
-
-    
 
 exports.userprofile = UserProfile;

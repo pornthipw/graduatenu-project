@@ -34,11 +34,26 @@ app.config(function($routeProvider) {
   
 });
 
+function UserCtrl($scope, User, Logout) {
+  $scope.user = User.get(function(response) {
+    
+  });
+  
+  $scope.logout = function(){
+    Logout.get(function(response){
+      if(response.success){
+        $scope.user = null;
+        $scope.$broadcast('logout');
+      }
+    });
+  };
+}
+
 function TaskController($scope, $routeParams, $location, Project) {
 	$scope.views = {
    	project_form : 'static/project_form.html'
-  	}  
-  	
+  	}
+    
   	var self = this;
 		Project.get({id:$routeParams.projectId},function (response) {
       	$scope.project = response;
@@ -50,7 +65,7 @@ function TaskController($scope, $routeParams, $location, Project) {
         		});
     		}
   	});
-  
+
   	$scope.task_save = function () {    
    	if(!$scope.task._id) {
    		Project.save({_id:undefined},angular.extend({}, 

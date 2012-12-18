@@ -1,11 +1,10 @@
 var express = require("express");
 var handlebars = require("hbs");
-//var mongodb = require('mongodb');
+var mongodb = require('mongodb');
 var _ = require('underscore');
 var passport = require('passport');
 var mongoac = require("mongo-ac");
 var mongo_con = require("mongo-connect");
-
 
 var userdb = require('./user_db');
 
@@ -16,23 +15,17 @@ var config = require('./config');
 var app = express();
 var OpenIDStrategy = require('passport-openid').Strategy;
 
+//var userprofile = new userdb.userprofile(config.authorization.mongodb);
 var userprofile = new userdb.userprofile({
   host:config.authorization.mongodb.server, 
   port:config.authorization.mongodb.port,
   db:config.authorization.mongodb.db,
-  collection_name:config.authorization.mongodb.collection
-});
-
-var access_control = new mongoac.MongoAC({	
-	host:config.authorization.mongodb.server, 
-  	port:config.authorization.mongodb.port,
-  	db:config.authorization.mongodb.db,
-  	collection_name:config.authorization.mongodb.collection
+  collection_name:config.authorization.mongodb.collection_name
 });
 
 var mongo = mongo_con.Mongo({
-  //host:'10.10.20.75',
-  host:'localhost',
+  host:'10.10.20.75',
+  //host:'localhost',
   db:'projectplan'
 });
 
@@ -47,8 +40,7 @@ app.configure(function() {
   	app.use(express.methodOverride());
   	app.use(express.session({ secret: 'keyboard cat' }));
   	app.use(passport.initialize());
-  	app.use(passport.session());
-  	app.use(access_control.guard());
+  	app.use(passport.session());  	
   	app.use(app.router);
 });
 
@@ -62,22 +54,14 @@ app.use(function(err,req,res,next) {
 });
 
 passport.serializeUser(function(user, done) {
-  console.log('serializeUser');
-  //console.log(user);
-  userprofile.store(user, function(exists, user) {
-    //console.log('done serializeUser');
+  userprofile.store(user, function(exists, user) {    
     done(null, user.identifier);
   });
-  
-	
 });
 
-passport.deserializeUser(function(identifier, done) {
-  //console.log('deserializeUser');
-  //console.log(identifier);
+passport.deserializeUser(function(identifier, done) {  
   userprofile.retrieve(identifier, function(exists, profile) {  
-    if(profile) {
-      //console.log(profile);
+    if(profile) {      
       done(null, profile);
     } else {
       done(null, {identifier : identifier});
@@ -95,7 +79,7 @@ passport.use(new OpenIDStrategy({
   }
 ));
 
-app.post('/auth/openid', 
+app.get('/auth/openid', 
 	passport.authenticate('openid', { failureRedirect: '/login' }),
   		function(req, res) {
     		res.redirect(config.site.baseUrl);
@@ -105,6 +89,19 @@ app.get('/auth/openid/return',
 	passport.authenticate('openid', { failureRedirect: '/login' }),
   		function(req, res) {
     		res.redirect(config.site.baseUrl);
+});
+
+app.get('/user', function(req, res) {
+  if(req.user) {
+    res.json({'user':req.user});
+  } else {
+    res.json({'user':null});
+  }
+});
+
+app.get('/logout', function(req, res){
+  req.logOut();
+  res.json({"success":true});
 });
 
 app.get('/login', function(req, res){
@@ -129,34 +126,37 @@ app.get('/mongo-ac/users/:user', function(req, res) {
 });
 
 app.get('/', function(req, res) { 
-  
-  userprofile.check_role(req.user, 'admin', function(error) {
-    if(!error) {
-    }
-  });
-  
   //console.log(req.user) 
   
 	var ctx = {title : 'Graduate File', baseHref:config.site.baseUrl};    
-  	res.render('index', ctx);
+    res.render('index', ctx);    
 });
 
-app.get('/addrole', function(req, res) {
-  //console.log(req.user);
-  console.log(req.user.identifier);
-  userprofile.addrole(req.user, 'admin', function(exists, profile) {
-    if(profile) {
-      console.log(profile);
-      //done(null, profile);
+app.post('/addrole', admin_role, function(req, res) {    
+  userprofile.add_role(req.body.identifier, req.body.role , function(profile) {    
+    if(!profile) {    
+      res.json(profile);      
     } else {
-      //done(null, null);
-      console.log("OK");
-    }
+      res.json({'error':'Profile dose not exists'});
+    }    
   });
-  
 });
 
-app.get('/query/:collection', mongo.query);
+function admin_role(req, res, next) {
+  if(req.user) {
+    userprofile.check_role(req.user.identifier, ["admin"], function(allow) {
+      if(allow) {
+        next();
+      } else {
+        next(new Error(401));
+      }
+    });
+  } else {
+    next(new Error(401));
+  }
+}
+
+app.get('/query/:collection/:id?', mongo.query);
 app.post('/query/:collection', mongo.insert);
 app.put('/query/:collection/:id', mongo.update);
 app.del('/query/:collection/:id', mongo.delete);

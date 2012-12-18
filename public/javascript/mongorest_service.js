@@ -9,6 +9,16 @@ app.factory('Project', function($resource) {
   return Project;
 });
 
+app.factory('User', function($resource) {
+    var User  = $resource('user',{}, {});   
+    return User;   
+});
+
+app.factory('Logout', function($resource) {
+    var Logout  = $resource('logout',{}, {});   
+    return Logout ;   
+});
+
 
 
 
