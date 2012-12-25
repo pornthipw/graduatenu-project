@@ -1,17 +1,17 @@
 var mongodb = require('mongodb');
 var BSON = require('mongodb').pure().BSON;
 var generic_pool = require('generic-pool');
-
+  
 var UserProfile = function(config) {  
+  console.log("nook");
   var pool = generic_pool.Pool({
     name: 'mongodb',
     max: 2,
     create: function(callback) {
-      var db = new mongodb.Db(config.db, 
+      new mongodb.Db(config.db, 
         new mongodb.Server(config.host, config.port),
-        {safe:false, auto_reconnect:true,poolSize:4
-      });      
-      db.open(function(err,db) {
+        {safe:true, auto_reconnect:true
+      }).open(function(err,db) {
         console.log('Open DB');
         if(err) {
           console.log(err);
@@ -26,6 +26,9 @@ var UserProfile = function(config) {
   
   this.store = function(user,callback) {
     pool.acquire(function(err,db) {
+      if(err) {
+        console.log('Error :'+err);
+      }
       db.collection(config.collection_name, function(err, collection) {
         collection.findOne({'identifier':user.identifier}, function(err, profile) {          
           if(profile) {
@@ -87,6 +90,7 @@ var UserProfile = function(config) {
     });    
   };
 
+  /*
   this.check_role = function(identifier, role_names, callback) {
     pool.acquire(function(err,db) {
       db.collection(config.collection_name, function(err, collection) {
@@ -98,6 +102,81 @@ var UserProfile = function(config) {
             for(var i=0;i<role_names.length;i++) {
               idx = profile.role.indexOf(role_names[i]);
               if(idx == -1) { 
+                found = true;                
+                break;
+              } 
+            }
+            if(found) {
+              callback(true);
+            } else {
+              callback(false);
+            }
+          }
+        });
+      });
+    });    
+  };
+  */
+    this.list_user = function(req, res) {
+    pool.acquire(function(err,db) {
+      db.collection(config.collection_name, function(err, collection) {
+        collection.find({'identifier':{'$exists':true}}).toArray(function(err, users) {
+          pool.release(db);
+          if(!err) {
+            res.json(users);
+          } else {
+            res.json([]);
+          }
+        });
+      });
+    });    
+  };
+
+  this.update_user = function(req, res) {
+    var spec = {'_id':mongodb.ObjectID.createFromHexString(req.params.id)};
+    pool.acquire(function(err,db) {
+      db.collection(config.collection_name, function(err, collection) {
+        collection.update(spec,req.body, function(err, result) {
+          pool.release(db);
+          if(!err) {
+            res.json({'success':true, 'message':result});
+          } else {
+            res.json({'success':false,'message':err});
+          }
+        });
+      });
+    });    
+  };
+
+  this.get_user = function(req, res) {
+    var spec = {'_id':mongodb.ObjectID.createFromHexString(req.params.id)};
+    pool.acquire(function(err,db) {
+      db.collection(config.collection_name, function(err, collection) {
+        collection.findOne(spec, function(err, user) {
+          pool.release(db);
+          if(!err) {
+            res.json(user);
+          } else {
+            res.json({});
+          }
+        });
+      });
+    });    
+  };
+
+
+  this.check_role = function(identifier, role_names, callback) {
+    pool.acquire(function(err,db) {
+      db.collection(config.collection_name, function(err, collection) {
+        collection.findOne({'identifier':identifier}, function(err, profile) {                                                  
+          pool.release(db);
+          if(!profile.role) {   
+            callback(false);
+          } else {  
+            var found = false;
+            for(var i=0;i<role_names.length;i++) {
+              idx = profile.role.indexOf(role_names[i]);
+              if(idx != -1) { 
                 found = true;                
                 break;
               } 

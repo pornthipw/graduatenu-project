@@ -35,9 +35,7 @@ app.config(function($routeProvider) {
 });
 
 function UserCtrl($scope, User, Logout) {
-  $scope.user = User.get(function(response) {
-    
-  });
+  $scope.user = User.get();
   
   $scope.logout = function(){
     Logout.get(function(response){
@@ -49,12 +47,49 @@ function UserCtrl($scope, User, Logout) {
   };
 }
 
-function TaskController($scope, $routeParams, $location, Project) {
+function RoleController($scope, Role, User, Logout, Admin) {   
+  var orig = null;
+  $scope.users = Admin.query();
+  $scope.get_user = function(id) {
+    Admin.get({'id':id}, function(user) {
+      var ng_role = [];
+      $scope.user = user;//user is object, array
+      orig = user;// ???
+      if(user['role']) { //found
+        angular.forEach(user.role, function(value, idx) {
+          ng_role.push({'name':value});//??
+        });
+      }
+      $scope.user['role'] = ng_role; // not found
+    });
+  };
+
+  $scope.update = function() {
+    var db_role = [];
+    angular.forEach($scope.user.role, function(value, idx) {
+      db_role.push(value.name);
+    });
+    orig['role'] = db_role;// ?? origin -- new user
+    
+    var doc = angular.extend({}, orig, {_id:undefined});
+    //console.log(doc);
+    Admin.update({'id':orig._id}, doc, function(response) { 
+      console.log(response);
+      if(response.success) {
+        $scope.get_user(orig._id);
+      }
+    });
+  };
+  
+}
+
+function TaskController($scope, $routeParams, $location, Project,User, Logout) {
 	$scope.views = {
    	project_form : 'static/project_form.html'
   	}
     
   	var self = this;
+    
 		Project.get({id:$routeParams.projectId},function (response) {
       	$scope.project = response;
     		console.log($scope.project._id);
@@ -165,7 +200,7 @@ function DBController($scope, $routeParams,$http ) {
   }; 
 	};
 
-function ProjectController($scope, $routeParams, $location, Project) {
+function ProjectController($scope, $routeParams, $location, Project,User, Logout) {
 	var self = this;
    $scope.project = Project.get({document:$routeParams.projectId});
 
@@ -210,7 +245,7 @@ function ProjectController($scope, $routeParams, $location, Project) {
   		
 }
 
-function CreateProjectController($scope, $location, Project, $routeParams) {
+function CreateProjectController($scope, $location, Project, $routeParams,User, Logout) {
 	var self=this;
   
   	$scope.save = function () {
@@ -221,29 +256,41 @@ function CreateProjectController($scope, $location, Project, $routeParams) {
   		}; 
 }
 
-function ProjectListController($scope, $routeParams, Project) {
-  
-  $scope.project_list = Project.query(); 
-  console.log($scope.project_list );
-  //$scope.stats = MongoStats.info();
+function ProjectListController($scope, $routeParams, Project, User, Logout) {
+  $scope.user = User.get(function(response) {
+    console.log(response);
+    if (response.user) {
+      
+      $scope.project_list = Project.query(); 
+      console.log($scope.project_list );
+      //$scope.stats = MongoStats.info();
+    }
+  });
      
 }
 
-function ProjectListByYearController($scope, $routeParams, Project) {
-  Project.query(function(response) {
-    var project_list = [];
-    for(var idx=0;idx<response.length;idx++) {      
-      var project = response[idx];
-      if(project.year == $routeParams.year) {
-        project_list.push(project);
-      }
+function ProjectListByYearController($scope, $routeParams, Project,User, Logout) {
+  //$scope.user = User.get();
+  $scope.user = User.get(function(response) {
+    console.log(response);
+    if (response.user) {
+      Project.query(function(response) {
+        var project_list = [];
+        for(var idx=0;idx<response.length;idx++) {      
+          var project = response[idx];
+          if(project.year == $routeParams.year) {
+            project_list.push(project);
+          }
+        }
+        $scope.project_list = project_list;
+      });
     }
-    $scope.project_list = project_list;
   });
 }
 
 
-function YearListController($scope, $location, $routeParams,Project) {
+function YearListController($scope, $location, $routeParams,Project,User, Logout) {
+  //$scope.user = User.get();
 	Project.query(function(response) {
     var years = {}; // {'2556':1}
     var year_list = [];

@@ -1,33 +1,38 @@
 var express = require("express");
 var handlebars = require("hbs");
-var mongodb = require('mongodb');
+//var mongodb = require('mongodb');
 var _ = require('underscore');
 var passport = require('passport');
-var mongoac = require("mongo-ac");
+//var mongoac = require("mongo-ac");
 var mongo_con = require("mongo-connect");
+
 
 var userdb = require('./user_db');
 
 var routes = require('./routes');
 var config = require('./config');
-//var utils = require('./utils');
+var utils = require('./utils');
 
 var app = express();
 var OpenIDStrategy = require('passport-openid').Strategy;
 
 //var userprofile = new userdb.userprofile(config.authorization.mongodb);
-var userprofile = new userdb.userprofile({
-  host:config.authorization.mongodb.server, 
+/*var userprofile = new userdb.userprofile({
+  host:config.authorization.mongodb.host, 
   port:config.authorization.mongodb.port,
   db:config.authorization.mongodb.db,
   collection_name:config.authorization.mongodb.collection_name
-});
+});*/
 
+var userprofile = new userdb.userprofile(config.authorization.mongodb);
+var mongo = mongo_con.Mongo(config.mongo_connect);
+/*
 var mongo = mongo_con.Mongo({
   host:'10.10.20.75',
   //host:'localhost',
   db:'projectplan'
 });
+*/
 
 app.configure(function() {
 	app.use(express.cookieParser());
@@ -44,24 +49,16 @@ app.configure(function() {
   	app.use(app.router);
 });
 
-app.use(function(err,req,res,next) {
-    if(err instanceof Error){
-        if(err.message === '401'){
-            res.json({'error':401});
-            //res.render();
-        }
-    }
-});
-
 passport.serializeUser(function(user, done) {
-  userprofile.store(user, function(exists, user) {    
+  console.log("test");
+  userprofile.store(user, function(exists, user) {  
     done(null, user.identifier);
   });
 });
 
 passport.deserializeUser(function(identifier, done) {  
   userprofile.retrieve(identifier, function(exists, profile) {  
-    if(profile) {      
+    if(profile) {    
       done(null, profile);
     } else {
       done(null, {identifier : identifier});
@@ -73,6 +70,7 @@ passport.use(new OpenIDStrategy({
   returnURL: config.site.baseUrl+'auth/openid/return',
   realm: config.site.baseUrl,
   profile: true}, function(identifier, profile, done) {
+    //console.log(profile);
     process.nextTick(function () {    
       	return done(null, {identifier: identifier, profile:profile})
     });
@@ -125,41 +123,46 @@ app.get('/mongo-ac/users/:user', function(req, res) {
   });
 });
 
-app.get('/', function(req, res) { 
-  //console.log(req.user) 
-  
-	var ctx = {title : 'Graduate File', baseHref:config.site.baseUrl};    
-    res.render('index', ctx);    
+app.get('/', function(req, res) {
+  console.log('index ');
+  res.render('index', {baseHref:config.site.baseUrl});
 });
 
-app.post('/addrole', admin_role, function(req, res) {    
-  userprofile.add_role(req.body.identifier, req.body.role , function(profile) {    
-    if(!profile) {    
-      res.json(profile);      
-    } else {
-      res.json({'error':'Profile dose not exists'});
-    }    
-  });
-});
 
-function admin_role(req, res, next) {
+app.get('/admin/users', admin_role, userprofile.list_user);
+app.get('/admin/users/:id', admin_role ,userprofile.get_user);
+app.put('/admin/users/:id', admin_role ,userprofile.update_user);
+
+app.get('/db/:collection/:id?', mongo.query);
+app.post('/db/:collection', mongo.insert);
+app.put('/db/:collection/:id', mongo.update);
+app.del('/db/:collection/:id', mongo.delete);
+
+
+function admin_role(req,res,next) {
+  console.log('admin_role');
   if(req.user) {
     userprofile.check_role(req.user.identifier, ["admin"], function(allow) {
       if(allow) {
-        next();
+          next();
       } else {
-        next(new Error(401));
+          next(new Error("401"));
       }
     });
   } else {
-    next(new Error(401));
+    console.log('no user signin');
+    next(new Error("401"));    
   }
 }
 
-app.get('/query/:collection/:id?', mongo.query);
-app.post('/query/:collection', mongo.insert);
-app.put('/query/:collection/:id', mongo.update);
-app.del('/query/:collection/:id', mongo.delete);
+app.use(function(err,req,res,next) {  
+  if(err instanceof Error){    
+    if(err.message === '401'){
+      res.json({'error':401});
+    }
+  }
+});
+
 
 app.listen(config.site.port || 3000);
 
