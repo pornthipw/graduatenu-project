@@ -1,4 +1,4 @@
-<form class="form-horizontal">  
+<form class="form-horizontal" ng-show="user">  
   <div class="control-group">
     <label class="control-label" for="inputYear">โครงการประจำปี</label>
     <div class="controls">
@@ -129,7 +129,7 @@
     </div>
   </div>   
     
-    <div class="control-group">
+  <div class="control-group">
     <label class="control-label" for="inputName">ตัวชี้วัดของโครงการ: </label> 
     <div class="controls">
         <select id="inputName" placeholder="kpi" ng-model="project.kpi">
@@ -138,6 +138,7 @@
           </select>
     </div>
   </div>
+  
   
      
   <div class="control-group">

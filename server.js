@@ -8,7 +8,6 @@ var mongo_con = require("mongo-connect");
 
 
 var userdb = require('./user_db');
-
 var routes = require('./routes');
 var config = require('./config');
 var utils = require('./utils');

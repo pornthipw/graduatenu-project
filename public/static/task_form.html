@@ -12,31 +12,39 @@
     	<li><a href="#tab3" data-toggle="tab">รายละเอียดโครงการ</a></li>
   	</ul>
  	<div class="tab-content">
-   	<div class="tab-pane active" id="tab1">
-      	<form class="form-horizontal">  
-        		<div class="control-group">
-          		<label class="control-label" for="inputName">ชื่องาน: </label>
-          		<div class="controls">
-            		<input type="text" id="inputName" placeholder="Name" ng-model="task.task_name">
-          		</div>
-       		</div>
+    <div class="tab-pane active" id="tab1">
+      <form class="form-horizontal">  
+        <div class="control-group">
+          <label class="control-label" for="inputTaskName">ชื่องาน: </label>
+          <div class="controls">
+            <input type="text" id="inputTaskName" placeholder="TaskName" ng-model="task.task_name">
+          </div>
+        </div>
+        
+        <div class="control-group">
+          <label class="control-label" for="inputDateRecord">วันที่: </label>
+          <div class="controls">
+            <input type="text" id="inputDateRecord" placeholder="DateRecord" ng-model="task.date_record">
+          </div>
+        </div>
        
-   			<div class="control-group">
-      			<div class="controls">
-         			<button ng-click="task_save()" class="btn btn-primary" type="submit"> <i class="icon-ok icon-white"></i> Save</button>
-         		</div>
-        		</div>
-     		</form>
-    	</div>
-    
+        <div class="control-group">
+          <div class="controls">
+            <button ng-click="task_save()" class="btn btn-primary" type="submit"> <i class="icon-ok icon-white"></i> Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+      
 		<div class="tab-pane" id="tab2">
-      	<ul>
-        		<li ng-repeat="task in task_list" ng-show="task.docID==project._id">{{task.task_name}}-{{task.docID}} 
-        			<a href="" ng-click="remove_task(task._id)"><i class="icon-remove"></i></a></li>
-      	</ul>
-    	</div>
+      <ul>
+        <li ng-repeat="task in task_list" ng-show="task.docID==project._id">{{task.task_name}}-{{task.docID}} 
+          <a href="" ng-click="remove_task(task._id)"><i class="icon-remove"></i></a>
+        </li>
+      </ul>
+    </div>
     
-    	<div class="tab-pane" id="tab3" ng-include src="views.project_form"></div>
+    <div class="tab-pane" id="tab3" ng-include src="views.project_form"></div>
     
   	</div>
 </div>
