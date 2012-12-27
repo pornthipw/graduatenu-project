@@ -34,6 +34,9 @@
 </form>
 -->
 
+
+
+
 <div class="row-fluid" ng-show="user">
   <div class="span12">
     <div class="input-prepend">
@@ -44,23 +47,17 @@
         <thead>
           <tr>
             <th></th>    
-            <th></th>
-            <th></th> 
-            <th></th>
-            <th></th>                                        
-            <th></th>
-            <th></th>          
+            <th>ชื่องาน</th> 
+            <th>วันที่บันทึกข้อมูล</th>    
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="task in task_list |  filter:search " ng-show="task.docID">  
-            <td>{{task.owner}}</td>     
-            <td>{{task._id}}</td>  
-            <td>{{task.date_record}}</td>     
-            <td></td>    
-            <td></td>    
-            <td></td>     
-            <td></td>  
+            <td>{{task.owner}}</td>   
+            <td>{{task.task_name}} </td>    
+            <td>
+              {{task.date_record}}
+            </td>     
           </tr>
         </tbody>
     </table>

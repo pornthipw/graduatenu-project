@@ -7,7 +7,10 @@
     <base href="{{ baseHref }}">
     
     <link href="javascript/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">    
+          
+    
     <link href="javascript/vendor/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="javascript/vendor/bootstrap-datepicker.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -19,12 +22,16 @@
     <script src="javascript/vendor/bootstrap/js/bootstrap.min.js"></script> 
     <script src="javascript/vendor/angular.min.js"></script>
     <script src="javascript/vendor/angular-resource.min.js"></script>
+    <script src="javascript/vendor/bootstrap-datepicker.js"></script>
+    <script src="javascript/vendor/angular-strap.min.js"></script>
     <script src="javascript/mongorest_service.js"></script>
     <script src="javascript/app.js"></script>
     
 </head>
     
 <body >  
+  
+
   <div class="navbar navbar-inverse navbar-fixed-top" ng-controller="UserCtrl">
     <div class="navbar-inner">
       <div class="container">
@@ -74,9 +81,7 @@
             </li>
           </ul>     
         	</div> 
-        	
-
-                          
+          
       </div>
     </div>
   </div>  

@@ -6,6 +6,16 @@
     </div>
   </div>
   
+    
+  <div class="control-group">
+    <label class="control-label" for="inputType">สถานะของโครงการ</label>
+    <div class="controls">
+      <select  ng-model="project.status" ng-options="i.id as i.name for i in statuses">
+        <option value=""></option>
+      </select> 
+    </div>
+  </div>
+  
   <div class="control-group">
     <label class="control-label" for="inputPid">รหัสโครงการ: </label>
     <div class="controls">
@@ -56,8 +66,11 @@
   <div class="control-group">
     <label class="control-label" for="inputName">วันเดือนปีที่จัด: </label>
     <div class="controls">
-      <input type="text" id="inputName" placeholder="date_manage" ng-model="project.date_manage">
-          </div>
+      <div class="control-group input-append">
+        <input type="text" ng-model="project.date_manage" data-date-format="dd/mm/yyyy" bs-datepicker>
+        <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+      </div>
+    </div>
   </div>
   
  <div class="control-group">
@@ -138,8 +151,6 @@
           </select>
     </div>
   </div>
-  
-  
      
   <div class="control-group">
         <div class="controls">
