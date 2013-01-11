@@ -1,23 +1,63 @@
 <div>
 	<blockquote>
- 		<p>รหัสโครงการ {{project.pid}} : {{project.name}}</p>
+ 		<p><img style="border: 0px" src="img/icon_project.jpg" alt="With Twitter">{{project.pid}} : {{project.name}}</p>
   		<small>ผู้รับผิดชอบ {{project.owner}} </small>
 	</blockquote>
 </div>
 
-<div class="tabbable"> <!-- Only required for left/right tabs -->
+<div class="form-actions">
+  <div class="input-append">
+    <span class="pull-right ">  
+      <a href="#/message/create" class="btn"><i class="icon-plus"></i> New Message</a>
+    </span>
+  </div>
+</div>
+
+<div class="span6" >
+  <table class="table table-condensed table-bordered">
+    <tr>
+        <th></th>
+        <th >ผลการดำเนินงาน</th>
+        <th >ผู้รายงาน</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="message in message_list" ng-show="message.project_id==project._id">
+      <td></td>
+      <td>{{message.task_name}}-{{message.project_id}} </td>
+      <td>{{message.owner}}</td>
+      <td><a href="" ng-click="remove_message(message._id)"><i class="icon-remove"></i></a></td>
+    </tr>
+  </table>
+</div>
+<div class="span6" >
+  
+</div>
+
+<!--
+<div class="tabbable"> 
 	<ul class="nav nav-tabs">
-   	<li class="active"><a href="#tab1" data-toggle="tab">เพิ่มข้อมูล</a></li>
-    	<li><a href="#tab2" data-toggle="tab">ผลการดำเนินงาน</a></li>
-    	<li><a href="#tab3" data-toggle="tab">รายละเอียดโครงการ</a></li>
-  	</ul>
+   	<li class="active"><a href="#tab1" data-toggle="tab">ผลการดำเนินงาน</a></li>
+    <li><a href="#tab2" data-toggle="tab">เพิ่มข้อมูล</a></li>
+    <li><a href="#tab3" data-toggle="tab">รายละเอียดโครงการ</a></li>
+  </ul>
  	<div class="tab-content">
-    <div class="tab-pane active" id="tab1">
+    
+    <div class="tab-pane active"   id="tab1">
+      <ul>
+        <li ng-repeat="message in message_list" ng-show="message.project_id==project._id">{{message.task_name}}-{{message.project_id}} 
+          <a href="" ng-click="remove_message(message._id)"><i class="icon-remove"></i></a>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="tab-pane" id="tab2">
       <form class="form-horizontal">  
         <div class="control-group">
           <label class="control-label" for="inputTaskName">ชื่องาน: </label>
           <div class="controls">
-            <input type="text" id="inputTaskName" placeholder="TaskName" ng-model="task.task_name">
+              <div ng-model="message.task_name" mode="text"  codemirror="text">
+                <textarea></textarea>
+              </div>            
           </div>
         </div>
         
@@ -25,7 +65,7 @@
           <label class="control-label" for="inputDateRecord">วันที่: </label>
           <div class="controls">
             <div class="control-group input-append">
-              <input type="text" ng-model="task.date_record" data-date-format="dd/mm/yyyy" bs-datepicker>
+              <input type="text" ng-model="message.date_record" data-date-format="dd/mm/yyyy" bs-datepicker>
               <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
             </div>
           </div>
@@ -34,21 +74,15 @@
        
         <div class="control-group">
           <div class="controls">
-            <button ng-click="task_save()" class="btn btn-primary" type="submit"> <i class="icon-ok icon-white"></i> Save</button>
+            <button ng-click="message_save()" class="btn btn-primary" type="submit"> <i class="icon-ok icon-white"></i> Save</button>
           </div>
         </div>
       </form>
     </div>
       
-		<div class="tab-pane" id="tab2">
-      <ul>
-        <li ng-repeat="task in task_list" ng-show="task.docID==project._id">{{task.task_name}}-{{task.docID}} 
-          <a href="" ng-click="remove_task(task._id)"><i class="icon-remove"></i></a>
-        </li>
-      </ul>
-    </div>
     
     <div class="tab-pane" id="tab3" ng-include src="views.project_form"></div>
     
   	</div>
 </div>
+-->

@@ -30,7 +30,7 @@ app.factory('Logout', function($resource) {
 });
 
 app.factory('Role', function($resource) {
-  var Role = $resource(prefix + '/db/nook_ac_1/:id', {    
+  var Role = $resource(prefix + '/db/nook_ac_2/:id', {    
     id: '@id'
   },
   {update: { method:'PUT' }});

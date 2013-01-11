@@ -1,4 +1,6 @@
-var app = angular.module('projectplan', ['mongorest_service','$strap.directives']);
+var app = angular.module('projectplan', ['mongorest_service',
+'codemirror',
+'$strap.directives']);
 
 app.config(function($routeProvider) {
   
@@ -8,7 +10,7 @@ app.config(function($routeProvider) {
   });    
   
   $routeProvider.when('/project/task/:projectId', {
-    controller:TaskController, 
+    controller:MessageController, 
     templateUrl:'static/task_form.html'
   }); 	
   
@@ -33,7 +35,7 @@ app.config(function($routeProvider) {
   });	
 
   $routeProvider.when('/', {
-    controller:DBController,  
+    controller:MainController,  
     templateUrl:'static/index.html'
   }); 
   
@@ -88,7 +90,18 @@ function RoleController($scope, Role, User, Logout, Admin) {
   };
 }
 
-function TaskController($scope, $routeParams, $location, Project,User, Logout) {
+function MessageController($scope, $routeParams, $location, Project,User, Logout) {
+  var self = this;
+  
+  self.message = function(message) {
+    $scope.message = message;
+    setTimeout(function() {      
+      $scope.$apply(function() {
+        $scope.message = null;
+      });
+    }, 3000);
+  };
+  
   $scope.user = User.get(function(response) {
     //console.log(response);
     if (response.user ||$scope.user ) {
@@ -115,25 +128,31 @@ function TaskController($scope, $routeParams, $location, Project,User, Logout) {
             $scope.project = response;
             console.log($scope.project._id);
             if (response) {
-                Project.query({docID:$scope.project._id}, function (result) {
-                  $scope.task_list = result;
+                Project.query({project_id:$scope.project._id}, function (result) {
+                  $scope.message_list = result;
                 });
             }
         });
       
       //SaveTask
-      $scope.task_save = function () {    
-        if(!$scope.task._id) {
+      $scope.message_save = function () {    
+        if(!$scope.message._id) {
 
           Project.save({_id:undefined},angular.extend({}, 
-                $scope.task,
-                {_id:undefined,docID:$routeParams.projectId,owner:$scope.user.user.profile.name.givenName}),function(result) { 
+                $scope.message,
+                {_id:undefined,project_id:$routeParams.projectId,owner:$scope.user.user.profile.name.givenName,type:"post_messsge"}),function(result) { 
                   console.log(result);
                   if(result.success) {
-                    Project.query({docID:$scope.project._id}, function (result2) {
-                      $scope.task_list = result2;
+                    self.message("Message Saved");
+                    Project.query({project_id:$scope.project._id}, function (result2) {
+                      $scope.message_list = result2;
                       });
+                    } else {
+                      self.message("Message don't Saved");
                     }
+                    Project.query({project_id:$scope.project._id}, function (result2) {
+                      $scope.message_list = result2;
+                      });
                 });
               } else {  
                 
@@ -141,13 +160,13 @@ function TaskController($scope, $routeParams, $location, Project,User, Logout) {
         };
       
       //RemoveTask
-      $scope.remove_task = function (task_id) {
+      $scope.remove_message = function (message_id) {
           Project.delete({
-            id:task_id
+            id:message_id
             },function(result) {            
               if(result.success) { 
-                Project.query({docID:$scope.project._id}, function (result) {
-                    $scope.task_list = result;
+                Project.query({project_id:$scope.project._id}, function (result) {
+                    $scope.message_list = result;
                     });
                 }
               });
@@ -183,15 +202,24 @@ function TaskController($scope, $routeParams, $location, Project,User, Logout) {
   });
 }
 
-function DBController($scope, $routeParams,$http,User, Logout,Project ) {
-  $scope.user = User.get(function(response) {
-    console.log(response);
-    if (response.user ||$scope.user ) {
-      Project.query(function (result) {
-        $scope.task_list = result;
+function MainController($scope, $routeParams,$http,User, Logout,Project ) {          
+    Project.query({query:'{"type":"post_message"}'}, function (result) {      
+      //console.log(result);
+      var dict = {}; //       
+      angular.forEach(result, function(message) {
+        if(!(message.project_id in dict)) {
+          Project.get({id:message.project_id}, function(project) {
+            message['project'] = project;
+            dict[message.project_id] = project;
+            //console.log(project);
+          });
+        } else {
+          message['project'] = dict[message.project_id];
+        }
+        
       });
-    }
-  });
+      $scope.message_list = result;
+    });    
 };
 
 function ProjectController($scope, $routeParams, $location, Project,User, Logout) {

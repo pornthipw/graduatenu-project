@@ -1,43 +1,7 @@
 <a href="#/project/create"><i class="icon-plus-sign"></i></a>
-<!--
-<form class="form-horizontal">
-	  <div class="control-group">
-	    <label class="control-label" for="inputUsername">Username</label>
-	    <div class="controls">
-	      <input type="text" id="inputUsername" ng-model="user">
-	    </div>            
-	  </div>
-                
-	  <div class="control-group">
-	    <label class="control-label" for="inputUrl">URL</label>
-	      <div class="controls">
-		      <input type="text" id="inputUrl" ng-model="url">
-	      </div>                
-	  </div>
-    
-    <div class="control-group">
-	    <label class="control-label" for="inputMethod">Method</label>
-	      <div class="controls">
-		      <input type="text" id="inputMethod" ng-model="method">
-	      </div>            
-	  </div>
-    
-    <div class="control-group">
-      <label class="control-label" for="inputMethod"></label>
-      <div class="controls">
-        <button ng-click="allow()" class="btn btn-primary" type="submit"> allow</button>
-        <button ng-click="notallow()" class="btn btn-primary" type="submit"> not-allow</button>
-        <button ng-click="protect()" class="btn btn-primary" type="submit"> protect</button>
-        <button ng-click="release()" class="btn btn-primary" type="submit"> release</button>
-      </div>
-    </div>
-</form>
--->
 
 
-
-
-<div class="row-fluid" ng-show="user">
+<div class="row-fluid">
   <div class="span12">
     <div class="input-prepend">
         <span class="add-on"><i class="icon-search"></i></span>
@@ -48,15 +12,17 @@
           <tr>
             <th></th>    
             <th>ชื่องาน</th> 
+            <th>ชื่องาน</th> 
             <th>วันที่บันทึกข้อมูล</th>    
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="task in task_list |  filter:search " ng-show="task.docID">  
-            <td>{{task.owner}}</td>   
-            <td>{{task.task_name}} </td>    
+          <tr ng-repeat="message in message_list |  filter:search">  
+            <td>{{message.owner}}</td>   
+            <td>{{message.task_name}} </td>    
+            <td><a href="#/project/task/{{message.project_id}}">{{message.project.name}} </a></td>    
             <td>
-              {{task.date_record}}
+              {{message.date_record}}
             </td>     
           </tr>
         </tbody>
