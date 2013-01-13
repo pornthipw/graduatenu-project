@@ -92,15 +92,16 @@ function RoleController($scope, Role, User, Logout, Admin) {
 
 function MessageController($scope, $routeParams, $location, Project,User, Logout) {
   var self = this;
-  
-  self.message = function(message) {
-    $scope.message = message;
+  /*
+  self.messageAlert = function(messageAlert) {
+    $scope.messageAlert = messageAlert;
     setTimeout(function() {      
       $scope.$apply(function() {
-        $scope.message = null;
+        $scope.messageAlert = null;
       });
     }, 3000);
   };
+  */
   
   $scope.user = User.get(function(response) {
     //console.log(response);
@@ -126,6 +127,7 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
         
         Project.get({id:$routeParams.projectId},function (response) {
             $scope.project = response;
+            $scope.current_id = $scope.project._id;
             console.log($scope.project._id);
             if (response) {
                 Project.query({project_id:$scope.project._id}, function (result) {
@@ -135,27 +137,36 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
         });
       
       //SaveTask
-      $scope.message_save = function () {    
-        if(!$scope.message._id) {
-
+      $scope.message_save = function (mid) { 
+        $scope.cur = mid;  
+         
+        if(!$scope.cur) {
           Project.save({_id:undefined},angular.extend({}, 
                 $scope.message,
                 {_id:undefined,project_id:$routeParams.projectId,owner:$scope.user.user.profile.name.givenName,type:"post_messsge"}),function(result) { 
                   console.log(result);
                   if(result.success) {
-                    self.message("Message Saved");
-                    Project.query({project_id:$scope.project._id}, function (result2) {
+                    //self.message("Message Saved");
+                    $scope.messageAlert = "Message Saved";
+                    setTimeout(function() {      
+                      $scope.$apply(function() {
+                        $scope.messageAlert = null;
+                      });
+                    }, 3000);
+                    Project.query({project_id:$routeParams.projectId}, function (result2) {
                       $scope.message_list = result2;
                       });
                     } else {
-                      self.message("Message don't Saved");
+                      //self.messageAlert("Message don't Saved");
                     }
                     Project.query({project_id:$scope.project._id}, function (result2) {
                       $scope.message_list = result2;
                       });
                 });
               } else {  
-                
+                console.log("test");
+                $scope.message = Project.get({id:$scope.cur});
+
               }
         };
       
