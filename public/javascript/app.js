@@ -14,6 +14,12 @@ app.config(function($routeProvider) {
     templateUrl:'static/task_form.html'
   }); 	
   
+  $routeProvider.when('/project/edit/field/:projectId', {
+    controller:ProjectEditController, 
+    //templateUrl:'static/project_form.html'
+    templateUrl:'static/project_edit.html'
+  });  
+  
   $routeProvider.when('/project/edit/:projectId', {
     controller:ProjectController, 
     templateUrl:'static/project_form.html'
@@ -61,14 +67,14 @@ function RoleController($scope, Role, User, Logout, Admin) {
   $scope.get_user = function(id) {
     Admin.get({'id':id}, function(user) {
       var ng_role = [];
-      $scope.user = user;//user is object, array
-      orig = user;// ???
-      if(user['role']) { //found
+      $scope.user = user;
+      orig = user;
+      if(user['role']) { 
         angular.forEach(user.role, function(value, idx) {
-          ng_role.push({'name':value});//??
+          ng_role.push({'name':value});
         });
       }
-      $scope.user['role'] = ng_role; // not found
+      $scope.user['role'] = ng_role; 
     });
   };
 
@@ -77,10 +83,9 @@ function RoleController($scope, Role, User, Logout, Admin) {
     angular.forEach($scope.user.role, function(value, idx) {
       db_role.push(value.name);
     });
-    orig['role'] = db_role;// ?? origin -- new user
+    orig['role'] = db_role;
     
     var doc = angular.extend({}, orig, {_id:undefined});
-    //console.log(doc);
     Admin.update({'id':orig._id}, doc, function(response) { 
       console.log(response);
       if(response.success) {
@@ -96,7 +101,7 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
     //console.log(response);
     
     if (response.user ||$scope.user ) {
-      
+      /*
       $scope.statuses = [
         {
           id: 'เริ่มดำเนินการ',
@@ -107,7 +112,7 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
         {
           id: 'เสร็จสิ้น',
           name: 'เสร็จสิ้น'},
-      ];
+      ];*/
       
     var self = this;
     
@@ -126,14 +131,14 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
     
       
     Project.get({id:$routeParams.projectId},function (response) {
-        $scope.project = response;
-        $scope.current_id = $scope.project._id;
-        console.log($scope.project._id);
-        if (response) {
-            Project.query({project_id:$scope.project._id}, function (result) {
-              $scope.message_list = result;
-            });
-        }
+      $scope.project = response;
+      $scope.current_id = $scope.project._id;
+      console.log($scope.project._id);
+      if (response) {
+        Project.query({project_id:$scope.project._id}, function (result) {
+          $scope.message_list = result;
+        });
+      }
     });
       
     $scope.editField = function(mes) {
@@ -144,7 +149,6 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
     
     //createMessage
     $scope.createMessage = function(){
-      console.log("OK");
       $scope.message = null;
       Project.save({_id:undefined},angular.extend({}, 
           {_id:undefined,task_name:"task_name",project_id:$routeParams.projectId,
@@ -178,7 +182,6 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
                 console.log(result);
                 if(result.success) {
                   self.messageAlert("Message Saved");
-
                   Project.query({project_id:$routeParams.projectId}, function (result2) {
                     $scope.message_list = result2;
                   });
@@ -263,7 +266,6 @@ function MainController($scope, $routeParams,$http,User, Logout,Project ) {
         Project.get({id:message.project_id}, function(project) {
           message['project'] = project;
           dict[message.project_id] = project;
-          //console.log(project);
         });
       } else {
         message['project'] = dict[message.project_id];
@@ -271,29 +273,83 @@ function MainController($scope, $routeParams,$http,User, Logout,Project ) {
       
     });
     $scope.message_list = result;
-    console.log($scope.message_list);
-  });    
+    //console.log($scope.message_list);
+  });  
+  
+    $scope.project_list = Project.query({
+      query:'{"type":"post_project"}'
+    });
+    //console.log("ff"+$scope.project_list);
 };
 
 function ProjectController($scope, $routeParams, $location, Project,User, Logout) {
-	var self = this;
-   $scope.project = Project.get({id:$routeParams.projectId});
-
-	$scope.save = function () {		
-   	Project.update({      
-      	id:$routeParams.projectId
-    		}, angular.extend({}, $scope.project,
-      		{_id:undefined}), function(result) {
-      			$scope.save_result = result;
-      			if(result.success) {
-        				$location.path('/project/list');
-      			} else {
-        				console.log("not");
-      				}
-          });    
-  		};
+  $scope.user = User.get(function(response) {
+    console.log(response);
+    
+    if (response.user ||$scope.user ) {
+      console.log("test");
+      var self = this;
+      $scope.project = Project.get({id:$routeParams.projectId});  
+      
+      $scope.save = function () {		
+        Project.update({      
+            id:$routeParams.projectId
+            }, angular.extend({}, $scope.project,
+              {_id:undefined}), function(result) {
+                $scope.save_result = result;
+                if(result.success) {
+                    $location.path('/projects/'+$scope.project.year);
+                } else {
+                    console.log("not");
+                  }
+              });    
+          };
+    
+      $scope.del = function() {
+        Project.delete({
+            id:$routeParams.projectId
+          },function(result) {
+            console.log(result);            
+            if(result.success) {        
+                $location.path('/projects/'+$scope.project.year);
+              }
+            });
+          };
+    }
+  });
   
-	$scope.del = function() {
+}
+
+function ProjectEditController($scope, $routeParams, $location, Project,User, Logout) {
+  var self = this;
+  self.messageAlert = function(messageAlert) {
+    $scope.messageAlert = messageAlert;
+    setTimeout(function() {      
+      $scope.$apply(function() {
+        $scope.messageAlert = null;
+      });
+    }, 3000);
+  };
+  
+  $scope.project = Project.get({id:$routeParams.projectId});  
+  
+  $scope.editField = function(field) {
+    $scope.selectField = field;
+    $scope.selectValue = $scope.project[field];
+  }
+  
+  $scope.update = function() {
+    $scope.project[$scope.selectField] = $scope.selectValue;
+    Project.update({
+      id:$routeParams.id
+    }, angular.extend({}, $scope.project, {_id:undefined}), function(result) {      
+      if(result.success) {
+        self.messageAlert("Project Saved");                
+      }
+    });
+  }  
+  
+  $scope.del = function() {
    	Project.delete({
       	id:$routeParams.projectId
     	},function(result) {
@@ -302,34 +358,54 @@ function ProjectController($scope, $routeParams, $location, Project,User, Logout
         		$location.path('/project/list');
       		}
     		});
-  		};
+  		}; 
+
 }
 
 function CreateProjectController($scope, $location, Project, $routeParams,User, Logout) {
-  var self=this;
   $scope.user = User.get(function(response) {
     console.log(response);
-    if (response.user.identifier ||$scope.user.identifier) {
-      console.log(response.user);
-      $scope.save = function () { 
-        Project.save({_id:undefined},angular.extend({}, 
-          $scope.project,
-          {_id:undefined,user:$scope.user.user.identifier}),function(result) { 
-            console.log(result);
-            if(result.success) {
-              $location.path('/');
-            }
-          });
-        } 
+    
+    if (response.user ||$scope.user ) {
+      var self=this;
       /*
-      $scope.save = function () {
-        Project.save($scope.project,function(result) { 
-          //console.log(result);
-          //$location.path('/project/list');
-          if (result) { }
-        });
-      }; */
-    };
+      $scope.statuses = [
+      {
+        id: 'เริ่มดำเนินการ',
+        name: 'เริ่มดำเนินการ'},
+      {
+        id: 'กำลังดำเนินงาน',
+        name: 'กำลังดำเนินงาน'},
+      {
+        id: 'เสร็จสิ้น',
+        name: 'เสร็จสิ้น'},
+    ];*/
+      
+      $scope.user = User.get(function(response) {
+        console.log(response);
+        if (response.user.identifier ||$scope.user.identifier) {
+          console.log(response.user);
+          $scope.save = function () { 
+            Project.save({_id:undefined},angular.extend({}, 
+              $scope.project,
+              {_id:undefined,user:$scope.user.user.identifier,"type":"post_project"}),function(result) { 
+                console.log(result);
+                if(result.success) {
+                  $location.path('/');
+                }
+              });
+            } 
+          /*
+          $scope.save = function () {
+            Project.save($scope.project,function(result) { 
+              //console.log(result);
+              //$location.path('/project/list');
+              if (result) { }
+            });
+          }; */
+        };
+      });
+    }
   });
 }
 
