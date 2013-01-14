@@ -92,7 +92,7 @@ function RoleController($scope, Role, User, Logout, Admin) {
 
 function MessageController($scope, $routeParams, $location, Project,User, Logout) {
   var self = this;
-  /*
+  
   self.messageAlert = function(messageAlert) {
     $scope.messageAlert = messageAlert;
     setTimeout(function() {      
@@ -101,7 +101,8 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
       });
     }, 3000);
   };
-  */
+  
+  
   
   $scope.user = User.get(function(response) {
     //console.log(response);
@@ -122,9 +123,7 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
       $scope.views = {
         project_form : 'static/project_form.html'
         }
-        
-        var self = this;
-        
+      
         Project.get({id:$routeParams.projectId},function (response) {
             $scope.project = response;
             $scope.current_id = $scope.project._id;
@@ -136,23 +135,24 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
             }
         });
       
+        $scope.editField = function(message) {
+          $scope.selectMessage = message;
+          console.log($scope.selectField);
+          $scope.message = Project.get({id:$scope.selectMessage});
+          //$scope.selectValue = $scope.document[field];
+        }
+      
       //SaveTask
-      $scope.message_save = function (mid) { 
-        $scope.cur = mid;  
+      $scope.message_save = function () { 
          
-        if(!$scope.cur) {
+        if(!$scope.selectMessage) {
           Project.save({_id:undefined},angular.extend({}, 
                 $scope.message,
                 {_id:undefined,project_id:$routeParams.projectId,owner:$scope.user.user.profile.name.givenName,type:"post_messsge"}),function(result) { 
                   console.log(result);
                   if(result.success) {
-                    //self.message("Message Saved");
-                    $scope.messageAlert = "Message Saved";
-                    setTimeout(function() {      
-                      $scope.$apply(function() {
-                        $scope.messageAlert = null;
-                      });
-                    }, 3000);
+                    self.messageAlert("Message Saved");
+
                     Project.query({project_id:$routeParams.projectId}, function (result2) {
                       $scope.message_list = result2;
                       });
@@ -163,10 +163,17 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
                       $scope.message_list = result2;
                       });
                 });
-              } else {  
-                console.log("test");
-                $scope.message = Project.get({id:$scope.cur});
-
+              } else {
+                    Project.update({
+                      id:$scope.selectMessage
+                    }, angular.extend({}, $scope.message, {_id:undefined}), function(result) {      
+                      if(result.success) {
+                        self.messageAlert("Document Saved");
+                        Project.query({project_id:$scope.project._id}, function (result2) {
+                          $scope.message_list = result2;
+                        });                
+                      }
+                    });
               }
         };
       
