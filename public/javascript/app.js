@@ -91,91 +91,123 @@ function RoleController($scope, Role, User, Logout, Admin) {
 }
 
 function MessageController($scope, $routeParams, $location, Project,User, Logout) {
-  var self = this;
-  
-  self.messageAlert = function(messageAlert) {
-    $scope.messageAlert = messageAlert;
-    setTimeout(function() {      
-      $scope.$apply(function() {
-        $scope.messageAlert = null;
-      });
-    }, 3000);
-  };
-  
-  
-  
+
   $scope.user = User.get(function(response) {
     //console.log(response);
+    
     if (response.user ||$scope.user ) {
       
       $scope.statuses = [
         {
-          id: 's',
+          id: 'เริ่มดำเนินการ',
           name: 'เริ่มดำเนินการ'},
         {
-          id: 'p',
+          id: 'กำลังดำเนินงาน',
           name: 'กำลังดำเนินงาน'},
         {
-          id: 'f',
+          id: 'เสร็จสิ้น',
           name: 'เสร็จสิ้น'},
       ];
       
-      $scope.views = {
-        project_form : 'static/project_form.html'
-        }
-      
-        Project.get({id:$routeParams.projectId},function (response) {
-            $scope.project = response;
-            $scope.current_id = $scope.project._id;
-            console.log($scope.project._id);
-            if (response) {
-                Project.query({project_id:$scope.project._id}, function (result) {
-                  $scope.message_list = result;
-                });
-            }
+    var self = this;
+    
+    self.messageAlert = function(messageAlert) {
+      $scope.messageAlert = messageAlert;
+      setTimeout(function() {      
+        $scope.$apply(function() {
+          $scope.messageAlert = null;
         });
-      
-        $scope.editField = function(message) {
-          $scope.selectMessage = message;
-          console.log($scope.selectField);
-          $scope.message = Project.get({id:$scope.selectMessage});
-          //$scope.selectValue = $scope.document[field];
-        }
-      
-      //SaveTask
-      $scope.message_save = function () { 
-         
-        if(!$scope.selectMessage) {
-          Project.save({_id:undefined},angular.extend({}, 
-                $scope.message,
-                {_id:undefined,project_id:$routeParams.projectId,owner:$scope.user.user.profile.name.givenName,type:"post_messsge"}),function(result) { 
-                  console.log(result);
-                  if(result.success) {
-                    self.messageAlert("Message Saved");
+      }, 3000);
+    };
 
-                    Project.query({project_id:$routeParams.projectId}, function (result2) {
-                      $scope.message_list = result2;
-                      });
-                    } else {
-                      //self.messageAlert("Message don't Saved");
-                    }
-                    Project.query({project_id:$scope.project._id}, function (result2) {
-                      $scope.message_list = result2;
-                      });
+    $scope.views = {
+      project_form : 'static/project_form.html'
+    }
+    
+      
+    Project.get({id:$routeParams.projectId},function (response) {
+        $scope.project = response;
+        $scope.current_id = $scope.project._id;
+        console.log($scope.project._id);
+        if (response) {
+            Project.query({project_id:$scope.project._id}, function (result) {
+              $scope.message_list = result;
+            });
+        }
+    });
+      
+    $scope.editField = function(mes) {
+      $scope.selectMessage = mes;
+      console.log($scope.selectMessage);
+      $scope.message = Project.get({id:$scope.selectMessage});
+    }
+    
+    //createMessage
+    $scope.createMessage = function(){
+      console.log("OK");
+      $scope.message = null;
+      Project.save({_id:undefined},angular.extend({}, 
+          {_id:undefined,task_name:"task_name",project_id:$routeParams.projectId,
+            owner:$scope.user.user.profile.name.givenName,
+            type:"post_messsge"}),function(result) { 
+              console.log(result);
+              if(result.success) {
+                self.messageAlert("Message Saved");
+
+                Project.query({project_id:$routeParams.projectId}, function (result2) {
+                  $scope.message_list = result2;
                 });
               } else {
-                    Project.update({
-                      id:$scope.selectMessage
-                    }, angular.extend({}, $scope.message, {_id:undefined}), function(result) {      
-                      if(result.success) {
-                        self.messageAlert("Document Saved");
-                        Project.query({project_id:$scope.project._id}, function (result2) {
-                          $scope.message_list = result2;
-                        });                
-                      }
-                    });
+                self.messageAlert("Message don't Saved");
               }
-        };
+              Project.query({project_id:$scope.project._id}, function (result2) {
+                $scope.message_list = result2;
+              });
+        });
+    };
+      
+    //SaveTask
+    $scope.messageSave = function () { 
+       
+      if(!$scope.selectMessage) {
+        Project.save({_id:undefined},angular.extend({}, 
+          $scope.message,
+            {_id:undefined,project_id:$routeParams.projectId,
+              owner:$scope.user.user.profile.name.givenName,
+              type:"post_messsge"}),function(result) { 
+                console.log(result);
+                if(result.success) {
+                  self.messageAlert("Message Saved");
+
+                  Project.query({project_id:$routeParams.projectId}, function (result2) {
+                    $scope.message_list = result2;
+                  });
+                } else {
+                  self.messageAlert("Message don't Saved");
+                }
+                Project.query({project_id:$scope.project._id}, function (result2) {
+                  $scope.message_list = result2;
+                });
+              });
+            } else {
+              Project.update({
+                id:$scope.selectMessage
+              }, angular.extend({}, 
+                $scope.message, 
+                {_id:undefined,
+                  project_id:$routeParams.projectId,
+                  owner:$scope.user.user.profile.name.givenName,
+                  type:"post_messsge"
+                }), function(result) {      
+                if(result.success) {
+                  self.messageAlert("Document Saved");
+                  Project.query({project_id:$scope.project._id}, function (result2) {
+                    $scope.message_list = result2;
+                  });                
+                }
+              });
+            }
+      };
       
       //RemoveTask
       $scope.remove_message = function (message_id) {
@@ -188,21 +220,21 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
                     });
                 }
               });
-          };
+      };
       
       //CreateProject
       $scope.save = function () {		
         Project.update({      
-            id:$routeParams.projectId
-            }, angular.extend({}, $scope.project,
-              {_id:undefined}), function(result) {
-                $scope.save_result = result;
-                if(result.success) {
-                    $location.path('/project/list');
-                  } else {
-                      console.log("not");
-                    }
-                });    
+          id:$routeParams.projectId
+          }, angular.extend({}, $scope.project,
+            {_id:undefined}), function(result) {
+              $scope.save_result = result;
+              if(result.success) {
+                  $location.path('/project/task/'+$routeParams.projectId);
+                } else {
+                    console.log("not");
+                  }
+              });    
       };
       
       //DeleteProject
@@ -221,23 +253,26 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
 }
 
 function MainController($scope, $routeParams,$http,User, Logout,Project ) {          
-    Project.query({query:'{"type":"post_message"}'}, function (result) {      
-      //console.log(result);
-      var dict = {}; //       
-      angular.forEach(result, function(message) {
-        if(!(message.project_id in dict)) {
-          Project.get({id:message.project_id}, function(project) {
-            message['project'] = project;
-            dict[message.project_id] = project;
-            //console.log(project);
-          });
-        } else {
-          message['project'] = dict[message.project_id];
-        }
-        
-      });
-      $scope.message_list = result;
-    });    
+  Project.query({
+    query:'{"type":"post_messsge"}'
+  }, function (result) {      
+    console.log(result);
+    var dict = {}; //       
+    angular.forEach(result, function(message) {
+      if(!(message.project_id in dict)) {
+        Project.get({id:message.project_id}, function(project) {
+          message['project'] = project;
+          dict[message.project_id] = project;
+          //console.log(project);
+        });
+      } else {
+        message['project'] = dict[message.project_id];
+      }
+      
+    });
+    $scope.message_list = result;
+    console.log($scope.message_list);
+  });    
 };
 
 function ProjectController($scope, $routeParams, $location, Project,User, Logout) {

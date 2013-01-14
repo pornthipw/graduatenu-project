@@ -1,13 +1,22 @@
-<div class="row-fluid">
-  <div class="span12">    
+<div class="row-fluid" ng-show="user.user">
+  <div class="span12">  
+   <p class="lead">Messages</p>  
       <blockquote>
-        <p><img style="border: 0px" src="img/icon_project.jpg" alt="With Twitter">{{project.pid}} : {{project.name}}</p>
+        <p><img style="border: 0px" src="img/icon_message1.jpg" alt="With Twitter">{{project.pid}} : <a href="#/projects/{{project.year}}">{{project.name}}</a></p>
           <small>ผู้รับผิดชอบ {{project.owner}} </small>
-      </blockquote>    
+          <small>สถานะโครงการ {{project.status}} </small>
+      </blockquote>  
         
+      <div class="form-actions input-append">    
+        <span class="pull-left"></span>
+        <span class="pull-right ">  
+          <a href="" ng-click="messageSave()" class="btn btn-primary" ng-show="selectMessage"> <i class="icon-ok icon-white"></i> Save </a>  
+          <a href="" class="btn" ng-click="createMessage()"><i class="icon-plus"></i> New Message</a>      
+        </span>          
+    </div>      
     <div class="row-fluid">
       <div class="span6" >
-        <table class="table table-condensed table-bordered">
+        <table class="table table-condensed table-bordered" ng-show="message">
           <tr>
               <th>วันที่</th>
               <th >ผลการดำเนินงาน</th>
@@ -29,42 +38,85 @@
           </div>
         </div>
       </div>
-      
-      
-      <div class="span6">        
-        <div class="form-actions input-append">          
-            <span class="pull-right ">  
-              <a href="" ng-click="message_save()" class="btn btn-primary" > <i class="icon-ok icon-white"></i> Save </a>
-              <a href="" class="btn"><i class="icon-plus"></i> New Message</a>
-            </span>          
-        </div>
+      <div class="span6" ng-show="selectMessage">
+
         
         <div class="row-fluid">
           <div class="span12">
-        <form class="form-horizontal">  
-          <div class="control-group">
-            <label class="control-label" for="inputDateRecord">วันที่: </label>
-            <div class="controls">
-              <div class="control-group input-append">
-                <input type="text" ng-model="message.date_record" data-date-format="dd/mm/yyyy" bs-datepicker>
-                <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+            <div class="tabbable"> 
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab1" data-toggle="tab">ผลการดำเนินงาน</a></li>
+                <li><a href="#tab2" data-toggle="tab">รายละเอียดโครงการ</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active"   id="tab1">
+                  <form class="form-horizontal"> 
+                    <div class="control-group">
+                      <label class="control-label" for="inputDateRecord">วันที่: </label>
+                      <div class="controls">
+                        <div class="control-group input-append">
+                          <input type="text" ng-model="message.date_record" data-date-format="dd/mm/yyyy" bs-datepicker>
+                          <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="control-group">
+                      <label class="control-label" for="inputTaskName">ผลการดำเนินงาน: </label>
+                      <div class="controls">
+                        <div ng-model="message.task_name" mode="text"  codemirror="text">
+                          <textarea></textarea>
+                        </div>            
+                      </div>
+                    </div>      
+                  </form>
+                </div>
+                
+                <div class="tab-pane"   id="tab2">
+                  <div ng-include src="views.project_form"></div>
+                </div>
               </div>
             </div>
           </div>
-          
-          <div class="control-group">
-            <label class="control-label" for="inputTaskName">ผลการดำเนินงาน: </label>
-            <div class="controls">
-                <div ng-model="message.task_name" mode="text"  codemirror="text">
-                  <textarea></textarea>
-                </div>            
-            </div>
-          </div>      
-          </div>
-        </form>
         </div>
       </div>
-    </div>
+        
+      <!--
+      <div class="span6" ng-show="selectMessage" ng-hide="views">        
+        <div class="row-fluid">
+          <div class="span12">
+            <form class="form-horizontal"> 
+              <div class="control-group">
+                <label class="control-label" for="inputDateRecord">วันที่: </label>
+                <div class="controls">
+                  <div class="control-group input-append">
+                    <input type="text" ng-model="message.date_record" data-date-format="dd/mm/yyyy" bs-datepicker>
+                    <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <label class="control-label" for="inputTaskName">ผลการดำเนินงาน: </label>
+                <div class="controls">
+                  <div ng-model="message.task_name" mode="text"  codemirror="text">
+                    <textarea></textarea>
+                  </div>            
+                </div>
+              </div>      
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="span6" ng-show="views" ng-hide="selectMessage">
+        <div class="row-fluid">
+          <div class="span12">
+            <div ng-include src="views.project_form"></div>
+          </div>
+        </div>
+      </div>
+        -->
+    
   </div>
 </div>
     
