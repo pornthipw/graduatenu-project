@@ -10,23 +10,25 @@
         <tr>
           <th>ชื่อโครงการ</th>    
           <th>วันเดือนปีที่จัด</th>
-          <th>สถานที่จัดโครงการ</th> 
+          <th>สถานที่</th> 
           <th>งบประมาณที่ใช้</th>
-          <th>จำนวนผู้เข้าร่วม</th>                                        
-          <th>ระดับความพึงพอใจ</th>
-          <th>ค่าเฉลี่ย <a href="#/project/create"><i class="icon-plus-sign"></i></a></th>          
+          <th>ผู้เข้าร่วม</th>                                        
+          <th>ความพึงพอใจ</th>
+          <th>ค่าเฉลี่ย </th>    
+          <th>สถานะ<a href="#/project/create"><i class="icon-plus-sign"></i></a></th>      
         </tr>
       </thead>
       <tbody>
         <tr ng-repeat="project in project_list |  filter:search " ng-hide="project.docID" >
           <!--<td><a href="#/project/edit/{{project._id}}" >{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-tasks"></i></a></td>-->   
-          <td><a href="#/project/task/{{project._id}}" >{{project.name}}</a> </td>     
+          <td><a href="#/project/edit/{{project._id}}">{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-pencil"></i></a></td>     
           <td>{{project.date_manage| date:'MM/dd/yyyy'}}</td>  
           <td>{{project.place}}</td>     
           <td>{{project.money_use}}</td>    
           <td>{{project.party}}</td>    
           <td>{{project.sd}}</td>     
           <td>{{project.average}}</td>  
+          <td>{{project.status}}</td>  
         </tr>
       </tbody>
     </table>

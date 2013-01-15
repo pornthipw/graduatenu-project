@@ -203,7 +203,7 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
                   type:"post_messsge"
                 }), function(result) {      
                 if(result.success) {
-                  self.messageAlert("Document Saved");
+                  self.messageAlert("Message Saved");
                   Project.query({project_id:$scope.project._id}, function (result2) {
                     $scope.message_list = result2;
                   });                
@@ -225,7 +225,7 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
               });
       };
       
-      //CreateProject
+      //UpdateProject
       $scope.save = function () {		
         Project.update({      
           id:$routeParams.projectId
@@ -233,7 +233,9 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
             {_id:undefined}), function(result) {
               $scope.save_result = result;
               if(result.success) {
-                  $location.path('/project/task/'+$routeParams.projectId);
+                self.messageAlert("Project Updated");
+                console.log("OK saved");
+                //$location.path('/project/task/'+$routeParams.projectId);
                 } else {
                     console.log("not");
                   }
@@ -246,8 +248,9 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
             id:$routeParams.projectId
             },function(result) {
               console.log(result);        
-              if(result.sucess) {        
-                  $location.path('/project/list');
+              if(result.sucess) {    
+                self.messageAlert("Project Deleted");    
+                  //$location.path('/project/list');
                 }
               });
           };
@@ -258,31 +261,42 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
 function MainController($scope, $routeParams,$http,User, Logout,Project ) {          
   Project.query({
     query:'{"type":"post_messsge"}'
-  }, function (result) {      
-    console.log(result);
-    var dict = {}; //       
-    angular.forEach(result, function(message) {
-      if(!(message.project_id in dict)) {
-        Project.get({id:message.project_id}, function(project) {
-          message['project'] = project;
-          dict[message.project_id] = project;
-        });
-      } else {
-        message['project'] = dict[message.project_id];
-      }
+    }, function (result) {      
+      console.log(result);
+      var dict = {}; //       
+      angular.forEach(result, function(message) {
+        if(!(message.project_id in dict)) {
+          Project.get({id:message.project_id}, function(project) {
+            message['project'] = project;
+            dict[message.project_id] = project;
+          });
+        } else {
+          message['project'] = dict[message.project_id];
+        }
+      });
       
-    });
-    $scope.message_list = result;
-    //console.log($scope.message_list);
-  });  
+      $scope.message_list = result;
+    
+    });  
   
     $scope.project_list = Project.query({
       query:'{"type":"post_project"}'
     });
-    //console.log("ff"+$scope.project_list);
+    
+
 };
 
 function ProjectController($scope, $routeParams, $location, Project,User, Logout) {
+  var self = this;
+    
+  self.messageAlert = function(messageAlert) {
+    $scope.messageAlert = messageAlert;
+    setTimeout(function() {      
+      $scope.$apply(function() {
+        $scope.messageAlert = null;
+      });
+    }, 3000);
+  };
   $scope.user = User.get(function(response) {
     console.log(response);
     
@@ -298,7 +312,8 @@ function ProjectController($scope, $routeParams, $location, Project,User, Logout
               {_id:undefined}), function(result) {
                 $scope.save_result = result;
                 if(result.success) {
-                    $location.path('/projects/'+$scope.project.year);
+                   
+                  $location.path('/projects/'+$scope.project.year);
                 } else {
                     console.log("not");
                   }
@@ -363,11 +378,7 @@ function ProjectEditController($scope, $routeParams, $location, Project,User, Lo
 }
 
 function CreateProjectController($scope, $location, Project, $routeParams,User, Logout) {
-  $scope.user = User.get(function(response) {
-    console.log(response);
-    
-    if (response.user ||$scope.user ) {
-      var self=this;
+
       /*
       $scope.statuses = [
       {
@@ -380,6 +391,17 @@ function CreateProjectController($scope, $location, Project, $routeParams,User, 
         id: 'เสร็จสิ้น',
         name: 'เสร็จสิ้น'},
     ];*/
+    
+    var self = this;
+    
+    self.messageAlert = function(messageAlert) {
+      $scope.messageAlert = messageAlert;
+      setTimeout(function() {      
+        $scope.$apply(function() {
+          $scope.messageAlert = null;
+        });
+      }, 3000);
+    };
       
       $scope.user = User.get(function(response) {
         console.log(response);
@@ -391,7 +413,8 @@ function CreateProjectController($scope, $location, Project, $routeParams,User, 
               {_id:undefined,user:$scope.user.user.identifier,"type":"post_project"}),function(result) { 
                 console.log(result);
                 if(result.success) {
-                  $location.path('/');
+                  self.messageAlert("Project Saved"); 
+                  //$location.path('/');
                 }
               });
             } 
@@ -405,8 +428,7 @@ function CreateProjectController($scope, $location, Project, $routeParams,User, 
           }; */
         };
       });
-    }
-  });
+
 }
 
 function ProjectListController($scope, $routeParams, Project, User, Logout) {
