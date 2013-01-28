@@ -13,8 +13,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="project in project_list" ng-show="project.status!='สิ้นสุดโครงการ'">  
-              <td><a href="#/project/edit/{{project._id}}">{{project.name}} </a></td>    
+            <tr ng-repeat="project in project_list" ng-show="project.status!='ดำเนินการแล้ว' && project.status!='ยังไม่ได้ดำเนินการ'">  
+              <td>
+                <a href="#/project/edit/{{project._id}}">{{project.name}} </a>
+                  <div class="progress progress-success" ng-show="project.status=='กำลังดำเนินการ'">
+                    <div class="bar" style="width: 50%" ></div>
+                  </div>
+              </td>    
               <td>{{project.status}} </td>   
               <td>{{project.date_manage}} 
                 <a href="#/project/edit/field/{{project._id}}"><i class="icon-pencil"></i></a>

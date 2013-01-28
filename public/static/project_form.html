@@ -8,7 +8,7 @@
             <i class="icon-remove icon-white"></i> 
             Delete Project
           </a>  
-          <a href="" class="btn" type="submit"> 
+          <a href="" class="btn" type="submit" ng-click="save()"> 
             <i class="icon-ok"></i> Save
           </a>
         </span>
@@ -28,16 +28,15 @@
       
         
       <div class="control-group">
-        <label class="control-label" for="inputType">สถานะของโครงการ</label>
+        <label class="control-label" for="inputType">สถานภาพโครงการ</label>
         <div class="controls">
           <!--<select  ng-model="project.status" ng-options="i.id as i.name for i in statuses">
             <option value=""></option>
           </select> -->
           <select id="inputStatus" placeholder="Status" ng-model="project.status">
-                <option ng-selected="project.status=='ยังไม่เริ่มดำเนินการ'">ยังไม่เริ่มดำเนินการ</option>
-                <option ng-selected="project.status=='เริ่มดำเนินการ'">เริ่มดำเนินการ</option>
+                <option ng-selected="project.status=='ยังไม่ได้ดำเนินการ'">ยังไม่ได้ดำเนินการ</option>
                 <option ng-selected="project.status=='กำลังดำเนินการ'">กำลังดำเนินการ</option>
-                <option ng-selected="project.status=='สิ้นสุดโครงการ'">สิ้นสุดโครงการ</option>
+                <option ng-selected="project.status=='ดำเนินการแล้ว'">ดำเนินการแล้ว</option>
               </select>
         </div>
       </div>
@@ -67,6 +66,26 @@
               </select>
         </div>
       </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">วันเดือนปีที่จัด เริ่ม: </label>
+        <div class="controls">
+          <div class="input-append">
+            <input type="text" ng-model="project.date_manage" data-date-format="dd/mm/yyyy" bs-datepicker>
+            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">ถึง วันที่: </label>
+        <div class="controls">
+          <div class="input-append">
+            <input type="text" ng-model="project.end_date_manage" data-date-format="dd/mm/yyyy" bs-datepicker>
+            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+          </div>
+        </div>
+      </div>
     
       <div class="control-group">
         <label class="control-label" for="inputName">งบประมาณที่ขอ: </label>
@@ -89,15 +108,6 @@
               </div>
       </div>
       
-      <div class="control-group">
-        <label class="control-label" for="inputName">วันเดือนปีที่จัด: </label>
-        <div class="controls">
-          <div class="control-group input-append">
-            <input type="text" ng-model="project.date_manage" data-date-format="dd/mm/yyyy" bs-datepicker>
-            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
-          </div>
-        </div>
-      </div>
       
      <div class="control-group">
         <label class="control-label" for="inputName">สถานที่: </label>

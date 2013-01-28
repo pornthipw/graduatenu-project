@@ -33,7 +33,12 @@ app.config(function($routeProvider) {
   $routeProvider.when('/projects/:year', {
     controller:ProjectListByYearController, 
     templateUrl:'static/project_list.html'
-  });    
+  });   
+  
+  $routeProvider.when('/report', {
+    controller:ReportyYearController,  
+    templateUrl:'static/report.html'
+  });  
   
   $routeProvider.when('/role', {
     controller:RoleController, 
@@ -363,10 +368,7 @@ function ProjectEditController($scope, $routeParams, $location, Project,User, Lo
 }
 
 function CreateProjectController($scope, $location, Project, $routeParams,User, Logout) {
-  $scope.user = User.get(function(response) {
-    console.log(response);
-    
-    if (response.user ||$scope.user ) {
+
       var self=this;
       /*
       $scope.statuses = [
@@ -391,7 +393,9 @@ function CreateProjectController($scope, $location, Project, $routeParams,User, 
               {_id:undefined,user:$scope.user.user.identifier,"type":"post_project"}),function(result) { 
                 console.log(result);
                 if(result.success) {
-                  $location.path('/');
+                  //$location.path('/');
+                  //$location.path('/projects/list');
+                  $location.path('/projects/'+$scope.project.year);
                 }
               });
             } 
@@ -405,20 +409,20 @@ function CreateProjectController($scope, $location, Project, $routeParams,User, 
           }; */
         };
       });
-    }
-  });
+
 }
 
 function ProjectListController($scope, $routeParams, Project, User, Logout) {
   $scope.user = User.get(function(response) {
     console.log(response);
     if (response.user | $scope.user) {
-      
-      $scope.project_list = Project.query(); 
-      console.log($scope.project_list );
-      //$scope.stats = MongoStats.info();
+      Project.query(function(response){
+        
+      }); 
     }
   });
+  
+
 }
 
 function ProjectListByYearController($scope, $routeParams, Project,User, Logout) {
@@ -440,6 +444,9 @@ function ProjectListByYearController($scope, $routeParams, Project,User, Logout)
 }
 
 function YearListController($scope, $location, $routeParams,Project,User, Logout) {
+    $scope.user = User.get(function(response) {
+    console.log(response);
+    if (response.user || $scope.user) {
 	Project.query(function(response) {
     var years = {}; // {'2556':1}
     var year_list = [];
@@ -455,9 +462,15 @@ function YearListController($scope, $location, $routeParams,Project,User, Logout
     console.log(year_list);
     $scope.year_list = year_list;    
   });  
+}
+});
   
   $scope.filter = function(year) {
     $location.path('/projects/'+year);
   };
+  
+}
+
+function ReportyYearController($scope, $location, $routeParams,Project,User, Logout){
   
 }
