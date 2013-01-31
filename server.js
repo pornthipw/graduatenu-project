@@ -79,6 +79,7 @@ passport.use(new OpenIDStrategy({
 app.get('/auth/openid', 
 	passport.authenticate('openid', { failureRedirect: '/login' }),
   		function(req, res) {
+        console.log('Hello');
     		res.redirect(config.site.baseUrl);
 });
   

@@ -859,7 +859,7 @@ function ProjectEditController($scope, $routeParams, $location, Project,User, Lo
 }
 
 function CreateProjectController($scope, $location, Project, $routeParams,User, Logout) {
-
+/*
 <<<<<<< HEAD
     var self=this;
 =======
@@ -898,14 +898,15 @@ function CreateProjectController($scope, $location, Project, $routeParams,User, 
               {_id:undefined,user:$scope.user.user.identifier,"type":"post_project"}),function(result) { 
                 console.log(result);
                 if(result.success) {
-<<<<<<< HEAD
+//<<<<<<< HEAD
                   //$location.path('/');
                   //$location.path('/projects/list');
                   $location.path('/projects/'+$scope.project.year);
+                  /*
 =======
                   self.messageAlert("Project Saved"); 
                   //$location.path('/');
->>>>>>> 8f41787a1a51e04ee48fcba556d614758961e080
+>>>>>>> 8f41787a1a51e04ee48fcba556d614758961e080 */
                 }
               });
             } 
