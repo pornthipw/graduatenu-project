@@ -1,8 +1,8 @@
 <div class="row-fluid" >
-  <p class="lead">Messages</p>  
+  <p class="lead">ติดตามโครงการ/กิจกรรม</p>  
   <blockquote>
     <p><img style="border: 0px" src="img/icon_message1.jpg" alt="With Twitter">
-      {{project.pid}} : {{project.name}} 
+      {{project.pid}} : <a href="#/project/edit/{{project._id}}">{{project.name}} </a>
       <a href="#/projects/{{project.year}}"><i class="icon-th-list"></i></a>
       <a href=""  ng-click="createMessage()" ><i class="icon-plus"></i> </a>   
     </p>
@@ -45,7 +45,7 @@
               <div class="tab-content">
                 <div class="tab-pane active"   id="tab1">
                   <fieldset>
-                    <legend>เพิ่ม/แก้ไขผลการดำเนินงาน</legend>
+                    <legend>ผลการดำเนินงาน</legend>
                     
                     <label>วันที่: </label>
                     <div class="input-append" >

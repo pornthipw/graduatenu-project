@@ -1,7 +1,7 @@
 var app = angular.module('mongorest_service', ['ngResource']);
 
-var prefix = '/apps/grad-project';
-//var prefix = '';
+//var prefix = '/apps/grad-project';
+var prefix = '';
 
 app.factory('Project', function($resource) {
    //var Project = $resource('http://www.db.grad.nu.ac.th/apps/mongodb/databases/projectplan/collections/project/:document', {   
@@ -11,6 +11,20 @@ app.factory('Project', function($resource) {
   {update: { method:'PUT' }});
   return Project;
 });
+
+app.factory('FileDB', function($resource) {
+  var FileDB = $resource(prefix + '/db/fs.files/:id', {    
+    id: '@id'
+  },
+  {update: { method:'PUT' }});
+  return FileDB;
+});
+
+app.factory('GridDB', function($resource) {
+    var GridDB  = $resource('file/:id', {id:'@id'},{});                 
+    return GridDB;
+});
+
 
 app.factory('User', function($resource) {
     var User  = $resource('user',{}, {});   

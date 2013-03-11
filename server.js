@@ -135,6 +135,7 @@ app.put('/admin/users/:id', admin_role ,userprofile.update_user);
 
 app.get('/db/:collection/:id?', mongo.query);
 app.post('/db/:collection', mongo.insert);
+
 app.put('/db/:collection/:id', mongo.update);
 app.del('/db/:collection/:id', mongo.delete);
 

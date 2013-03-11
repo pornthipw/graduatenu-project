@@ -28,7 +28,12 @@
               <tr ng-repeat="project in project_list |  filter:search " ng-hide="project.docID" ng-show="project.owner=='งานวิชาการ'">
                 <!--<td><a href="#/project/edit/{{project._id}}" >{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-tasks"></i></a></td>-->   
                 <td><a href="#/project/edit/{{project._id}}">{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-pencil"></i></a></td>     
-                <td>{{project.date_manage| date:'MM/dd/yyyy'}}</td>     
+                <td>
+                  {{project.date_manage| date:'MM/dd/yyyy'}} 
+                  <span ng-hide="!project.end_date_manage">
+                    - {{project.end_date_manage| date:'MM/dd/yyyy'}}
+                  </span>
+                </td>      
                 <td>{{project.money_use}}</td>    
                 <td>{{project.party}}</td>    
                 <td><small>{{project.status}}</small>
@@ -52,7 +57,12 @@
               <tr ng-repeat="project in project_list |  filter:search " ng-hide="project.docID" ng-show="project.owner=='งานธุรการและการเงิน'">
                 <!--<td><a href="#/project/edit/{{project._id}}" >{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-tasks"></i></a></td>-->   
                 <td><a href="#/project/edit/{{project._id}}">{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-pencil"></i></a></td>     
-                <td>{{project.date_manage| date:'MM/dd/yyyy'}}</td>      
+                <td>
+                  {{project.date_manage| date:'MM/dd/yyyy'}} 
+                  <span ng-hide="!project.end_date_manage">
+                    - {{project.end_date_manage| date:'MM/dd/yyyy'}}
+                  </span>
+                </td>         
                 <td>{{project.money_use}}</td>    
                 <td>{{project.party}}</td>    
                 <td><small>{{project.status}}</small>
@@ -76,7 +86,12 @@
               <tr ng-repeat="project in project_list |  filter:search " ng-hide="project.docID" ng-show="project.owner=='งานแผนและสารสนเทศ'">
                 <!--<td><a href="#/project/edit/{{project._id}}" >{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-tasks"></i></a></td>-->   
                 <td><a href="#/project/edit/{{project._id}}">{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-pencil"></i></a></td>     
-                <td>{{project.date_manage| date:'MM/dd/yyyy'}}</td>    
+                <td>
+                  {{project.date_manage| date:'MM/dd/yyyy'}} 
+                  <span ng-hide="!project.end_date_manage">
+                    - {{project.end_date_manage| date:'MM/dd/yyyy'}}
+                  </span>
+                </td>        
                 <td>{{project.money_use}}</td>    
                 <td>{{project.party}}</td>    
                 <td><small>{{project.status}} </small>
@@ -103,7 +118,12 @@
               <tr ng-repeat="project in project_list |  filter:search " ng-hide="project.docID" ng-show="project.owner=='สำนักพิมพ์มหาวิทยาลัยนเรศวร'">
                 <!--<td><a href="#/project/edit/{{project._id}}" >{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-tasks"></i></a></td>-->   
                 <td><a href="#/project/edit/{{project._id}}">{{project.name}}</a> <a href="#/project/task/{{project._id}}" ><i class="icon-pencil"></i></a></td>     
-                <td>{{project.date_manage| date:'MM/dd/yyyy'}}</td>   
+                <td>
+                  {{project.date_manage| date:'MM/dd/yyyy'}} 
+                  <span ng-hide="!project.end_date_manage">
+                    - {{project.end_date_manage| date:'MM/dd/yyyy'}}
+                  </span>
+                </td>    
                 <td>{{project.money_use}}</td>    
                 <td>{{project.party}}</td>    
                 <td><small>{{project.status}}</small>
@@ -131,12 +151,15 @@
                   <a href="#/project/edit/{{project._id}}">{{project.name}}</a> 
                   <a href="#/project/task/{{project._id}}" ><i class="icon-pencil"></i></a>
                 </td>     
-                <td>{{project.date_manage| date:'MM/dd/yyyy'}}</td>    
+                <td>
+                  {{project.date_manage| date:'MM/dd/yyyy'}} 
+                  <span ng-hide="!project.end_date_manage">
+                    - {{project.end_date_manage| date:'MM/dd/yyyy'}}
+                  </span>
+                </td>    
                 <td>{{project.money_use}}</td>    
                 <td>{{project.party}}</td>    
                 <td><small>{{project.status}}</small>
-
-
                 </td>
               </tr>
               <tr>

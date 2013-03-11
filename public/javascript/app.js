@@ -181,7 +181,15 @@ function ProjectController($scope, $routeParams, $location, Project,User, Logout
     if (!response.user) {
       self.messageAlert("You are not authorized to update content");  
     } else {
-      $scope.project = Project.get({id:$routeParams.projectId});  
+      $scope.project = Project.get({id:$routeParams.projectId},function () {
+        console.log($scope.project._id);
+          var query_obj = {"project_id":$scope.project._id}; 
+          Project.query({query:JSON.stringify(query_obj)}, function (result) {
+           $scope.message_list = result;
+           console.log(result);
+          });
+      });  
+        
       $scope.save = function () {		
         Project.update({      
           id:$routeParams.projectId
@@ -193,17 +201,30 @@ function ProjectController($scope, $routeParams, $location, Project,User, Logout
             }
           });    
         };
-    
-      $scope.del = function() {
-        Project.delete({
-          id:$routeParams.projectId
-        },function(result) {
-          console.log(result);            
-          if(result.success) {        
-            $location.path('/projects/'+$scope.project.year);
-          }
-        });
-      };
+        
+        $scope.del = function() {
+          angular.forEach($scope.message_list, function(e_msg) {
+            console.log(e_msg['project_id']);
+            //console.log($scope.message_list.indexOf(e_msg));
+            Project.delete({
+              id:e_msg['_id']
+            },function(result) {   
+              console.log(result);         
+                $scope.success = result.success;
+            });
+            
+          });
+          
+          Project.delete({
+            id:$routeParams.projectId
+          },function(result) {
+            console.log(result);            
+            if(result.success) {        
+              //$location.path('/projects/'+$scope.project.year);
+              $location.path('/');
+            }
+          });
+        }
     }
   });
 }
@@ -290,7 +311,8 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
               } else {
                 self.messageAlert("Message don't Saved");
               }
-              Project.query({project_id:$scope.project._id}, function (result2) {
+              var query_obj = {"project_id":$scope.project._id}; 
+              Project.query({query:JSON.stringify(query_obj)}, function (result2) {
                 $scope.message_list = result2;
               });
             });
@@ -306,7 +328,8 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
           function(result) {      
             if(result.success) {
               self.messageAlert("Message Saved");
-              Project.query({project_id:$scope.project._id}, function (result2) {
+              var query_obj = {"project_id":$scope.project._id}; 
+              Project.query({query:JSON.stringify(query_obj)}, function (result2) {
                 $scope.message_list = result2;
               });                
             }
@@ -320,7 +343,8 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
           id:message_id
         },function(result) {            
           if(result.success) { 
-            Project.query({project_id:$scope.project._id}, function (result) {
+            var query_obj = {"project_id":$scope.project._id}; 
+            Project.query({query:JSON.stringify(query_obj)}, function (result) {
               $scope.message_list = result;
             });
           }
