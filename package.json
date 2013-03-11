@@ -1,17 +1,20 @@
 {
-  "name" : "nodejs-projectplan",
+  "name" : "grad-project",
+  "user" : "pornthipw",
   "version" : "0.0.1",
   "dependencies" : {
-    "express" : "*",        
-    "hbs" : "*" ,
+    "express" : "*",
+    "hbs" : "*",
     "underscore" : "*",
     "mongodb" : "*",
     "underscore" : "*",
     "mongo-ac" : "*",
     "passport" : "*",
-    "passport-openid" : "*",
-    "generic-pool" : "*",
+    "passport-openid":"*",
+    "generic-pool":"*",
     "mongo-connect":"*"
+  },
+  "scripts" : {
+    "start" :"server.js"
   }
 }
-
