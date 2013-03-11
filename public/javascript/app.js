@@ -186,7 +186,7 @@ function ProjectController($scope, $routeParams, $location, Project,User, Logout
           var query_obj = {"project_id":$scope.project._id}; 
           Project.query({query:JSON.stringify(query_obj)}, function (result) {
            $scope.message_list = result;
-           console.log(result);
+           //console.log(result);
           });
       });  
         
@@ -209,8 +209,8 @@ function ProjectController($scope, $routeParams, $location, Project,User, Logout
             Project.delete({
               id:e_msg['_id']
             },function(result) {   
-              console.log(result);         
-                $scope.success = result.success;
+              //console.log(result);         
+              $scope.success = result.success;
             });
             
           });
@@ -218,7 +218,7 @@ function ProjectController($scope, $routeParams, $location, Project,User, Logout
           Project.delete({
             id:$routeParams.projectId
           },function(result) {
-            console.log(result);            
+            //console.log(result);            
             if(result.success) {        
               //$location.path('/projects/'+$scope.project.year);
               $location.path('/');
@@ -249,7 +249,8 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
       $scope.current_id = $scope.project._id;
       //console.log($scope.project._id);
       if (response) {
-        Project.query({project_id:$scope.project._id}, function (result) {
+        var query_obj = {"project_id":$scope.project._id}; 
+        Project.query({query:JSON.stringify(query_obj)}, function (result) {
           $scope.message_list = result;
         });
       }
@@ -286,7 +287,8 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
             } else {
               self.messageAlert("Message don't Saved");
             }
-            Project.query({project_id:$scope.project._id}, function (result2) {
+            var query_obj = {"project_id":$scope.project._id}; 
+            Project.query({query:JSON.stringify(query_obj)}, function (result2) {
               $scope.message_list = result2;
             });
           });
