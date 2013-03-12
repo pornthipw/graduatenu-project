@@ -30,7 +30,8 @@
       </thead>
       <tbody>
         <tr ng-repeat="message in message_list |  filter:search | orderBy:predicate:reverse ">  
-          <td>{{message.task_name}} </td>    
+          <td><a href="#/project/edit/field/{{message._id}}">
+		{{message.task_name}}</a> </td>    
           <td><a href="#/project/task/{{message.project_id}}">{{message.project.name}} </a></td>    
           <td>{{message.owner}}</td>   
           <td>

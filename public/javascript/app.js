@@ -11,13 +11,13 @@ app.config(function($routeProvider) {
     controller:MessageController, 
     templateUrl:'static/task_form.html'
   }); 	
-  /*
+  
   $routeProvider.when('/project/edit/field/:projectId', {
     controller:ProjectEditController, 
     //templateUrl:'static/project_form.html'
     templateUrl:'static/project_edit.html'
   });  
-  */
+  
   $routeProvider.when('/project/edit/:projectId', {
     controller:ProjectController, 
     templateUrl:'static/project_form.html'
