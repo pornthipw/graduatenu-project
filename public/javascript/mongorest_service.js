@@ -1,7 +1,8 @@
 var app = angular.module('mongorest_service', ['ngResource']);
 
-//var prefix = '/apps/grad-project';
-var prefix = '';
+var prefix = '/apps/grad-project';
+//var prefix = '';
+               
 
 app.factory('Project', function($resource) {
    //var Project = $resource('http://www.db.grad.nu.ac.th/apps/mongodb/databases/projectplan/collections/project/:document', {   
