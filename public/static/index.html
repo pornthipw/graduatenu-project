@@ -12,6 +12,17 @@
   </div>
   <div class="span12">
     <p class="lead">Lasted Messages</p>  
+    Page {{currentPage}}/{{totalPage}}
+    <div class="btn-group pull-right" ng-init="currentPage=1">
+      <button class="btn" 
+        ng-click="currentPage=currentPage-1"
+        ng-disabled="currentPage==1">
+        &laquo;</button>
+      <button class="btn"
+        ng-click="currentPage=currentPage+1"
+        ng-disabled="currentPage==totalPage">
+        &raquo;</button>
+    </div>
     <table class="table table-hover">
       <thead>
         <tr>
@@ -29,9 +40,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="message in message_list |  filter:search | orderBy:predicate:reverse ">  
+        <tr ng-repeat="message in message_list |  filter:search | orderBy:predicate:reverse | skip:(currentPage-1)*limit|limitTo:limit ">  
           <td>{{message.task_name}} </td>    
-          <td><a href="#/project/task/{{message.project_id}}">{{message.project.name}} </a></td>    
+          <td>
+            <a href="#/project/task/{{message.project_id}}">
+              {{message.project.name}} 
+            </a>
+            
+          </td>    
           <td>{{message.owner}}</td>   
           <td>
             {{message.date_record}}
