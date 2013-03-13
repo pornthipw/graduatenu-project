@@ -1,5 +1,28 @@
 var app = angular.module('projectplan', ['mongorest_service','codemirror','$strap.directives']);
 
+app.filter('skip', function() {
+  return function(input, start) {
+    start=+start;
+    if(input) {
+      return input.slice(parseInt(start));
+    }
+  }
+});
+
+app.filter('hide', function() {
+  return function(input, key) {
+    if(input) {
+      var result = [];
+      angular.forEach(input, function(v) {
+        if(!v.hide) {
+          result.push(v);
+        }
+      });
+      return result;
+    }
+  }
+});
+
 app.config(function($routeProvider) {
   
   $routeProvider.when('/project/create', {
@@ -64,11 +87,13 @@ function UserCtrl($scope, User, Logout) {
   };
 }
 
-function MainController($scope, $routeParams,$http,User, Logout,Project ) {          
+function MainController($scope, $routeParams,$http,User, Logout,Project ) { 
+  $scope.limit = 10;         
   Project.query({
     query:'{"type":"post_messsge"}'
   }, function (result) {      
-    var dict = {}; //       
+    var dict = {}; //
+    $scope.totalPage = Math.ceil(result.length/$scope.limit);      
     angular.forEach(result, function(message) {
       if(!(message.project_id in dict)) {
         Project.get({id:message.project_id}, function(project) {
@@ -80,6 +105,7 @@ function MainController($scope, $routeParams,$http,User, Logout,Project ) {
       }
       
     });
+
     $scope.message_list = result;
   });  
   
