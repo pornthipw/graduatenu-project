@@ -57,7 +57,7 @@
           <tr ng-repeat="message in message_list">
           <tr style="cursor:pointer"
               ng-class="{'warning':entry.cancel}"
-              ng-repeat="message in message_list" ng-click="select_message(message)">
+              ng-repeat="message in message_list|orderBy:'-date_record'" ng-click="select_message(message)">
             <td>{{message.date_record}}</td>
             <td>{{message.task_name}}</td>
             <td>{{message.owner.profile.displayName}}</td>
