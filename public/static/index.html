@@ -79,8 +79,17 @@
             </button>
           </div>
           
+          <label>ประเภท: </label>
+          <div class="input-append" >
+           <select ng-model = "current_message.task_type"> 
+             <option ng-repeat="tasktype in tasktype_list" 
+                ng-selected="current_message.task_type==tasktype.name">{{tasktype.name}}</option> 
+           </select>  
+          </div>
+
           <label>ผลการดำเนินงาน: </label>
-          <div ng-model="current_message.task_name" mode="text"  codemirror="text">
+          <div ng-model="current_message.task_name" 
+            mode="text"  codemirror="text">
             <textarea></textarea>
           </div>  
       

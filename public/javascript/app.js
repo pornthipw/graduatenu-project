@@ -92,6 +92,23 @@ function UserCtrl($scope, User, Logout) {
 }
 
 function MainController($scope, $filter, User,Project ) {   
+  $scope.tasktype_list = [
+    {'name':'ติดต่อวิทยากร'},
+    {'name':'ติดต่อสถานที่'},
+    {'name':'ยืมเงิน'},
+    {'name':'ประชาสัมพันธ์'},
+    {'name':'ประสานงานผู้เกี่ยวข้อง'},
+    {'name':'หนังสือเชิญวิทยากร'},
+    {'name':'คำกล่าวรายงาน'},
+    {'name':'ประชุมเตรียมการ'},
+    {'name':'เอกสารประกอบโครงการ'},
+    {'name':'อาหารว่าง/เคร่ืองดื่ม'},
+    {'name':'ป้ายตั้งโต๊ะ'},
+    {'name':'แบบประเมิน'},
+    {'name':'นัดหมายการแต่งกาย'},
+
+  ];
+  
   $scope.project_list = Project.query({query:'{"type":"post_project","status":"กำลังดำเนินการ"}'}, function(res) {
     if(res.length>0) {
       $scope.current_project = res[0];
