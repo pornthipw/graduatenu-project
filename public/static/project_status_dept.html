@@ -1,0 +1,160 @@
+<!--<div class="row">
+  <ol>
+    <li ng-repeat="w in result">
+      {{w.owner}} :: กำลังดำเนินการ {{w.count.working}}
+       :: ดำเนินการแล้ว {{w.count.finish}}
+       :: ยังไม่ได้ดำเนินการ {{w.count.no}}
+    </li>
+  </ol>
+</div>
+<div class="row">
+  <table>
+    <tbody ng-repeat="w in result">
+      <tr >
+        <td>{{w.owner}}</td> 
+      </tr>
+      <tr ng-repeat="p in w.count.listproject">
+        <td>{{p.name}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+-->
+     <!--<div ng-repeat="project in p_list|orderBy:'project.fund' ">
+       <div ng-show="CreateHeader(project.project.fund)">
+        <span ng-show="project.project.fund=='A'">กองทุนทั่วไป</span> 
+        <span ng-show="project.project.fund=='B'">กองทุนกิจการนิสิต</span> 
+        <span ng-show="project.project.fund=='C'">กองทุนวิจัย</span> 
+        <span ng-show="project.project.fund=='D'">กองทุนทำนุบำรุงศิลปวัฒนธรรม</span> 
+      </div>
+        {{project.project.name}} 
+     </div>
+     -->
+<ol class="breadcrumb">
+  <li><a href="#">Home</a></li>
+  <li><a href="#/projects/{{current_year}}">แผนปฏิบัติการประจำปี {{current_year}} </a></li>
+  <li class="active">สถานภาพโครงการตามงาน</li>
+</ol>
+
+<div class="page-header">
+  <h1>สถานะภาพโครงการตามงานผู้รับผิดชอบ <small>ตามแผนปฏิบัติการประจำปี 2557 </small></h1>
+</div>
+<div class="row">
+  <div class="col-lg-7">
+  </div>
+  <div class="col-lg-2">
+  </div>
+  <div class="col-lg-3 input-group">
+    <span class="input-group-addon">@</span>
+    <input type="text" 
+      class = "form-control" placeholder="สืบค้นโครงการ" ng-model="search">    
+  </div>
+    <!--
+  <div class="col-lg-2 ">
+    <select ng-model="orderProp" class="form-control">
+      <option value="date_record">วันที่</option>
+      <option value="owner">ผู้รับผิดชอบ</option>
+      <option value="name">โครงการ</option>
+      <option value="financeid">รหัสการเงิน</option>
+    </select>
+  </div>
+i-->
+</div>
+<!--{{project_list}}-->
+<div class="row">
+  <div >
+          <table class="table">
+            <thead>
+              <tr>
+                <th colspan="6">รายงานสถานภาพโครงการ</th>
+              </tr>
+            </thead>
+            <tbody ng-repeat="p in result | orderBy:'orderProp'" ng-hide="p.docID" >
+              <tr class="success">
+                <td >
+                  {{p.owner}}
+                </td>
+                <td colspan="5">
+                   <div class="row">
+                     <div class="col-lg-7">
+                       โครงการ
+                     </div>
+                     <div class="col-lg-1">
+                        ได้รับ
+                     </div>
+                     <div class="col-lg-1">
+                        ใช้ไป
+                     </div>
+                     <div class="col-lg-1">
+                        คงเหลือ
+                     </div>
+                     <div class="col-lg-1">
+                       สถานะ 
+                     </div>
+                   </div>
+                </td> 
+              </tr>
+              <tr ng-repeat="(key,value) in p.count.fund" >
+                 <td>
+                   <span ng-show="key=='A'">กองทุนทั่วไป</span> 
+                   <span ng-show="key=='B'">กองทุนกิจการนิสิต</span> 
+                   <span ng-show="key=='C'">กองทุนวิจัย</span> 
+                   <span ng-show="key=='D'">กองทุนทำนุบำรุงศิลปวัฒนธรรม</span> 
+                   <span ng-show="key=='Z'">กองทุน</span> 
+                 </td>
+                 <td colspan="5">
+                   <div ng-repeat="project in value " class="row">
+                   <div class="col-lg-12">
+                     <div class="row">
+                       <div class="col-lg-7">
+                         {{$index+1}}. {{project.pid}}-
+                           <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+                           <a href="#/project/task/{{project._id}}" >
+                           </a>
+                       </div>
+                       <div class="col-lg-1">
+                         {{project.start_balance}}
+                       </div>
+                       <div class="col-lg-1">
+                          <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/" 
+                             target="_blank">
+                             <p class="text-danger" 
+                               ng-hide="project.sum_expend==0">
+                               ({{project.sum_expend}})
+                             </p>
+                          </a>
+                         <p class="text-primary" 
+                           ng-hide="project.sum_expend!=0">
+                         {{project.sum_expend}}
+                       </div>
+                       <div class="col-lg-1">
+                         {{project.start_balance-project.sum_expend}}
+                       </div>
+                       <div class="col-lg-1">
+                         <span ng-show="project.status=='กำลังดำเนินการ'"
+                           class="label label-warning">P</span>
+                         <span ng-show="project.status=='ดำเนินการแล้ว'"
+                           class="label label-info">F</span>
+                         <span ng-show="project.status=='ยังไม่ได้ดำเนินการ'"
+                           class="label label-danger">N</span>
+                       </div>
+                     </div>
+                     <!--
+                     <tr class="danger">
+                       <td></td>
+                       <td>รวมงบประมาณ</td>
+                       <td>{{p.count.total_start}}</td>
+                       <td>{{p.count.total_expend}}</td>
+                       <td>{{p.count.total_start-p.count.total_expend}}</td>
+                       <td></td>
+                      -->
+                   </div>
+                   </div>
+
+                 </td>
+              </tr>
+            </tbody>
+          </table>
+  </div>
+</div>
+

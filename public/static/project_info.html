@@ -1,45 +1,77 @@
-<div class="row-fluid">
-  <div class="span12"> 
-    <legend>โครงการ/กิจกรรม</legend> <br>
-    <blockquote>
-        <p>
-          <img style="border: 0px" src="img/icon_project.jpg" alt="With Twitter">
-            <strong> {{project.pid}} : 
-              <a href="#/project/edit/{{project._id}}">
-                {{project.name}}</a> 
-            </strong>
-        </p>
-      <i class="icon-user"></i><strong>ผู้รับผิดชอบ : </strong> {{project.owner}} 
-      <i class="icon-signal"></i><strong>สถานะโครงการ : </strong> {{project.status}} 
-    </blockquote>
-
-    <div class="row-fluid">
-      <div class="span8 well">
-        <strong>โครงการประจำปี :</strong>{{project.year}}<br>
-        <strong>ประเภท: </strong> {{project.ptype}} <br>
-        <strong>วันเดือนปีที่ขออนุมัติ: </strong> {{project.date_approval}} <br>
-        <strong>วันเดือนปีที่จัด:</strong> {{project.date_manage}}  <br>
-          <span ng-show="project.end_date_manage">- {{project.end_date_manage}}</span>
-        <strong>งบประมาณที่ขอ: </strong> {{project.money_plan}} <br>
-        <strong>งบประมาณ(ที่ใช้):</strong> {{project.money_use}} <br>
-        <strong>ร้อยละ: </strong> {{project.money_percent}} <br>
-        <strong>สถานที่: </strong> {{project.place}} <br>
-        <strong>จำนวนผู้เข้าร่วม:</strong> {{project.party}} <br>
-        <strong>จำนวนผู้ตอบ: </strong>{{project.respon}}<br>
-        <strong>ค่าเฉลี่ย:</strong> {{project.percent}}<br>
-        <strong>ระดับความพึงพอใจ:</strong>{{project.sd}}<br>
-        <strong>ร้อยละค่าเฉลี่ย:</strong>{{project.average}}<br>
-        <strong>โหลดข้อมูล:</strong>{{project.Load}}<br>
-        <strong>วัตถุประสงค์ของโครงการ: </strong>{{project.object}}<br>
-        <strong>เป้าหมายของโครงการ: </strong>{{project.goal}}<br>
-        <strong>ตัวชี้วัดของโครงการ</strong>{{project.kpi}}<br>
-      </div>
-      <div class="span4">
-          <!---ffff-->
-      </div>
-    </div>
-
+<div class="row">
+  <div class="col-lg-12"> 
+    <legend>
+      <img style="border: 0px" 
+        src="img/icon_project.jpg" 
+        alt="With Twitter">
+        รายละเอียดโครงการ/กิจกรรม
+    </legend> 
   </div>
 </div>
-
-
+<div class="row">
+  <div class="col-lg-6"> 
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <strong> {{project.pid}} : {{project.name}} 
+          <a href="#/project/finance/edit/{{project._id}}/{{project.financeid}}">
+            แก้ไข
+          </a> 
+        </strong>
+      </div>
+        <dl class="dl-horizontal">
+          <dt>โครงการประจำปี :</dt><dd>{{project.year}}</dd>
+          <dt>ประเภท: </dt><dd> {{project.ptype}} </dd>
+          <dt>วันเดือนปีที่ขออนุมัติ: </dt><dd> {{project.date_approval}} </dd>
+          <dt>URL เอกสาร: </dt>
+            <dd> 
+              <a href="{{project.permitdocument}}" target="_blank">Download<i class="icon-file"></i></a>
+            </dd>
+          <dt>วันเดือนปีที่จัด:</dt><dd> {{project.date_manage}} 
+            <span ng-show="project.end_date_manage">
+             - {{project.end_date_manage}}</span></dd>
+          <dt>งบประมาณที่ขอ: </dt><dd> {{project.start_balance}} </dd>
+          <dt>งบประมาณ(ที่ใช้):</dt><dd> {{project.sum_expend}} </dd>
+          <dt>งบประมาณ(ที่รออนุมัติ):</dt><dd> {{project.sum_wait}} </dd>
+          <dt>ร้อยละ: </dt><dd> {{project.money_percent}} </dd>
+          <dt>สถานที่: </dt><dd> {{project.place}} </dd>
+          <dt>จำนวนผู้เข้าร่วม:</dt><dd> {{project.party}} </dd>
+          <dt>จำนวนผู้ตอบ: </dt><dd>{{project.respon}}</dd>
+          <dt>ค่าเฉลี่ย:</dt><dd> {{project.percent}}</dd>
+          <dt>ระดับความพึงพอใจ:</dt><dd>{{project.sd}}</dd>
+          <dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.average}}</dd>
+          <dt>โหลดข้อมูล:</dt><dd>{{project.Load}}</dd>
+          <dt>วัตถุประสงค์ของโครงการ: </dt><dd>{{project.object}}</dd>
+          <dt>เป้าหมายของโครงการ: </dt><dd>{{project.goal}}</dd>
+          <dt>ตัวชี้วัดของโครงการ</dt><dd>{{project.kpi}}</dd>
+        </dl>
+      <div class="panel-footer">
+        <strong>ผู้รับผิดชอบ : </strong> {{project.owner}} 
+        <strong>สถานะโครงการ : </strong> {{project.status}} 
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6"> 
+    <div class="panel panel-warning">
+      <div class="panel-heading">ผลดำเนินงาน</div>
+      <table  ng-show="message_list.length>0" 
+        class="table table-hover table-striped">
+        <tr>
+          <th >วันที่</th>
+          <th >ผลการดำเนินงาน</th>
+          <th >ผู้รายงาน</th>
+          <th ng-show="user_logon"></th>
+        </tr>
+        <tr ng-repeat="message in message_list">
+        <tr style="cursor:pointer" 
+          ng-class="{'warning':entry.cancel}"
+          ng-repeat="message in message_list|orderBy:'-date_record'" >
+          <td>{{message.date_record}}</td>
+          <td>{{message.task_name}}</td>
+          <td>{{message.owner.profile.displayName}}</td>
+          <td ng-show="user_logon"> 
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

@@ -28,7 +28,8 @@ app.factory('GridDB', function($resource) {
 
 
 app.factory('User', function($resource) {
-    var User  = $resource('user',{}, {});   
+    var User = $resource(prefix + '/user', {}, {});    
+   // var User  = $resource('user',{}, {});   
     return User;   
 });
 
@@ -52,7 +53,37 @@ app.factory('Role', function($resource) {
   return Role;
 });
 
+app.factory('GradDB', function($resource) {
+  var GradDB = $resource(
+    //prefix + '/gradnu/:table/:mode', 
+    '/apps/core/gradnu/:table/:mode', 
+    //'http://www.db.grad.nu.ac.th/apps/core/gradnu/:table/:mode', 
+    {},{
+     'save':{method:'POST'},
+     'update':{method:'PUT'},
+     'remove':{method:'POST'},
+    }
+  );                         
+  return GradDB;
+});
 
+app.factory('CurrentDate', function($resource) {
+  var CDate = $resource(
+    prefix+'/currentdate',     
+    {         
+    });                         
+  return CDate;    
+});
 
-
-
+/*
+app.factory('Student', function($resource) {
+    var Student = $resource(
+      'http://www.db.grad.nu.ac.th/django/rest/students/:id', 
+      {callback:'JSON_CALLBACK'}, 
+      {
+	'query':  {method:'JSONP', isArray:true},
+	'get':  {method:'JSONP'}
+      });                         
+    return Student;    
+});
+*/

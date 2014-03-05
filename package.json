@@ -15,6 +15,6 @@
     "mongo-connect":"*"
   },
   "scripts" : {
-    "start" :"server.js"
+    "start" :"project_server.js"
   }
 }

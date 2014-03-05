@@ -1,0 +1,61 @@
+     <!--<div ng-repeat="project in p_list|orderBy:'project.fund' ">
+       <div ng-show="CreateHeader(project.project.fund)">
+        <span ng-show="project.project.fund=='A'">กองทุนทั่วไป</span> 
+        <span ng-show="project.project.fund=='B'">กองทุนกิจการนิสิต</span> 
+        <span ng-show="project.project.fund=='C'">กองทุนวิจัย</span> 
+        <span ng-show="project.project.fund=='D'">กองทุนทำนุบำรุงศิลปวัฒนธรรม</span> 
+      </div>
+        {{project.project.name}} 
+     </div>
+     -->
+     <table class="table">
+            <thead>
+              <tr>
+                <th>ลำดับที่</th>
+                <th>ชื่อโครงการ</th>    
+                <th>งบประมาณที่ได้รับ</th>    
+                <th>งบประมาณที่ใช้ไป</th>    
+                <th>คงเหลือ</th>    
+                <th>รออนุมัติ่่</th>    
+                <th>คงเหลือสุทธิ</th>    
+              </tr>
+            </thead>
+             <tbody ng-repeat="project in p_list|orderBy:'project.fund' ">
+               <tr class="success" ng-show="CreateHeader(project.project.fund)">
+                 <th  colspan="7"  
+                   ng-show="project.project.fund=='A'">
+                   กองทุนทั่วไป
+                 </th> 
+                 <th colspan = "7"  ng-show="project.project.fund=='B'">กองทุนกิจการนิสิต</span> 
+                 <th colspan = "7"  ng-show="project.project.fund=='C'">กองทุนวิจัย</span> 
+                 <th colspan = "7"  ng-show="project.project.fund=='D'">กองทุนทำนุบำรุงศิลปวัฒนธรรม</span> 
+              </tr>
+              <tr>
+                
+                <td>{{$index+1}}</td>
+                <td>
+                   <!--<a href="#/project/finance/info/{{project.project.id}}">{{project.project.name}}</a>
+                   -->
+                   {{project.project.name}} {{project.project.id}}
+                   <a href="#/project/finance/create/{{project.project.id}}">เพิ่ม</a>
+                
+                </td>
+                <td>{{
+                project.project.start_balance}}</td>     
+                <td >
+                  <p class="text-danger" ng-hide="project.project.sum_expend==0">
+                    ({{project.project.sum_expend}})
+                  </p>
+                  <p class="text-primary" ng-hide="project.project.sum_expend!=0">
+                    {{project.project.sum_expend}}
+                  </p>
+                </td>     
+                <td>{{
+                project.project.start_balance-
+                project.project.sum_expend     
+                }}</td>     
+                <td>{{project.project.sum_wait}}</td>
+                <td>{{project.project.start_balance-project.project.sum_wait-project.project.sum_expend}}</td>
+              </tr>
+            </tbody>
+          </table>

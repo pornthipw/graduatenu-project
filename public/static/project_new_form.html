@@ -1,0 +1,284 @@
+<div class="row">
+  <div class="col-lg-12" ng-show="messageAlert">
+    <div class="alert">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <strong>Warning!</strong>  {{messageAlert}}
+  
+    </div>
+  </div>
+</div>
+<div class="row" ng-show="user.user&&user.user.role=='admin'">
+<!--
+<div class="row" >
+-->
+  <div class="col-lg-5"> 
+    <legend>โครงการ/กิจกรรม</legend>
+    <form class="form-horizontal" >  
+      <div class="control-group">
+        <label class="control-label" for="inputYear">โครงการประจำปี</label>
+          <input 
+            class="form-control" 
+            type="text" id="inputYear" 
+            placeholder="Year" ng-model="project.year">
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">ประเภท: </label> 
+          <select id="inputName"  
+            class="form-control" 
+            ng-model="project.ptype">
+            <option ng-selected="project.ptype=='โครงการ'">โครงการ</option>
+            <option ng-selected="project.ptype=='กิจกรรม'">กิจกรรม</option>
+          </select>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputType">สถานภาพโครงการ</label>
+          <select id="inputStatus" 
+            class="form-control" 
+            placeholder="Status" ng-model="project.status">
+            <option ng-selected="project.status=='ยังไม่ได้ดำเนินการ'">ยังไม่ได้ดำเนินการ</option>
+            <option ng-selected="project.status=='กำลังดำเนินการ'">กำลังดำเนินการ</option>
+            <option ng-selected="project.status=='ดำเนินการแล้ว'">ดำเนินการแล้ว</option>
+          </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputName">ชื่อกองทุน: </label>
+          <input type="text" 
+            class="form-control" 
+            id="inputName" placeholder="ประเภทกองทุน" 
+            ng-model="project.fund">
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputPid">รหัสโครงการ: </label>
+          <input type="text" 
+            class="form-control" 
+            id="inputPid" placeholder="Name" 
+            ng-model="project.pid">
+      </div>
+    
+      <div class="control-group">
+        <label class="control-label" for="inputName">ชื่อโครงการ: </label>
+          <input type="text" 
+            class="form-control" 
+            id="inputName" placeholder="Name" 
+            ng-model="project.name"> 
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">ผู้รับผิดชอบ: </label> 
+          <select id="inputName" placeholder="Owner" 
+            class="form-control" 
+            ng-model="project.owner">
+            <option ng-selected="project.owner=='งานอำนวยการ'">งานอำนวยการ</option>
+            <option ng-selected="project.owner=='งานวิชาการ'">งานวิชาการ</option>
+            <option ng-selected="project.owner=='งานแผนและสารสนเทศ'">งานแผนและสารสนเทศ</option>
+            <option ng-selected="project.owner=='สำนักพิมพ์มหาวิทยาลัยนเรศวร'">สำนักพิมพ์มหาวิทยาลัยนเรศวร</option>
+            <option ng-selected="project.owner=='งานวิจัยและวิเทศสัมพันธ์'">งานวิจัยและวิเทศสัมพันธ์</option>
+          </select>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">วันเดือนปีที่ขออนุมัติ: </label>
+            <input type="text" ng-model="project.date_approval" 
+              class="form-control" 
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+      <div class="control-group">
+      <label class="control-label" for="inputName">เอกสารการขออนุมัติ: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="ที่อยู่ลิงค์ของเอกสารการขออนุมัติโครงการ" ng-model="project.permitdocument">
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" 
+          for="inputName">ระยะเวลาดำเนินโครงการ: </label>
+            <input type="text" ng-model="project.date_plan" 
+              class="form-control" 
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" 
+            for="inputName">ถึง วันที่: </label>
+            <input type="text" ng-model="project.end_date_plan" 
+              class="form-control" 
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">วันเดือนปีที่จัด: </label>
+            <input type="text" ng-model="project.date_manage" 
+              class="form-control" 
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">ถึง วันที่: </label>
+            <input type="text" ng-model="project.end_date_manage" 
+              class="form-control" 
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+
+      <div class="control-group">
+      <label class="control-label" for="inputName">สถานที่: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="place" ng-model="project.place">
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">เป้าหมายผู้เข้าร่วม: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="เป้าหมายผู้เข้าร่วมโครงการ" ng-model="project.partytarget">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">จำนวนผู้เข้าร่วม: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="party" ng-model="project.party">
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">จำนวนผู้ตอบ: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="respon" ng-model="project.respon">
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">ค่าเฉลี่ยของผู้ตอบแบบสอบถาม: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="percent" 
+            ng-model="project.percent"> 
+      </div>   
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">ระดับความพึงพอใจ: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="sd" ng-model="project.sd">
+      </div> 
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">ร้อยละค่าเฉลี่ย: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="average" 
+            ng-model="project.average" >
+      </div> 
+      
+      <div class="control-group">
+        <label class="control-label" for="inputName">โหลดข้อมูล: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="load" ng-model="project.Load"> 
+          <a href="{{project.load}}" ng-show="project.load"> ไฟล์โครงการ</a>          
+      </div> 
+    
+      <div class="control-group">
+        <label class="control-label" for="inputName">
+          วัตถุประสงค์ของโครงการ: </label> 
+          <select id="inputName" placeholder="object" 
+            class="form-control"
+            ng-model="project.object">
+            <option 
+              ng-selected="project.object=='บรรลุวัตถุประสงค์'">บรรลุวัตถุประสงค์</option>
+            <option 
+              ng-selected="project.object=='ไม่บรรลุวัตถุประสงค์'">ไม่บรรลุวัตถุประสงค์</option>
+          </select>
+      </div>
+      
+       <div class="control-group">
+        <label class="control-label" for="inputName">เป้าหมายของโครงการ: </label> 
+          <select id="inputName" placeholder="goal" 
+            class="form-control"
+            ng-model="project.goal">
+            <option 
+              ng-selected="project.goal=='บรรลุเป้าหมาย'">บรรลุเป้าหมาย</option>
+            <option 
+              ng-selected="project.goal=='ไม่บรรลุเป้าหมาย'">ไม่บรรลุเป้าหมาย</option>
+          </select>
+      </div>   
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">
+          ตัวชี้วัดของโครงการ: </label> 
+          <select id="inputName" 
+            class="form-control"
+            placeholder="kpi" ng-model="project.kpi">
+            <option ng-selected="project.kpi=='เป็นไปตามตัวชี้วัด'">เป็นไปตามตัวชี้วัด</option>
+            <option ng-selected="project.kpi=='ไม่เป็นไปตามตัวชี้วัด'">ไม่เป็นไปตามตัวชี้วัด</option>
+          </select>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">ตัวชี้วัดเชิงปริมาณ: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="กรอกข้อมูลตัวชี้วัดเชิงปริมาณ" ng-model="project.kpiquantity">
+      </div> 
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">ตัวชี้วัดเชิงคุณภาพ: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="กรอกข้อมูลตัวชี้วัดเชิงคุณภาพ" ng-model="project.kpiquality">
+      </div> 
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">ประโยชน์ที่ได้รับจากการจัดโครงการ: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="กรอกข้อมูลประโยชน์ที่ได้รับ" ng-model="project.advantage">
+      </div> 
+
+      <div class="row">&nbsp;</div>
+      <div class="input-append">
+        <button type="button" class="btn btn-danger " 
+          ng-click="del()" ng-show="project">
+          <i class="icon-remove icon-white"></i> 
+          ลบข้อมูลโครงการ
+        </button>  
+        <button type = "button" 
+          class="btn btn-primary" type="submit" ng-click="save()"> 
+          <i class="icon-ok"></i> บันทึกข้อมูล
+        </button>
+      </div>       
+    </form>
+  </div>
+
+  <div class="col-lg-1"> 
+  </div>
+  <div class="col-lg-3"> 
+    <div class="row">
+      <div class="col-lg-12">
+         <p><br></p>
+         <p></p>
+         <p></p>
+         <p></p>
+         <p></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+         <p></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+      <p><span class="label label-primary"> A </span> = กองทุนทั่วไป</p>
+      <p><span class="label label-primary"> B </span> = กองทุนกิจการนิสิต<p>
+      <p><span class="label label-primary"> C </span> = กองทุนทำนุบำรุงศิลปวัฒนธรรม<p>
+      <p><span class="label label-primary"> D </span> = กองทุนวิจัย<p>
+
+      </div>
+    </div>
+  </div>
+</div>
+

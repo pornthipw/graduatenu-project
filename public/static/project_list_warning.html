@@ -1,0 +1,82 @@
+ <p ng-repeat="project in project_list|filter:dateToday" ng-bind="project">
+ </p>
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    ระยะเวลาดำเนินโครงการ <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a ng-click="filterProject(1)">ครึ่งปีแรก (ตุลาคม {{current_year-1}}- มีนาคม{{current_year}}</a></li>
+    <li><a ng-click="filterProject(2)">ครึ่งปีหลัง (เมษายน {{current_year}}- กันยายน{{current_year}}</a></li>
+    <li class="divider"></li>
+    <li><a ng-click="filterProject(0)">Current Status</a></li>
+  </ul>
+</div>
+<p></p>
+<div class="row" ng-show="chk=='0'">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-6">
+        <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+      </div>
+      <div class="col-md-6">
+        <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel panel-warning" ng-show="chk=='0'">
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<!-- Data from www.netmarketshare.com. Select Browsers => Desktop share by version. Download as tsv. -->
+
+</div>
+<div class="panel panel-warning" ng-show="chk=='0'">
+  <div class="panel-heading">
+    <h3 class="panel-title">โครงการที่ยังไม่ได้ดำเนินการ</h3>
+  </div>
+  <div class="panel-body">
+    <div class="alert alert-warning"> 
+      <div ng-repeat="project in project_list_new.first.list_alert|orderBy:'-new_date_plan' " >
+            {{project.owner}} : วันที่เริ่มดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
+            <a 
+              href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+              วันที่ขออนุมัติ -{{project.date_approval}} 
+      </div>
+    </div>
+    <div class="alert alert-danger">
+      <div ng-repeat="project in project_list_new.first.list_late|orderBy:'-new_date_plan' " >
+            {{project.owner}} : วันที่เริ่มดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
+            <a 
+              href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+              วันที่ขออนุมัติ -{{project.date_approval}} 
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div ng-show="chk=='2'">
+      <div ng-repeat="project in project_list|orderBy:'-new_date_plan'" >
+        <div 
+          ng-switch on="((project.new_date_plan >= fdateRange)&& (!project.date_approval))">
+           <span ng-switch-when="true">
+             ระยะเวลาดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
+             <a 
+               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+               วันที่ขออนุมัติ -{{project.date_approval}} 
+           </span>
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="chk=='1'">
+      <div ng-repeat="project in project_list|orderBy:'-new_date_plan'" >
+        <div 
+          ng-switch on="((project.new_date_plan <= fdateRange)&& (!project.date_approval))">
+           <span ng-switch-when="true">
+             ระยะเวลาดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
+             <a 
+               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+               วันที่ขออนุมัติ -{{project.date_approval}} 
+           </span>
+        </div>
+      </div>
+    </div>

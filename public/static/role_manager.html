@@ -2,14 +2,14 @@
   <div class="span12">
     <div class="row-fluid">
       <div class="span6">
-      <ul>
-        <li ng-repeat="user in users"> 
+        <ul>
+          <li ng-repeat="user in users"> 
             <a href = "" 
                ng-click="get_user(user._id)">
                {{user.profile.displayName}}
             </a>
-        </li>
-      </ul>
+          </li>
+        </ul>
       </div>
       
       <div class="span6" ng-show="user">

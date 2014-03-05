@@ -1,0 +1,110 @@
+<ul class="nav nav-pills">
+  <li ><a href="#/projects/2557/working">โครงการที่ดำเนินการแล้ว</a></li>
+  <li ><a href="#">โครงการที่ยังไม่ได้ดำเนินการ</a></li>
+  <li ><a href="#">โครงการที่ไม่ได้ดำเนินการ</a></li>
+  <li ><a href="#/projects/2557/status">สถานะภาพโครงการ</a></li>
+  <li class="disabled"><a href="#">Disabled link</a></li>
+</ul>
+
+<div class="page-header">
+  <h1>โครงการ/กิจกรรมประจำปี {{year}} <small>ตามแผนปฏิบัติการประจำปี 2557 </small></h1>
+</div>
+<div class="row">
+  <div class="col-lg-7">
+  </div>
+  <div class="col-lg-2">
+  </div>
+  <div class="col-lg-3 input-group">
+    <span class="input-group-addon">@</span>
+    <input type="text" 
+      class = "form-control" placeholder="สืบค้นโครงการ" ng-model="search">    
+  </div>
+</div>
+<div class="row">
+  <div >
+          <table class="table">
+            <thead>
+              <tr>
+                <th>กองทุน</th>
+                <th > โครงการ</th>    
+                
+                <th>ได้รับ</th>    
+                <th>ใช้ไป</th>    
+                <th>เหลือ</th>    
+               
+                <th>สถานะ</th> 
+              </tr>
+            </thead>
+          
+            <tbody ng-repeat="p in result " ng-hide="p.docID" >
+           
+              <tr class="success">
+                <td colspan="6" >
+                  {{p.owner}}
+                </td> 
+              </tr>
+              <tr ng-repeat="project in p.count.listproject|filter:search|orderBy:'project.fund'" >
+                 <div class="warning" ng-show="CreateHeader(project.fund)">
+                 <td>
+                   <span ng-show="project.fund=='A'">กองทุนทั่วไป</span> 
+                   <span ng-show="project.fund=='B'">กองทุนกิจการนิสิต</span> 
+                   <span ng-show="project.fund=='C'">กองทุนวิจัย</span> 
+                   <span ng-show="project.fund=='D'">กองทุนทำนุบำรุงศิลปวัฒนธรรม</span> 
+                 </td>
+                 </div>
+
+
+                 <td >
+                     {{$index+1}}. {{project.pid}}-
+                       <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+                       <span class="glyphicon glyphicon-search"></span>
+                       <a href="#/project/task/{{project._id}}" >
+                       </a>
+                       {{project.financeid}}
+                   </td>
+                   <td >
+                     {{project.start_balance}}
+                   </td>
+                   <td >
+                       <p class="text-danger" ng-hide="project.sum_expend==0">
+                         ({{project.sum_expend}})
+                       </p>
+                       <p class="text-primary" ng-hide="project.sum_expend!=0">
+                         {{project.sum_expend}}
+                       </p>
+                   </td>
+                   <td >
+                     {{project.start_balance-project.sum_expend}}
+                   </td>
+                   <td >
+                       <span ng-show="project.status=='กำลังดำเนินการ'"
+                         class="label label-warning">P</span>
+                       <span ng-show="project.status=='ดำเนินการแล้ว'"
+                         class="label label-info">F</span>
+                       <span ng-show="project.status=='ยังไม่ได้ดำเนินการ'"
+                         class="label label-danger">N</span>
+                   </td>
+
+      
+              
+              </tr>
+               
+              <tr class="danger">
+                <td></td>
+                <td>รวมงบประมาณ</td>
+                <td>{{p.count.total_start}}</td>
+                <td>{{p.count.total_expend}}</td>
+                <td>{{p.count.total_start-p.count.total_expend}}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>รวม จำนวน</td>
+                <td>{{p.count.listproject.length}}</td>
+              </tr>
+              
+             
+            </tbody>
+          </table>
+  </div>
+</div>
+
