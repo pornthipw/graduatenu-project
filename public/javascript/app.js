@@ -113,11 +113,21 @@ app.config(function($routeProvider) {
     controller:ProjectListByYearController, 
     templateUrl:'static/project_list.html'
   });   
-
+/*
+  $routeProvider.when('/projects/report/:year', {
+    controller:ProjectListReportByYearController, 
+    templateUrl:'static/report_list.html'
+  });   
+*/
   $routeProvider.when('/projects/:year/status', {
     controller:ProjectListByYearStatusController, 
     templateUrl:'static/project_status.html'
   });   
+
+  $routeProvider.when('/task/create', {
+    controller:CreateTaskByProjectController,  
+    templateUrl:'static/task_create.html'
+  }); 
 
   $routeProvider.when('/role', {
     controller:RoleController, 
@@ -147,6 +157,10 @@ function UserCtrl($scope, User, Logout) {
 }
 
 function MainController($scope, $filter, GradDB, User,Project ) {   
+
+};
+
+function CreateTaskByProjectController($scope, $filter, GradDB, User,Project ) {   
   $scope.tasktype_list = [
     {'name':'ติดต่อวิทยากร'},
     {'name':'ติดต่อสถานที่'},
@@ -378,6 +392,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
         //console.log(fstatusDate);
       }else{
     //}
+        if (val=='' || val==0){
             //Current Date
             //var d = new Date();
             //var curr_date = d.getDate();
@@ -387,6 +402,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
             $scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
             //$scope.dateRange = ""; 
             //console.log($scope.dateToday);
+        }
       }
       
     
@@ -594,93 +610,16 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
         $scope.project_list_new = result_alert[0].list.type;
         //console.log(result_late[0].list.project);
         $(function () {
-    	
     	  // Radialize the colors
-	   Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, 
-            function(color) {
-              return {
-		radialGradient: { cx: 0.5, cy: 0.3, r: 0.7 },
-		  stops: [
-		    [0, color],
-		    [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
-		  ]
-		};
-	   });
-		
-            // Build the chart
-           $('#container').highcharts({
-              colors: ['#DDDF00', '#E53E24'],
-              chart: {
-                  plotBackgroundColor: null,
-                  plotBorderWidth: null,
-                  plotShadow: false
-              },
-              title: {
-                text: 'สรุปสถานภาพโครงการที่"ยังไม่ได้ดำเนินการ"ประจำปี '+$routeParams.year
-              },
-              tooltip: {
-        	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                    percentageDecimals:1 
-              },
-              plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        color: '#000000',
-                        connectorColor: '#000000',
-                        formatter: function() {
-                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
-                        }
-                    }
-                }
-              },
-              series: [{
-                type: 'pie',
-                name: 'คิดเป็น',
-                data: [
-                    ['โครงการที่ต้องเร่งรัด',   result_alert[0].list.alert1],
-                    ['โครงการที่ล่าช้า(ณ วันที่ปัจจุบัน)',       result_alert[0].list.late]
-                    /*{
-                        name: 'Chrome',
-                        y: 12.8,
-                        sliced: true,
-                        selected: true
-                    },
-                    ['Safari',    8.5],
-                    ['Opera',     6.2],
-                    ['Others',   0.7]
-                    */
-                ]
-              }]
-           });
-        });
-    ////// 
-
-        $(function () {
-    	
-    	  // Radialize the colors
-	   Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, 
-            function(color) {
-              return {
-		radialGradient: { cx: 0.5, cy: 0.3, r: 0.7 },
-		  stops: [
-		    [0, color],
-		    [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
-		  ]
-		};
-	   });
-		
             // Build the chart
            $('#container1').highcharts({
-              colors: ['#058DC7', '#FF9655'],
               chart: {
                   plotBackgroundColor: null,
                   plotBorderWidth: null,
                   plotShadow: false
               },
               title: {
+                //text: 'สรุปสถานภาพโครงการที่"ยังไม่ได้ดำเนินการ"ประจำปี '+$routeParams.year
                 text: 'สรุปสถานภาพโครงการประจำปี '+$routeParams.year
               },
               tooltip: {
@@ -707,87 +646,88 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
                 data: [
                     ['โครงการครึ่งปีแรก',   result_alert[0].list.type.first.a],
                     ['โครงการครึ่งปีหลัง', result_alert[0].list.type.second.a]
-                    /*{
-                        name: 'Chrome',
-                        y: 12.8,
-                        sliced: true,
-                        selected: true
-                    },
-                    ['Safari',    8.5],
-                    ['Opera',     6.2],
-                    ['Others',   0.7]
-                    */
+                    //['โครงการที่ต้องเร่งรัด',   result_alert[0].list.alert1],
+                    //['โครงการที่ล่าช้า(ณ วันที่ปัจจุบัน)',       result_alert[0].list.late]
                 ]
               }]
            });
         });
 
-        $(function () {
-    	
-    	  // Radialize the colors
-	   Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, 
-            function(color) {
-              return {
-		radialGradient: { cx: 0.5, cy: 0.3, r: 0.7 },
-		  stops: [
-		    [0, color],
-		    [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
-		  ]
-		};
-	   });
-		
-            // Build the chart
-           $('#container2').highcharts({
-              //colors: ['#E53E24','#50B432','#058DC7'],
-              colors: ['#E53E24','#b4dcee','#36a3d2'],
-              chart: {
-                  plotBackgroundColor: null,
-                  plotBorderWidth: null,
-                  plotShadow: false
-              },
-              title: {
-                text: 'สรุปสถานภาพโครงการครึ่งปีแรกประจำปี '+$routeParams.year
-              },
-              tooltip: {
-        	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
-                    percentageDecimals:1 
-              },
-              plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        color: '#000000',
-                        connectorColor: '#000000',
-                        formatter: function() {
-                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
-                        }
-                    }
-                }
-              },
-              series: [{
+        //niew gedeelte
+        var options = {
+          chart: {
+            renderTo: 'container1',
+            defaultSeriesType: 'spline'
+          },
+          series: []
+        };
+        $("#change").click(function(){
+          if ($("#list").val() == "A")
+          {
+            options.series = [{
                 type: 'pie',
                 name: 'คิดเป็น',
+                //data: [[result_alert[0].list.type.first.a]]
                 data: [
+                    ['โครงการครึ่งปีแรก',   result_alert[0].list.type.first.a],
+                    ['โครงการครึ่งปีหลัง', result_alert[0].list.type.second.a]
+                ]
+
+            }]
+            //$.get('/dough/includes/live-chart.php?mode=month'
+          }
+          else
+          
+          {
+           
+            if ($("#list").val() == "B")
+              {
+              options.series = [{
+                  type: 'pie',
+                  name: 'สถานภาพโครงการครึ่งปีแรกปี'+$routeParams.year, 
+                  data: [
                     ['ยังไม่ได้ดำเนินการ',   result_alert[0].list.type.first.n],
                     ['อยู่ระหว่างดำเนินการ', result_alert[0].list.type.first.w],
                     ['ดำเนินการแล้ว', result_alert[0].list.type.first.f],
                     ['ยกเลิก', result_alert[0].list.type.first.c]
-                    /*{
-                        name: 'Chrome',
-                        y: 12.8,
-                        sliced: true,
-                        selected: true
-                    },
-                    ['Safari',    8.5],
-                    ['Opera',     6.2],
-                    ['Others',   0.7]
-                    */
-                ]
+                  ]
+                  //data: [3,2,1,2,3]
               }]
-           });
-        });
+              //$.get('/dough/includes/live-chart.php?mode=newmode'
+             } 
+             else
+             {
+               options.series = [{
+                  type: 'pie',
+                  name: 'สถานภาพโครงการที่ยังไม่ได้ดำเนินการปี'+$routeParams.year,
+                  data: [
+                    ['โครงการที่ต้องเร่งรัด',   result_alert[0].list.alert1],
+                    ['โครงการที่ล่าช้า(ณ วันที่ปัจจุบัน)',       result_alert[0].list.late]
+                  ]
+                  //data: [3,2,1,2,3]
+              }]
+             }
+
+          } 
+          
+          var chart = new Highcharts.Chart(options);    
+       });
+
+       // nieuw gadeelte
+       var options = { 
+         chart: {
+           renderTo: 'container1',
+           defaultSeriesType: 'spline',
+           plotBackgroundColor: null,
+           plotBorderWidth: null,
+           plotShadow: false
+         },
+         series: []
+       };
+
+
+    ////// 
+
     });
 
     /*
@@ -935,7 +875,7 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
         percentageDecimals:1 
       },
       plotOptions: {
-        pie: {
+        series: {
           allowPointSelect: true,
           cursor: 'pointer',
           dataLabels: {
@@ -1015,8 +955,10 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
     });
     */
     
+    //$scope.bbarchart = {
+   // var chart2; 
     $(function () {
-        $('#container').highcharts({
+      $('#container3').highcharts({
             chart: {
                 type: 'column'
             },
@@ -1100,13 +1042,9 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
                 result[3].count.no,
                 result[4].count.no]
             }],
+
         });
     });
-    
-
-
-
-
   });
 
 
@@ -1276,7 +1214,8 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
 
     });    
     console.log(dict);
-    
+   /*---csv----*/ 
+
     var result = [];
     
     angular.forEach(dict, function(value, name) {
@@ -1286,6 +1225,12 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
     $scope.result = result;
     $scope.project_list =  project_list;
     $scope.year = $routeParams.year;
+    $scope.exportData = function () {
+        var blob = new Blob([document.getElementById('exportable').innerHTML], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+        });
+        saveAs(blob, "Report.xls");
+    };
 
   });
   
@@ -1313,9 +1258,29 @@ function YearListController($scope, GradDB,$location, $timeout,$routeParams,Proj
     $location.path('/projects/'+year);
   
   }
-
-  
 }
+
+function YearListReportController($scope, GradDB,$location, $timeout,$routeParams,Project,User, Logout) {
+  Project.query(function(response) {
+    var years = {}; // {'2556':1}
+    var year_list = [];
+    for(var idx=0;idx<response.length;idx++) {      
+      var project = response[idx];
+      if(project.year && !years[project.year]) {
+        years[project.year] = 1;
+        year_list.push(project.year);             
+      }      
+    }    
+    year_list.sort();
+    $scope.year_list = year_list;    
+  });  
+
+  $scope.filter = function(year) {
+    $location.path('/projects/Reports/'+year);
+  
+  }
+}
+
 
 function highChartController($scope) {
     $scope.initConfig=function(config,item) {
@@ -1751,6 +1716,10 @@ function ProjectFinanceViewController($scope, User,Project, $routeParams, GradDB
     });
        $scope.project = result;
        $scope.project['project'] = project;
+       $scope.doTheBack = function() {
+         window.history.back();
+       };
+
        console.log($scope.project);
     var query_obj = {'type':"post_message",'project_id':$scope.project.project._id};
     Project.query({query:JSON.stringify(query_obj)}, function (result) {

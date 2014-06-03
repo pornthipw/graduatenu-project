@@ -12,8 +12,12 @@
   </ul>
 </div>
 <p></p>
-<div class="row" ng-show="chk=='0'">
+
+
+
+<div class="row" ng-hide="chk=='0' " >
   <div class="col-md-12">
+    <!--
     <div class="row">
       <div class="col-md-6">
         <div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
@@ -22,11 +26,22 @@
         <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
       </div>
     </div>
+    -->
   </div>
 </div>
 <div class="panel panel-warning" ng-show="chk=='0'">
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-<!-- Data from www.netmarketshare.com. Select Browsers => Desktop share by version. Download as tsv. -->
+  <SELECT id="list">
+    <OPTION VALUE="A"> สรุปสถานภาพโครงการประจำปี {{current_year}} 
+    <OPTION VALUE="B"> สรุปสถานภาพโครงการครึ่งปีแรกประจำปี {{current_year}} 
+    <OPTION VALUE="C"> สรุปสถานภาพโครงการที่ยังไม่ได้ดำเนินการประจำปี {{current_year}}
+  </SELECT>
+  <button id="change">Refresh Table</button>
+    <div id="container1" 
+      style="height: 400px; margin: 0 auto">
+    </div>
+    
+    <!-- Data from www.netmarketshare.com. 
+    Select Browsers => Desktop share by version. Download as tsv. -->
 
 </div>
 <div class="panel panel-warning" ng-show="chk=='0'">

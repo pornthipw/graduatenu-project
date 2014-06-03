@@ -3,25 +3,34 @@
   
 <head>
     <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>  
     <base href="{{ baseHref }}">
-   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"> 
-    <link href="javascript/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">    
+    <link rel="stylesheet" 
+      href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"> 
+    <link href="javascript/vendor/bootstrap/css/bootstrap.css" 
+      rel="stylesheet">    
 <!-- Bootstrap theme -->
     <link href="http://getbootstrap.com/dist/css/bootstrap-theme.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="http://getbootstrap.com/examples/theme/theme.css" rel="stylesheet">
-
     <link href="javascript/vendor/bootstrap/css/main.css" rel="stylesheet">    
     <link href="javascript/vendor/reusable_chart.css" rel="stylesheet">    
-
     <link href="javascript/vendor/bootstrap/css/docs.css" rel="stylesheet">    
     <link href="javascript/vendor/codemirror/codemirror.css" rel="stylesheet"> 
-          
+    <!--Core CSS - Include with every page -->
+    <link href="javascript/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="javascript/vendor/bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Page-Level Plugin CSS - Dashboard -->
     
-    <link href="javascript/vendor/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="javascript/vendor/bootstrap/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="javascript/vendor/bootstrap/css/plugins/timeline/timeline.css" rel="stylesheet">
+
+    <!-- SB Admin CSS - Include with every page -->
+    <link href="javascript/vendor/bootstrap/css/sb-admin.css" rel="stylesheet">
     <link href="javascript/vendor/bootstrap-datepicker.css" rel="stylesheet">
+
 
     <style type="text/css">
       body {
@@ -34,119 +43,262 @@
     <script src="javascript/vendor/bootstrap/js/bootstrap.js"></script> 
     <script src="javascript/vendor/codemirror/codemirror.js"></script> 
     <script src="javascript/vendor/codemirror/mode/javascript.js"></script> 
-    <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="javascript/vendor/angular.min.js"></script>
     <script src="javascript/vendor/angular-resource.min.js"></script>
     <script src="javascript/vendor/angular-codemirror.js"></script>
     <script src="javascript/vendor/bootstrap-datepicker.js"></script>
     <script src="javascript/vendor/angular-strap.min.js"></script>
+    <!--
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    -->
+    <script src="javascript/vendor/bootstrap/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Dashboard -->
+    <script src="javascript/vendor/bootstrap/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <!--
+    <script src="javascript/vendor/bootstrap/js/plugins/morris/morris.js"></script>
+-->
+
+
+    <!-- SB Admin Scripts - Include with every page -->
+    <script src="javascript/vendor/bootstrap/js/sb-admin.js"></script>
+
+    <!-- Page-Level Demo Scripts - Dashboard - Use for reference -->
+    
+    <!--
+    <script src="javascript/vendor/bootstrap/js/demo/dashboard-demo.js"></script>
+   
+-->
     <script src="javascript/vendor/highcharts.js"></script>
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
     <script src="http://code.highcharts.com/modules/data.js"></script>
     <script src="http://code.highcharts.com/modules/drilldown.js"></script>
-    <script src="javascript/vendor/reusable_chart.js"></script>
     <script src="javascript/vendor/highcharts-ng.js"></script>
+<script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
     <script src="javascript/mongorest_service.js"></script>
     <script src="javascript/app.js"></script>
     
 </head>
     
 <body ng-app="projectplan">  
-  <!-- Fixed navbar -->
-  <div class="navbar navbar-inverse navbar-fixed-top" 
-    role="navigation" >
-     <div class="container" ng-controller="UserCtrl">
-       <div class="navbar-header">
-        <button type="button" 
-           class="navbar-toggle" 
-           data-toggle="collapse" 
-           data-target=".navbar-collapse">
-           <span class="sr-only">Toggle navigation</span>
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>
-           <span class="icon-bar"></span>
-         </button>
-         <a class="navbar-brand" 
-           href="#">E-Tracking Project (ระบบติดตามโครงการ/กิจกรรม)</a>
-       </div>
-       <div class="navbar-collapse collapse">
-         <ul class="nav navbar-nav">
-           <li class="active">
-             <a href="#">Home</a>
-           </li>
-           <li class="dropdown" ng-controller="YearListController">
-              <a href="http://getbootstrap.com/examples/theme/#" 
-                class="dropdown-toggle" 
-                data-toggle="dropdown">แผนปฏิบัติการประจำปี <b class="caret"></b></a>
-                <ul class="dropdown-menu" >
-                  <li ng-repeat="year in year_list">
-                    <a href="" ng-click="filter(year)">
-                    <span ng-bind="year"></span></a>
-                  </li>
-                </ul>
-           </li>
-           <li class="dropdown">
-                <a href="/" class="dropdown-toggle" 
-                  data-toggle="dropdown">จัดการข้อมูล<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="#/project/new">เพิ่มกิจกรรม/โครงการใหม่</a></li>
-                  <li>
-                    <a href="#/project/finance/list/2557">เพิ่มโครงการตามแผนฯ</a>
-                  </li>
-                  <li class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-
-                  <!--
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>
-                  -->
-                </ul>
-              </li>
-           <li ng-hide="user.user">
-            <ul class="nav navbar-nav pull-right" >
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" 
-                  data-toggle="dropdown" dropdown>Login 
-                  <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="auth/openid?openid_identifier=https://www.google.com/accounts/o8/id">
-                      <img style="border: 0px" 
-                        src="img/icongoogle-1.gif" 
-                        alt="With Twitter"> Login with Google
-                    </a>
-                  </li>
-                  <li class="divider"></li>                            
-                </ul>
-              </li>
-            </ul> 
-           </li>
-           <li ng-show="user.user">
-            <ul class="nav navbar-nav pull-right" >
-              <li class="dropdown">
-                <a href="#" ng-click="logout()">Logout</a>              
-              </li>
-            </ul>     
-           </li>
-
-         </ul>
-       </div><!--/.nav-collapse -->
-     </div><!--/.container -->
-   </div>
-
-    </div> <!-- /container -->
-    {{{body}}} 
-    <div class="container">
-      <div class="starter-template">
-        <div  ng-view></div>  
+  <div id="wrapper">
+    <nav class="navbar navbar-default navbar-static-top" 
+      role="navigation" style="margin-bottom: 0" ng-controller="UserCtrl">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" 
+          data-toggle="collapse" 
+          data-target=".sidebar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">ระบบฐานข้อมูลสารสนเทศสำหรับติดตามโครงการ/กิจกรรม Online</a>
       </div>
+      <!-- /.navbar-header -->
+
+      <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="fa fa-envelope fa-fw"></i>  
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-messages">
+        <li>
+          <a href="#">
+            <div>
+              <strong>John Smith</strong>
+              <span class="pull-right text-muted">
+                <em>Yesterday</em>
+              </span>
+            </div>
+            <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="#">
+            <div>
+              <strong>John Smith</strong>
+              <span class="pull-right text-muted">
+                <em>Yesterday</em>
+              </span>
+            </div>
+            <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="#">
+            <div>
+              <strong>John Smith</strong>
+              <span class="pull-right text-muted">
+                <em>Yesterday</em>
+              </span>
+            </div>
+            <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a class="text-center" href="#">
+            <strong>Read All Messages</strong>
+            <i class="fa fa-angle-right"></i>
+          </a>
+        </li>
+      </ul>
+      <!-- /.dropdown-messages -->
+    </li>
+    <!-- /.dropdown -->
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
+      </a>
+      <ul class="dropdown-menu dropdown-tasks">
+        <li>
+          <a href="#">
+            <div>
+              <p>
+                <strong>Task 1</strong>
+                <span class="pull-right text-muted">40% Complete</span>
+              </p>
+              <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-success" 
+                  role="progressbar" 
+                  aria-valuenow="40" 
+                  aria-valuemin="0" 
+                  aria-valuemax="100" 
+                  style="width: 40%">
+                  <span class="sr-only">40% Complete (success)</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+      <!-- /.dropdown-tasks -->
+    </li>
+    <!-- /.dropdown -->
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+      </a>
+      <ul class="dropdown-menu dropdown-alerts">
+        <li>
+          <a href="#">
+            <div>
+              <i class="fa fa-comment fa-fw"></i> New Comment
+              <span class="pull-right text-muted small">4 minutes ago</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+      <!-- /.dropdown-alerts -->
+    </li>
+    <!-- /.dropdown -->
+    <li class="dropdown" >
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+      </a>
+      <ul class="dropdown-menu dropdown-user">
+        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+        </li>
+        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+        </li>
+        <li ng-hide="user.user">
+          <a href="auth/openid?openid_identifier=https://www.google.com/accounts/o8/id">
+            <img style="border: 0px" 
+              src="img/icongoogle-1.gif" 
+              alt="With Twitter"> Login with Google
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li ng-show="user.user">
+          <a href="#" ng-click="logout()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+        </li>
+      </ul>
+      <!-- /.dropdown-user -->
+    </li>
+    <!-- /.dropdown -->
+  </ul>
+  <!-- /.navbar-top-links -->
+
+</nav>
+<!-- /.navbar-static-top -->
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li class="sidebar-search">
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <!-- /input-group -->
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-dashboard fa-fw"></i>Home</a>
+                    </li>
+                    <li class="dropdown" ng-controller="YearListController">
+                        <a href="#"><i class="fa fa-files-o fa-fw"></i>แผนปฏิบัติการประจำปี<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                          <li ng-repeat="year in year_list">
+                            <a href="" ng-click="filter(year)">
+                              <span ng-bind="year"></span></a>
+                          </li>
+                       </ul>
+                    </li>
+                    
+                    <li class="dropdown" ng-controller="YearListReportController">
+                        <a href="#"><i class="fa fa-files-o fa-fw"></i>ติดตามผลการดำเนินงาน<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                          <li ng-repeat="year in year_list">
+                            <a href="" ng-click="filter(year)">
+                              <span ng-bind="year"></span></a>
+                          </li>
+                       </ul>
+                    </li>
+                    
+                    <li>
+                        <a href="#"><i class="fa fa-edit fa-fw"></i>Form<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                          <li>
+                            <a href="#/project/new">เพิ่มกิจกรรม/โครงการใหม่</a></li>
+                          <li>
+                            <a href="#/project/finance/list/2557">โครงการตามแผนฯ</a>
+                          </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                </ul>
+                <!-- /#side-menu -->
+            </div>
+            <!-- /.sidebar-collapse -->
+        </nav>
+        <!-- /.navbar-static-side -->
+         {{{body}}}
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                 <div  ng-view></div>  
+                    <!--<h1 class="page-header">Dashboard</h1>-->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
     </div>
-  </div> 
 
 </body>
 </html>
-
-
-

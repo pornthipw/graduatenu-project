@@ -1,0 +1,218 @@
+<div class="row">
+  <div class="col-lg-9">
+  </div>
+  <div class="col-lg-3">
+    <div class="input-group">
+      <span class="input-group-addon">  </span>
+      <input type = "text" class = "form-control" 
+        placeholder = "Search"
+        ng-model="search">
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-3">
+    <!--
+    <div class="panel">
+      <div class="panel-heading">
+        <strong>โครงการ/กิจกรรมที่กำลังดำเนินการ</strong>
+      </div>
+    </div>
+    -->
+
+    <div class="list-group">
+      <a href="" class="list-group-item">
+        <h4 class="list-group-item-heading">
+          <font color="blue">โครงการที่กำลังดำเนินการ</font>
+        </h4>
+      </a> 
+      <a href="" ng-click="select_project(project)" 
+        ng-repeat="project in project_list" class="list-group-item" 
+        ng-class="{'active':project==current_project}">
+        <p class="list-group-item-text">
+          {{project.name}} 
+        </p>
+      </a>
+   </div>
+  </div>
+  <div class="col-lg-9">
+    <div class="row">
+      <div class="col-lg-12">
+        <blockquote>
+          <p>
+            <img style="border: 0px" 
+              src="img/icon_message1.jpg" alt="With Twitter">
+              {{project.pid}} : 
+              <a href="#/project/finance/info/{{current_project._id}}/{{current_project.financeid}}">
+                {{current_project.name}} 
+              </a>
+              <a href="#/project/finance/edit/{{current_project._id}}/{{current_project.financeid}}">
+              แก้ไข</a>
+              <!--
+                <a href="#/projects/{{current_project.year}}">
+                <button type="button" 
+                 class="btn btn-success btn-sm">
+                 โครงการ/กิจกรรมปีปัจจุบัน</button></a>
+              -->
+          </p>
+          <i class="icon-user"></i>
+          <strong>ผู้รับผิดชอบ : </strong> 
+          {{current_project.owner}} 
+          <i class="icon-signal"></i>
+          <strong>สถานะโครงการ : </strong> 
+          {{current_project.status}} 
+        </blockquote>  
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="row">
+          <div class="col-lg-9">
+            <strong>ผลการดำเนินงาน</strong>
+          </div>
+          <div class="col-lg-3">
+            <a href="" ng-click="new_message()" 
+              ng-show="current_project && user_logon">
+              <span class="badge">
+                สร้างกิจกรรม
+              </span>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+           &nbsp;
+          </div>
+        </div>
+        <table  ng-show="message_list.length>0" 
+          class="table table-hover table-striped">
+          <tr>
+            <th >วันที่</th>
+            <th >ผลการดำเนินงาน</th>
+            <th >ผู้รายงาน</th>
+            <th ng-show="user_logon"></th>
+          </tr>
+          <tr ng-repeat="message in message_list">
+          <tr style="cursor:pointer" 
+              ng-class="{'warning':entry.cancel}"
+              ng-repeat="message in message_list|orderBy:'-date_record'" 
+              ng-click="select_message(message)">
+            <td>{{message.date_record}}</td>
+            <td>{{message.task_name}}</td>
+            <td>{{message.owner.profile.displayName}}</td>
+            <td ng-show="user_logon"> 
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-lg-4"
+        ng-show="current_message && user_logon">
+        <form class="form-inline">
+          <fieldset>
+            <legend> แก้ไขข้อมูล </legend>
+            <div class="form-group">
+              <label>วันที่ดำเนินงาน</label>
+              <input type="text" 
+                ng-model="current_message.date_record" 
+                data-date-format="dd/mm/yyyy" bs-datepicker 
+                class="form-control" placeholder="คลิกเลือกวันที่ดำเนินงาน">
+            </div>
+            <div class="form-group">
+              <label>ประเภทของงานย่อย</label>
+              <select ng-model = "current_message.task_type"
+                class = "form-control" > 
+                <option ng-repeat="tasktype in tasktype_list" 
+                  ng-selected="current_message.task_type==tasktype.name">
+                  {{tasktype.name}}
+                </option> 
+              </select>  
+            </div>
+            <div class="form-group">
+              <div    
+                ng-model="current_message.task_name" 
+                model="text"  codemirror="text">
+                <textarea class="form-control"></textarea>
+              </div>  
+            </div>
+          </fieldset>
+        </form>
+      
+        <span class="pull-left ">              
+          <a href="" class="btn" ng-click="save_message()" >
+            <i class="icon-plus"></i> ปรับปรุงข้อมูล
+          </a>
+          <a href="" ng-click="remove_message()" 
+            class="btn btn-danger" >
+            <i class="icon-remove"></i> ลบข้อมูล
+          </a>     
+        </span>  
+      </div>
+    </div>
+  </div>
+</div>
+    <!--
+    <div class="row">
+      <div class="col-lg-7">
+        <strong>ผลการดำเนินงาน</strong>
+        <table  ng-show="message_list.length>0" class="table table-hover">
+          <tr>
+            <th class="span1">วันที่</th>
+            <th class="span6">ผลการดำเนินงาน</th>
+            <th class="span2">ผู้รายงาน</th>
+            <th ng-show="user_logon"></th>
+          </tr>
+          <tr ng-repeat="message in message_list">
+          <tr style="cursor:pointer"
+              ng-class="{'warning':entry.cancel}"
+              ng-repeat="message in message_list|orderBy:'-date_record'" ng-click="select_message(message)">
+            <td>{{message.date_record}}</td>
+            <td>{{message.task_name}}</td>
+            <td>{{message.owner.profile.displayName}}</td>
+            <td ng-show="user_logon"> 
+              
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-lg-5" >
+        <fieldset ng-show="current_message && user_logon">
+          <strong>แก้ไขข้อมูล</strong>
+          <label>วันที่: </label>
+          <div class="input-append" >
+            <input type="text" ng-model="current_message.date_record" 
+              data-date-format="dd/mm/yyyy" bs-datepicker class="input-small">
+            <button type="button" class="btn" data-toggle="datepicker">
+              <i class="icon-calendar"></i>
+            </button>
+          </div>
+          
+          <label>ประเภท: </label>
+          <div class="input-append" >
+           <select ng-model = "current_message.task_type"> 
+             <option ng-repeat="tasktype in tasktype_list" 
+                ng-selected="current_message.task_type==tasktype.name">{{tasktype.name}}</option> 
+           </select>  
+          </div>
+
+          <label>ผลการดำเนินงาน: </label>
+          <div ng-model="current_message.task_name" 
+            mode="text"  codemirror="text">
+            <textarea></textarea>
+          </div>  
+      
+          <span class="pull-left ">              
+            <a href="" class="btn" ng-click="save_message()" >
+              <i class="icon-plus"></i> ปรับปรุงข้อมูล
+            </a>
+             <a href="" ng-click="remove_message()" class="btn btn-danger" >
+                <i class="icon-remove"></i> ลบข้อมูล
+              </a>     
+          </span>  
+        </fieldset> 
+      </div>
+    </div>
+    -->
+
+
+

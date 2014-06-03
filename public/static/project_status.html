@@ -4,7 +4,7 @@
   <li class="active">สถานภาพโครงการตามกองทุน</li>
 </ol>
 <div class="page-header">
-  <h1>สถานะภาพโครงการตามกองทุน <small>ตามแผนปฏิบัติการประจำปี {{current_year}} </small></h1>
+  <h1>สถานภาพโครงการตามกองทุน <small>ตามแผนปฏิบัติการประจำปี {{current_year}} </small></h1>
 </div>
 
 <ul class="nav nav-tabs">
@@ -217,13 +217,18 @@
           </h4>
         </div>
         <div id="collapseOne" class="panel-collapse collapse in">
-          <div class="panel-body">
+          <button ng-click="exportData()">Export</button>
+          <div class="panel-body" >
             <!--ff-->
+            <div id="exportable">
             <table class="table">
               <thead>
                 <tr>
                   <th colspan="5"> 
-                    <p>ก.วัตถุประสงค์ของโครงการ </p>
+                    <p>
+
+                      ก.วัตถุประสงค์ของโครงการ 
+                    </p>
                     <p>มีโครงการที่ดำเนินการไปแล้วทั้งสิ้น ..... โครงการ </p>
                   </th>
                 </tr>
@@ -264,7 +269,7 @@
                     {{key}}
                   </td>
                   <td colspan="5">
-                    <div ng-repeat="project in value.project" class="row">
+                    <div ng-repeat="project in value.project" class="row" >
                       <div class="col-lg-12" ng-show="project.status=='ดำเนินการแล้ว'">
                         <div class="row">
                           <div class="col-lg-6">
@@ -290,6 +295,7 @@
                 </tr>
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       </div>

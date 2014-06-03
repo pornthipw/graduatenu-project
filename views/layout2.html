@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="projectplan">
+  
+<head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>  
+    <base href="{{ baseHref }}">
+   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"> 
+    <link href="javascript/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">    
+    <link href="javascript/vendor/bootstrap/css/starter-template.css" rel="stylesheet">    
+    <link href="javascript/vendor/bootstrap/css/main.css" rel="stylesheet">    
+    <link href="javascript/vendor/bootstrap/css/docs.css" rel="stylesheet">    
+    <link href="javascript/vendor/codemirror/codemirror.css" rel="stylesheet"> 
+          
+    
+    <link href="javascript/vendor/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="javascript/vendor/bootstrap-datepicker.css" rel="stylesheet">
+
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    
+    <script src="javascript/vendor/jquery-1.8.2.min.js"></script>
+    <script src="javascript/vendor/bootstrap/js/bootstrap.js"></script> 
+    <script src="javascript/vendor/codemirror/codemirror.js"></script> 
+    <script src="javascript/vendor/codemirror/mode/javascript.js"></script> 
+    <script src="javascript/vendor/angular.min.js"></script>
+    <script src="javascript/vendor/angular-resource.min.js"></script>
+    <script src="javascript/vendor/angular-codemirror.js"></script>
+    <script src="javascript/vendor/bootstrap-datepicker.js"></script>
+    <script src="javascript/vendor/angular-strap.min.js"></script>
+    <script src="javascript/mongorest_service.js"></script>
+    <script src="javascript/app.js"></script>
+    
+</head>
+    
+<body >  
+  
+    <div class="navbar navbar-inverse navbar-fixed-top" 
+      ng-controller="UserCtrl">
+      <div class="container">
+        <a class="navbar-brand" href="#">Project Tracking </a>
+        <div class="nav-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#"><i class="icon-home icon-white"></i> Home</a></li>        
+            
+            <ul class="nav navbar-nav" ng-controller="YearListController">
+              <li class="dropdown">
+                <a class="dropdown-toggle" 
+                  data-toggle="dropdown" href="#">
+                    แผนปฏิบัติการประจำปี 
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li ng-repeat="year in year_list">
+                    <a href="" ng-click="filter(year)">
+                    <span ng-bind="year"></span></a>
+                  </li>  
+                </ul>  
+              </li>
+            </ul>
+            <ul class="nav navbar-nav" >
+              <li class="dropdown">
+                <a class="dropdown-toggle" 
+                  data-toggle="dropdown" href="#">
+                    การใช้เงินงบประมาณ 
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="#project/finance/list/2557">
+                    <i class="icon-plus icon-white"></i>2557</a>
+                  </li>
+                </ul>  
+              </li>
+            </ul>
+           <!-- 
+            <li><a href="#project/create">
+              <i class="icon-plus icon-white"></i> เพิ่มโครงการ</a>
+            </li>  
+           -->
+            <ul class="nav navbar-nav pull-right" ng-hide="user.user">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" 
+                  data-toggle="dropdown" dropdown>Login 
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="auth/openid?openid_identifier=https://www.google.com/accounts/o8/id">
+                      <img style="border: 0px" 
+                        src="img/icongoogle-1.gif" 
+                        alt="With Twitter"> Login with Google
+                    </a>
+                  </li>
+                  <li class="divider"></li>                            
+                </ul>
+              </li>
+            </ul> 
+            <ul class="nav pull-right" ng-show="user.user">            
+              <li class="dropdown">
+                <a href="#" ng-click="logout()">Logout</a>              
+              </li>
+            </ul>     
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  
+   
+  {{{body}}} 
+  <div class="container">
+    <div class="starter-template">
+      <div  ng-view></div>  
+    </div>
+  </div>
+</body>
+</html>
+
+
+

@@ -19,10 +19,32 @@
 </div>
 
 <div ng-controller="YearListController">
-<div 
-  id="container" 
-  style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-<highchart id="chart1" config="Piechart"></highchart>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+      สรุป 
+  </div>
+                        <!-- /.panel-heading -->
+  <div class="panel-body">
+    <div id="container3" 
+      style="height: 400px; margin: 0 auto">
+    </div>
+    <!--<div id="morris-line-chart"></div>-->
+  </div>
+                        <!-- /.panel-body -->
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+       Line Chart Example
+  </div>
+                        <!-- /.panel-heading -->
+  <div class="panel-body">
+    <highchart id="chart1" config="Piechart"></highchart>
+    <!--<div id="morris-line-chart"></div>-->
+  </div>
+                        <!-- /.panel-body -->
+</div>
+
 
 </div>
 <!--

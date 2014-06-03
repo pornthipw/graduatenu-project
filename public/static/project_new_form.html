@@ -7,7 +7,7 @@
     </div>
   </div>
 </div>
-<div class="row" ng-show="user.user&&user.user.role=='admin'">
+<div class="row" ng-show="user.user&&user.user.role[0]=='admin'">
 <!--
 <div class="row" >
 -->
@@ -29,6 +29,7 @@
             ng-model="project.ptype">
             <option ng-selected="project.ptype=='โครงการ'">โครงการ</option>
             <option ng-selected="project.ptype=='กิจกรรม'">กิจกรรม</option>
+            <option ng-selected="project.ptype=='นอกแผน'">นอกแผน</option>
           </select>
       </div>
       
