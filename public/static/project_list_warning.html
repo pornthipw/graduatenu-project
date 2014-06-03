@@ -68,11 +68,11 @@
   </div>
 </div>
 
-    <div ng-show="chk=='2'">
-      <div ng-repeat="project in project_list|orderBy:'-new_date_plan'" >
-        <div 
-          ng-switch on="((project.new_date_plan >= fdateRange)&& (!project.date_approval))">
-           <span ng-switch-when="true">
+<div ng-show="chk!='0'">
+      <div ng-repeat="project in project_list.list.type.first.list_project|orderBy:'-new_date_plan'" >
+        <div> 
+            {{project.name}}
+           <span >
              ระยะเวลาดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
              <a 
                href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
@@ -82,16 +82,3 @@
       </div>
     </div>
 
-    <div ng-show="chk=='1'">
-      <div ng-repeat="project in project_list|orderBy:'-new_date_plan'" >
-        <div 
-          ng-switch on="((project.new_date_plan <= fdateRange)&& (!project.date_approval))">
-           <span ng-switch-when="true">
-             ระยะเวลาดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
-             <a 
-               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
-               วันที่ขออนุมัติ -{{project.date_approval}} 
-           </span>
-        </div>
-      </div>
-    </div>
