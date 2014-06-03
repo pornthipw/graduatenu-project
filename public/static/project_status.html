@@ -221,12 +221,12 @@
                  </td>
               </tr>
             </tbody>
-            <tr ng-repeat="sum in r_fund_new" >
+            <tr ng-repeat="s in status_result" >
               <td>รวมทั้งสิ้น</td>
-              <td>{{sum}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td>{{s.status_all}}</td>
+              <td>{{s.status_finish}}</td>
+              <td>{{s.status_working}}</td>
+              <td>{{s.status_no}}</td>
             </tr>
           </table>
            {{r_fund_new}}
