@@ -175,6 +175,9 @@
                      <div class="col-lg-2">
                       ไม่ได้ดำเนินการ  
                      </div>
+                     <div class="col-lg-2">
+                      ยกเลิก  
+                     </div>
                    </div>
                 </td> 
               </tr>
@@ -195,6 +198,9 @@
                      </div>
                      <div class="col-lg-2">
                        {{value.n}}
+                     </div>
+                     <div class="col-lg-2">
+                       {{value.c}}
                      </div>
                    </div>
                  </td>
@@ -217,13 +223,16 @@
                      <div class="col-lg-2">
                        {{p.count.no}} 
                      </div>
+                     <div class="col-lg-2">
+                       {{p.count.cancle}} 
+                     </div>
                    </div>
                  </td>
               </tr>
             </tbody>
             <tr ng-repeat="s in status_result" >
               <td>รวมทั้งสิ้น</td>
-              <td>{{s.status_all}}</td>
+              <td>{{s.status_finish+s.status_working+s.status_no+s.status_cancle}}</td>
               <td>{{s.status_finish}}</td>
               <td>{{s.status_working}}</td>
               <td>{{s.status_no}}</td>
