@@ -374,11 +374,11 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
     $scope.current_year = $routeParams.year;
     //
     var t_year = parseInt($routeParams.year)-543;
-      $scope.chk = "";
+    $scope.chk = "";
     $scope.filterProject = function (valchk) {
       //console.log("test");
       //console.log(val);
-      $scope.chk = valchk;
+      $scope.chk = parseInt(valchk);
       var fstrDate = 03+'/'+31+'/'+t_year;
       var fstatusDate =  new Date(fstrDate).getTime();
       var estrDate = 09+'/'+30+'/'+t_year;
@@ -412,11 +412,11 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
             //console.log($scope.dateToday);
         //}
       //}
-        if (valchk=='' || valchk==0){
-            $scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
+        //if (valchk=='' || valchk==0){
+            //$scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
         }
+
       
-    
 
     Project.query({query:'{"type":"post_project","year":"'+$routeParams.year+'"}'}, 
     //Project.query({query:'{"type":"post_project","status":"ยังไม่ได้ดำเนินการ" ,"year":"'+$routeParams.year+'"}'}, 
