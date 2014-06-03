@@ -375,10 +375,10 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
     //
     var t_year = parseInt($routeParams.year)-543;
     $scope.chk = "";
-    $scope.filterProject = function (valchk) {
+    //$scope.filterProject = function (valchk) {
       //console.log("test");
       //console.log(val);
-      $scope.chk = parseInt(valchk);
+      //$scope.chk = parseInt(valchk);
       var fstrDate = 03+'/'+31+'/'+t_year;
       var fstatusDate =  new Date(fstrDate).getTime();
       var estrDate = 09+'/'+30+'/'+t_year;
@@ -765,7 +765,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
         }
     }
     */
-   }
+   //}
 }
 
 function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, Logout) {
