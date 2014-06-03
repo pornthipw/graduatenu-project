@@ -863,7 +863,7 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
       //console.log('408 -'+value);
       r_fund.push({'name':key,'count':value});
     });
-    var r_fund_new = r_fund[0];
+    $scope.r_fund_new = r_fund[0];
     //console.log(r_fund_new.count);
    
     var result = [];
