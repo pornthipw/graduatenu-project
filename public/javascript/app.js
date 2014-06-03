@@ -502,10 +502,19 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
                  'c':0,
                  'list_alert':[],
                  'list_late':[],
+                 'list_project':[],
                  'alert':0,
                  'late':0};
             }
          
+            if( project.new_date_plan < ndateToday && ndateToday < project.new_date_check){
+                 dict[project.year]['type'][project.type]['list_project'].push(project);
+            } else {
+              if(project.new_date_plan < ndateToday && ndateToday > project.new_date_check){
+                 dict[project.year]['type'][project.type]['list_project'].push(project);
+              }
+            }
+
             if(project.status == "ยังไม่ได้ดำเนินการ" && project.new_date_plan < ndateToday && ndateToday < project.new_date_check){
                  dict[project.year]['alert1']+=1;
                  dict[project.year]['owner'][project.owner]['alert']+=1;
