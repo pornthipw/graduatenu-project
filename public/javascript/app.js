@@ -1267,6 +1267,7 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
     });
     
     $scope.status_result = status_result;
+    console.log(status_result);
     $scope.result = result;
     $scope.project_list =  project_list;
     $scope.year = $routeParams.year;
