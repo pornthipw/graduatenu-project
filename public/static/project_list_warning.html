@@ -44,7 +44,7 @@
     Select Browsers => Desktop share by version. Download as tsv. -->
 
 </div>
-<div class="panel panel-warning" ng-show="chk=='0'">
+<div class="panel panel-warning" ng-show="chk=='0'" ng-hide="ch!='0'">
   <div class="panel-heading">
     <h3 class="panel-title">โครงการที่ยังไม่ได้ดำเนินการ</h3>
   </div>
@@ -68,7 +68,7 @@
   </div>
 </div>
 
-<div ng-show="chk!='0'">
+<div >
       <div ng-repeat="project in project_list.list.type.first.list_project|orderBy:'-new_date_plan'" >
         <div> 
             {{project.name}}
