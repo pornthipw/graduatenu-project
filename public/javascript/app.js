@@ -1262,7 +1262,7 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
       result.push({'owner':name, 'count':value});
     });
     var status_result = [];
-    angular.forEach(status_dict, function(value, name) {
+    angular.forEach(status_dict[0], function(value, name) {
       status_result.push({'status':name, 'count':value});
     });
     
