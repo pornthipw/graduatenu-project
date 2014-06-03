@@ -232,13 +232,13 @@
             </tbody>
             <tr ng-repeat="s in status_result" >
               <td>รวมทั้งสิ้น</td>
-              <td>{{s.status_finish+s.status_working+s.status_no+s.status_cancle}}</td>
+              <td>{{s.status_all}}</td>
               <td>{{s.status_finish}}</td>
               <td>{{s.status_working}}</td>
               <td>{{s.status_no}}</td>
+              <td>{{s.status_cancle}}</td>
             </tr>
           </table>
-           {{r_fund_new}}
        </div>
      </div>
    </div>
