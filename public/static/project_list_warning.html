@@ -7,8 +7,9 @@
   <ul class="dropdown-menu" role="menu">
     <li class="divider"></li>
     <li><a ng-click="filterProject(0)">ติดตามความก้าวหน้าโครงการ</a></li>
-    <li><a ng-click="filterProject(1)">ครึ่งปีแรก (ตุลาคม {{current_year-1}}- มีนาคม{{current_year}}</a></li>
+    <!--<li><a ng-click="filterProject(1)">ครึ่งปีแรก (ตุลาคม {{current_year-1}}- มีนาคม{{current_year}}</a></li>
     <li><a ng-click="filterProject(2)">ครึ่งปีหลัง (เมษายน {{current_year}}- กันยายน{{current_year}}</a></li>
+    -->
   </ul>
 </div>
 <p></p>
@@ -30,7 +31,7 @@
     Select Browsers => Desktop share by version. Download as tsv. -->
 
 </div>
-<div class="panel panel-warning" ng-show="chk=='0'" ng-hide="ch!='0'">
+<div class="panel panel-warning" ng-show="chk==0" ng-hide="ch!=0">
   <div class="panel-heading">
     <h3 class="panel-title">โครงการที่ยังไม่ได้ดำเนินการ</h3>
   </div>
@@ -53,18 +54,3 @@
     </div>
   </div>
 </div>
-
-<div  ng-show="chk=='1'" ng-hide="ch=='0'">
-      <div ng-repeat="project in project_list.list.type.first.list_project|orderBy:'-new_date_plan'" >
-        <div> 
-            {{project.name}}
-           <span >
-             ระยะเวลาดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
-             <a 
-               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
-               วันที่ขออนุมัติ -{{project.date_approval}} 
-           </span>
-        </div>
-      </div>
-    </div>
-
