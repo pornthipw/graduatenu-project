@@ -412,11 +412,8 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
             //console.log($scope.dateToday);
         //}
       //}
-        if (valchk=='' || valchk==0){
             $scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
-        }else{
 
-        }
       
 
     Project.query({query:'{"type":"post_project","year":"'+$routeParams.year+'"}'}, 
