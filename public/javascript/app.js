@@ -1177,6 +1177,7 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
 
   Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
     var dict = {};
+    var status_dict = {};
     angular.forEach(project_list, function(project) {
       if(!(project.fund in dict)) {
         dict[project.fund] = {'working':0,
@@ -1198,6 +1199,13 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
         project.fund = 'Z';
       }
       */
+      if(!(project.year in status_dict)) {
+        status_dict[project.year]={'status_working':0,
+           'status_cancle':0,
+           'status_no':0,
+           'status_finish':0,
+           'status_all':0};
+      }
       
       if(!(project.owner in dict[project.fund]['owner'])) {
         //dict[project.fund]['owner'][project.owner] = [];
@@ -1219,23 +1227,28 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
        dict[project.fund]['listproject'].push(project);      
       if(project.status == "กำลังดำเนินการ") {
         dict[project.fund]['working']+=1;
+        status_dict[project.year]['status_working']+=1;
         dict[project.fund]['owner'][project.owner]['w']+=1;
       }else {
         if(project.status == "ดำเนินการแล้ว") {
           dict[project.fund]['finish']+=1;
+          status_dict[project.year]['status_finish']+=1;
           dict[project.fund]['owner'][project.owner]['f']+=1;
         }else{
           if(project.status == "ยังไม่ได้ดำเนินการ") {
             dict[project.fund]['no']+=1;
+            status_dict[project.year]['status_no']+=1;
             dict[project.fund]['owner'][project.owner]['n']+=1;
           } else {
             dict[project.fund]['cancle']+=1;
+            status_dict[project.year]['status_cancle']+=1;
             dict[project.fund]['owner'][project.owner]['c']+=1;
           }
         }
       }
       if((project.status == "กำลังดำเนินการ") ||(project.status == "ดำเนินการแล้ว") ||(project.status == 'ยังไม่ได้ดำเนินการ')||(project.status == 'ยกเลิก')) {
         dict[project.fund]['all']+=1;
+        status_dict[project.year]['status_all']+=1;
 
       }
 
@@ -1248,7 +1261,12 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
     angular.forEach(dict, function(value, name) {
       result.push({'owner':name, 'count':value});
     });
+    var status_result = [];
+    angular.forEach(status_dict, function(value, name) {
+      status_result.push({'status':name, 'count':value});
+    });
     
+    $scope.status_result = status_result;
     $scope.result = result;
     $scope.project_list =  project_list;
     $scope.year = $routeParams.year;
