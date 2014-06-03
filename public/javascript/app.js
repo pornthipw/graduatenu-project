@@ -874,6 +874,7 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
 
     $scope.result = result;
     console.log(result);
+    console.log(r_fund);
     $scope.project_list =  project_list;
     $scope.year = $routeParams.year;
     //graph 2
