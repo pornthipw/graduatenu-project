@@ -387,7 +387,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
       var curr_month = d.getMonth()+1;
       var curr_year = d.getFullYear();
       var ndateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
-      if (val!=0){
+      if (val==1 ||val==2){
         //var fstrDate = 03+'/'+31+'/'+t_year;
         //var fstatusDate =  new Date(fstrDate).getTime();
         $scope.fdateRange = fstatusDate;
@@ -396,7 +396,8 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
         $scope.edateRange = estatusDate;
         //console.log(fstrDate);
         //console.log(fstatusDate);
-      }else{
+      }
+       //else{
     //}
         //if (val=='' || val==0){
             //Current Date
@@ -409,7 +410,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
             //$scope.dateRange = ""; 
             //console.log($scope.dateToday);
         //}
-      }
+      //}
         if (val=='' || val==0){
             $scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
         }
