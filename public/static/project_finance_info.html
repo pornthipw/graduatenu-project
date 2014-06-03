@@ -38,13 +38,23 @@
           <dt>งบประมาณที่ขอ: </dt><dd> {{project[0].money.total_start+project[0].money.total_receive}} </dd>
           <dt>งบประมาณ(ที่ใช้):</dt><dd> {{project[0].money.total_expend}} </dd>
           <dt>งบประมาณ(ที่รออนุมัติ):</dt><dd> {{project[0].money.total_wait}} </dd>
-          <dt>ร้อยละ: </dt><dd> {{project.project.money_percent}} </dd>
-          <dt>สถานที่: </dt><dd> {{project.proejct.place}} </dd>
+          <dt>ร้อยละงบประมาณที่ใช้: </dt>
+          <dd> {{project.project.money_percent}} 
+                         <p class="text-danger" 
+                           ng-hide="project[0].money.total_expend==0">
+                           {{100-((project[0].money.total_expend*100)/project[0].money.total_start) | number:2}}
+                         </p>
+                         <p class="text-primary" 
+                           ng-hide="project[0].money.total_expend!=0">
+                           {{100-((project[0].money.total_expend*100)/project[0].money.total_start) | number:2}}
+                         </p>
+          </dd>
+          <dt>สถานที่: </dt><dd> {{project.project.place}} </dd>
           <dt>จำนวนผู้เข้าร่วม:</dt><dd> {{project.project.party}} </dd>
           <dt>จำนวนผู้ตอบ: </dt><dd>{{project.project.respon}}</dd>
           <dt>ค่าเฉลี่ย:</dt><dd> {{project.project.percent}}</dd>
           <dt>ระดับความพึงพอใจ:</dt><dd>{{project.project.sd}}</dd>
-          <dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>
+          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
           <dt>โหลดข้อมูล:</dt>
             <dd>
               <span ng-show="project.project.Load">

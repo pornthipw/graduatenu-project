@@ -178,7 +178,7 @@ function CreateTaskByProjectController($scope, $filter, GradDB, User,Project ) {
 
   ];
 
-      getMoney(GradDB, Project,"52ccee70f564a17d4100002b", function(m, a, b, c) {
+      getMoney(GradDB, Project,"52ccee70f564a17d4100002b", function(m, a, b, c ,o) {
        console.log(m);
         //owner_dict[res.owner]['total_start']+=m;      
       });
@@ -338,6 +338,7 @@ function getMoney(GradDB, Project, projectId, cb) {
        var total_expend = 0;
        var total_wait = 0;
        var total_receive = 0;
+       var total_out = 0;
        var dict ={};
        if(f_list.length > 0) {
          var finance = f_list[0];
@@ -353,11 +354,16 @@ function getMoney(GradDB, Project, projectId, cb) {
                if (record.mode == "P") {
                  total_wait+=record.amount;
                } else {
-                 total_receive+=record.amount;
+                   total_receive+=record.amount;
                }
              }
-           });
-           cb(finance.amount, total_wait, total_expend, total_receive);
+              
+               if (record.mode == "O") {
+                   total_out+=record.amount;
+               }
+            }
+           );
+           cb(finance.amount, total_wait, total_expend, total_receive, total_out);
          }); 
        } 
      });
@@ -437,6 +443,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
               'total_expend':0,
               'total_wait':0,
               'total_receive':0,
+              'total_out':0,
               'fund':{}
             };
           }      
@@ -455,7 +462,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
 
           if(!(project.year in dict_sum)) {
             dict_sum[project.year]={'start':0,
-            'wait':0,'receive':0,'expend':0,'balance':0};
+            'wait':0,'receive':0,'expend':0,'balance':0,'out':0};
             //dict_sum.push(project.year);
           }
           owner_dict[project.owner]['fund'][project.fund].push(project);
@@ -753,10 +760,11 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
   //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
   Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
     //var owner_dict = {};
-    console.log("test");
 
     var owner_dict = {};
     var dict_sum = {};
+    $scope.test = [];
+    console.log("nook");
     $scope.sum = [];
     
     angular.forEach(project_list, function(project) {
@@ -770,6 +778,7 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
             'total_expend':0,
             'total_wait':0,
             'total_receive':0,
+            'total_out':0,
             'fund':{},
             'listproject':[]
             };
@@ -784,26 +793,30 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
 
       if(!(project.year in dict_sum)) {
         dict_sum[project.year]={'start':0,
-           'wait':0,'receive':0,'expend':0,'balance':0};
+           'wait':0,'receive':0,'expend':0,'balance':0,'out':0,
+           'status_working':0,'status_finish':0,'status_no':0,'status_cancle':0};
         //dict_sum.push(project.year);
 
       }
       owner_dict[project.owner]['fund'][project.fund].push(project);
       // console.log(owner_dict);
-      getMoney(GradDB, Project, project._id, function(m, a, b, c) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o) {
         owner_dict[project.owner]['total_start']+=m;      
         owner_dict[project.owner]['total_expend']+=b;      
         owner_dict[project.owner]['total_wait']+=a;      
         owner_dict[project.owner]['total_receive']+=c;      
+        owner_dict[project.owner]['total_out']+=o;      
         dict_sum[project.year]['start']+=m;
         dict_sum[project.year]['wait']+=a;
         dict_sum[project.year]['receive']+=c;
+        dict_sum[project.year]['out']+=o;
         dict_sum[project.year]['expend']+=b;
         dict_sum[project.year]['balance']+=m+c-b;
 
 
         project.start_balance = m+c-b;
         project.sum_expend = b;
+        project.sum_out = o;
         //owner_dict[project.owner]['listproject'].push(project);      
         //console.log('getMoney');
         var f_b = parseFloat(b);
@@ -820,17 +833,22 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
         $scope.Piechart['series'][0]['data'][0][1]+=f_b;
         $scope.Piechart['series'][0]['data'][1][1]+=(f_m+f_c)-f_b;
       });
-      
       if(project.status == "กำลังดำเนินการ") {
         owner_dict[project.owner]['working']+=1;
+        dict_sum[project.year]['status_working']+=1;
       }else {
         if(project.status == "ดำเนินการแล้ว") {
           owner_dict[project.owner]['finish']+=1;
+          dict_sum[project.year]['status_finish']+=1;
         }else{
           if(project.status == "ยกเลิก") {
             owner_dict[project.owner]['cancle']+=1;
+            dict_sum[project.year]['status_cancle']+=1;
+            $scope.t_cancle+=1;
           }else{
             owner_dict[project.owner]['no']+=1;
+            dict_sum[project.year]['status_no']+=1;
+            $scope.t_no+=1;
           }
         }
       }
@@ -859,6 +877,7 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
     $scope.project_list =  project_list;
     $scope.year = $routeParams.year;
     //graph 2
+
     $scope.Piechart = {
       options: {
         chart: {
@@ -959,6 +978,7 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
    // var chart2; 
     $(function () {
       $('#container3').highcharts({
+           colors: ["#FE9A2E", "#21610B", "#0B173B", "#DF0101", "#aaeeee", "#ff0066", "#eeaaee","#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
             chart: {
                 type: 'column'
             },
@@ -1068,6 +1088,7 @@ function ProjectListByYearStatusDeptController($scope, CurrentDate,GradDB,$route
             'total_expend':0,
             'total_wait':0,
             'total_receive':0,
+            'total_out':0,
             'fund':{},
             'listproject':[]
             };
@@ -1082,14 +1103,16 @@ function ProjectListByYearStatusDeptController($scope, CurrentDate,GradDB,$route
 
       owner_dict[project.owner]['fund'][project.fund].push(project);
       // console.log(owner_dict);
-      getMoney(GradDB, Project, project._id, function(m, a, b, c) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o) {
         owner_dict[project.owner]['total_start']+=m;      
         owner_dict[project.owner]['total_expend']+=b;      
         owner_dict[project.owner]['total_wait']+=a;      
         owner_dict[project.owner]['total_receive']+=c;      
+        owner_dict[project.owner]['total_out']+=o;      
 
         project.start_balance = m+c;
         project.sum_expend = b;
+        project.sum_out = o;
         //console.log('Money  s ' + project.name+ ' '+m);
         //console.log('Money  a ' + project.name+ ' '+a);
         //console.log('Money  b'+b);
@@ -1164,6 +1187,7 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
             'total_expend':0,
             'total_wait':0,
             'total_receive':0,
+            'total_out':0,
             'owner':{},
             'listproject':[]
             };
@@ -1180,14 +1204,16 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
       } 
       dict[project.fund]['owner'][project.owner]['project'].push(project);
       // console.log(owner_dict);
-      getMoney(GradDB, Project, project._id, function(m, a, b, c) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o) {
         dict[project.fund]['total_start']+=m;      
         dict[project.fund]['total_expend']+=b;      
         dict[project.fund]['total_wait']+=a;      
         dict[project.fund]['total_receive']+=c;      
+        dict[project.fund]['total_out']+=o;      
 
         project.start_balance = m+c;
         project.sum_expend = b;
+        project.sum_out = o;
       });
        dict[project.fund]['listproject'].push(project);      
       if(project.status == "กำลังดำเนินการ") {
@@ -1609,6 +1635,7 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
      var total_expend = 0;
      var total_wait = 0;
      var total_receive = 0;
+     var total_out = 0;
      var dict ={};
      if (finance.length > 0) {
        angular.forEach(finance, function(entry) { 
@@ -1622,6 +1649,7 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
              'fund':entry.fund,
              'sum_expend':0,
              'sum_wait':0,
+             'sum_out':0,
              'start_balance':balance_start,
              'record':[],
              'finance':[]};
@@ -1640,10 +1668,15 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
                //console.log("เงินโอน"+record.amount);
                if(!(dict[entry.id]['record'][key] in dict)){
                  dict[entry.id]['record'][key] = {'balance_start':balance_start
-                 ,'total_receive':0
+                 ,'total_receive':0,'total_out':0
                  ,'total_expend':0,'total_wait':0};
                }
 
+               if (record.mode == "O") {
+                 total_out+=record.amount;
+                 dict[entry.id]['record'][key]['total_out']+=record.amount;
+                 dict[entry.id]['sum_out']+=record.amount;
+               }
                if (record.mode == "O"||record.mode == "E"||record.mode == "U" ) {
                  //balance_start-=record.amount;
                  total_expend+=record.amount;
@@ -1698,14 +1731,16 @@ function ProjectFinanceViewController($scope, User,Project, $routeParams, GradDB
             'total_start':0,
             'total_expend':0,
             'total_wait':0,
-            'total_receive':0
+            'total_receive':0,
+            'total_out':0
             };
       }      
-      getMoney(GradDB, Project, project._id, function(m, a, b, c) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o) {
         dict[project.name]['total_start']+=m;      
         dict[project.name]['total_expend']+=b;      
         dict[project.name]['total_wait']+=a;      
         dict[project.name]['total_receive']+=c;      
+        dict[project.name]['total_out']+=o;      
 
       });
     
@@ -1762,6 +1797,7 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
            var sum_expend = 0;
            var total_wait = 0;
            var total_receive = 0;
+           var total_out = 0;
            var dict ={};
            var balance_start = project_obj.amount;
            var thai_year = parseInt(project_obj.year)+543;
@@ -1772,6 +1808,7 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
                'record':[],
                'sum_expend':0,
                'sum_wait':0,
+               'sum_out':0,
                'start_balance':balance_start,
                'sum_start_balance':0,
                'name':project_obj.name,
@@ -1792,10 +1829,13 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
                  if(!(dict[project_obj.id] in dict)){
                    dict[project_obj.id]['record'][key] = {
                      'balance_start':balance_start
-                     ,'total_receive':0
+                     ,'total_receive':0,'total_out':0
                      ,'total_expend':0,'total_wait':0};
                  }
 
+                 if (record.mode == "O") {
+                   total_out+=record.amount;
+                 }
                  if (record.mode == "O"||record.mode == "E"||record.mode == "U" ) {
                    //balance_start-=record.amount;
                    total_expend+=record.amount;

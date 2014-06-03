@@ -68,25 +68,45 @@ i-->
               <tr>
                 <th colspan="6">รายงานสถานภาพโครงการ</th>
               </tr>
+              <tr>
+                <td colspan="6">
+                  <div class="col-lg-7">
+                  </div>
+                  <div class="col-lg-5">
+                    <small>
+                      <span class="label label-warning">P</span>-อยู่ระหว่างดำเนินการ
+                      <span class="label label-info">C</span>-ยกเลิกโครงการ
+                      <span class="label label-success">F</span>-เสร็จสิ้นโครงการ
+                      <span class="label label-danger">N</span>-ยังไม่ได้ดำเนินโครงการ
+                    </small>
+                  </div>
+                </td>
+          </tr>
             </thead>
             <tbody ng-repeat="p in result | orderBy:'orderProp'" ng-hide="p.docID" >
               <tr class="success">
                 <td >
                   {{p.owner}}
                 </td>
-                <td colspan="5">
+                <td colspan="6">
                    <div class="row">
-                     <div class="col-lg-7">
+                     <div class="col-lg-6">
                        โครงการ
                      </div>
                      <div class="col-lg-1">
                         ได้รับ
                      </div>
                      <div class="col-lg-1">
+                       โอนออก 
+                     </div>
+                     <div class="col-lg-1">
                         ใช้ไป
                      </div>
                      <div class="col-lg-1">
                         คงเหลือ
+                     </div>
+                     <div class="col-lg-1">
+                       % การใช้ไป 
                      </div>
                      <div class="col-lg-1">
                        สถานะ 
@@ -106,7 +126,7 @@ i-->
                    <div ng-repeat="project in value " class="row">
                    <div class="col-lg-12">
                      <div class="row">
-                       <div class="col-lg-7">
+                       <div class="col-lg-6">
                          {{$index+1}}. {{project.pid}}-
                            <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
                            <a href="#/project/task/{{project._id}}" >
@@ -116,27 +136,42 @@ i-->
                          {{project.start_balance}}
                        </div>
                        <div class="col-lg-1">
+                         {{project.sum_out}}
+                       </div>
+                       <div class="col-lg-1">
                           <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/" 
                              target="_blank">
                              <p class="text-danger" 
                                ng-hide="project.sum_expend==0">
-                               ({{project.sum_expend}})
+                               ({{project.sum_expend-project.sum_out}})
                              </p>
                           </a>
                          <p class="text-primary" 
                            ng-hide="project.sum_expend!=0">
-                         {{project.sum_expend}}
+                         {{project.sum_expend-project.sum_out}}
                        </div>
                        <div class="col-lg-1">
                          {{project.start_balance-project.sum_expend}}
                        </div>
                        <div class="col-lg-1">
-                         <span ng-show="project.status=='กำลังดำเนินการ'"
-                           class="label label-warning">P</span>
-                         <span ng-show="project.status=='ดำเนินการแล้ว'"
-                           class="label label-info">F</span>
-                         <span ng-show="project.status=='ยังไม่ได้ดำเนินการ'"
-                           class="label label-danger">N</span>
+                         <p class="text-danger" 
+                           ng-hide="project.sum_expend==0">
+                           {{100-((project.sum_expend*100)/project.start_balance) | number:2}}
+                         </p>
+                         <p class="text-primary" 
+                           ng-hide="project.sum_expend!=0">
+                           {{100-((project.sum_expend*100)/project.start_balance) | number:2}}
+                         </p>
+                       </div>
+                       <div class="col-lg-1">
+                        <span ng-show="project.status=='กำลังดำเนินการ'"
+                          class="label label-warning">P</span>
+                        <span ng-show="project.status=='ยกเลิก'"
+                          class="label label-info">C</span>
+                        <span ng-show="project.status=='ดำเนินการแล้ว'"
+                          class="label label-success">F</span>
+                        <span ng-show="project.status=='ยังไม่ได้ดำเนินการ'"
+                          class="label label-danger">N</span>
                        </div>
                      </div>
                      <!--
