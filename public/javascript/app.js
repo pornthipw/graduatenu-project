@@ -375,11 +375,10 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
     //
     var t_year = parseInt($routeParams.year)-543;
       $scope.chk = "";
-      var val = "";
-    $scope.filterProject = function (val) {
+    $scope.filterProject = function (valchk) {
       //console.log("test");
       //console.log(val);
-      $scope.chk = val;
+      $scope.chk = valchk;
       var fstrDate = 03+'/'+31+'/'+t_year;
       var fstatusDate =  new Date(fstrDate).getTime();
       var estrDate = 09+'/'+30+'/'+t_year;
@@ -389,16 +388,16 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
       var curr_month = d.getMonth()+1;
       var curr_year = d.getFullYear();
       var ndateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
-      if (val==1 ||val==2){
+      //if (valchk==1 ||valchk==2){
         //var fstrDate = 03+'/'+31+'/'+t_year;
         //var fstatusDate =  new Date(fstrDate).getTime();
-        $scope.fdateRange = fstatusDate;
+        //$scope.fdateRange = fstatusDate;
         //var estrDate = 09+'/'+30+'/'+t_year;
         //var estatusDate =  new Date(estrDate).getTime();
-        $scope.edateRange = estatusDate;
+        //$scope.edateRange = estatusDate;
         //console.log(fstrDate);
         //console.log(fstatusDate);
-      }
+      //}
        //else{
     //}
         //if (val=='' || val==0){
@@ -413,7 +412,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
             //console.log($scope.dateToday);
         //}
       //}
-        if (val=='' || val==0){
+        if (valchk=='' || valchk==0){
             $scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
         }
       
