@@ -396,20 +396,23 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
         $scope.edateRange = estatusDate;
         //console.log(fstrDate);
         //console.log(fstatusDate);
-      }
+      }else{
     //}
-        if (val=='' || val==0){
+        //if (val=='' || val==0){
             //Current Date
             //var d = new Date();
             //var curr_date = d.getDate();
             //var curr_month = d.getMonth()+1;
             //var curr_year = d.getFullYear();
     
-            $scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
+            //$scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
             //$scope.dateRange = ""; 
             //console.log($scope.dateToday);
+        //}
+      }
+        if (val=='' || val==0){
+            $scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
         }
-      
       
     
 
