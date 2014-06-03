@@ -230,6 +230,30 @@
                  </td>
               </tr>
             </tbody>
+              <tr ng-repeat="s in status_result" >
+                 <td>
+                    
+                 </td>
+                 <td colspan="5">
+                   <div class="row">
+                     <div class="col-lg-3">
+                      {{s.status_all}} 
+                     </div>
+                     <div class="col-lg-2">
+                      {{s.status_finish}} 
+                     </div>
+                     <div class="col-lg-2">
+                      {{s.status_working}} 
+                     </div>
+                     <div class="col-lg-2">
+                      {{s.status_no}} 
+                     </div>
+                     <div class="col-lg-2">
+                      {{s.status_cancle}} 
+                     </div>
+                   </div>
+                 </td>
+              </tr>
             <tr><td colspan"6">รวมทั้งสิ้น</td></tr>
             <tr ng-repeat="s in status_result" >
               <td></td>
