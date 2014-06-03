@@ -5,17 +5,17 @@
     ระยะเวลาดำเนินโครงการ <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
-    <li><a ng-click="filterProject(1)">ครึ่งปีแรก (ตุลาคม {{current_year-1}}- มีนาคม{{current_year}}</a></li>
-    <li><a ng-click="filterProject(2)">ครึ่งปีหลัง (เมษายน {{current_year}}- กันยายน{{current_year}}</a></li>
     <li class="divider"></li>
     <li><a ng-click="filterProject(0)">Current Status</a></li>
+    <li><a ng-click="filterProject(1)">ครึ่งปีแรก (ตุลาคม {{current_year-1}}- มีนาคม{{current_year}}</a></li>
+    <li><a ng-click="filterProject(2)">ครึ่งปีหลัง (เมษายน {{current_year}}- กันยายน{{current_year}}</a></li>
   </ul>
 </div>
 <p></p>
 
 
 
-<div class="panel panel-warning" >
+<div class="panel panel-warning" ng-show="chk=='0'">
   <SELECT id="list">
     <OPTION VALUE="A"> สรุปสถานภาพโครงการประจำปี {{current_year}} 
     <OPTION VALUE="B"> สรุปสถานภาพโครงการครึ่งปีแรกประจำปี {{current_year}} 
@@ -30,7 +30,7 @@
     Select Browsers => Desktop share by version. Download as tsv. -->
 
 </div>
-<div class="panel panel-warning" >
+<div class="panel panel-warning" ng-show="chk=='0'" ng-hide="ch!='0'">
   <div class="panel-heading">
     <h3 class="panel-title">โครงการที่ยังไม่ได้ดำเนินการ</h3>
   </div>
