@@ -622,7 +622,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
         angular.forEach(dict,function (value,key) {
           result_alert.push({'year':key,'list':value});
         });
-        console.log(result_alert);
+        //console.log(result_alert);
 
         var result_late =[];
         angular.forEach(dict_late,function (value,key) {
@@ -631,7 +631,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
       //console.log(result[0].list.project);
         $scope.project_list = result_late[0].list.project;
         $scope.project_list_new = result_alert[0].list.type;
-        //console.log(result_late[0].list.project);
+        console.log(result_late[0].list.project);
         $(function () {
     	  // Radialize the colors
             // Build the chart
