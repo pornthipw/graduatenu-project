@@ -374,6 +374,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
     $scope.current_year = $routeParams.year;
     //
     var t_year = parseInt($routeParams.year)-543;
+      $scope.chk = "";
     $scope.filterProject = function (val) {
       //console.log("test");
       //console.log(val);
