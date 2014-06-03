@@ -231,14 +231,14 @@
               </tr>
             </tbody>
             <thead>
-              <tr class="info"  >
+              <tr class="info" ng-repeat="s in status_result[0]" >
                  <th>
                   รวม  
                  </th>
                  <th colspan="5">
                    <div class="row">
                      <div class="col-lg-3">
-                      {{status_result.status_all}} 
+                      {{s.status_all}} 
                      </div>
                      <div class="col-lg-2">
                       {{s.status_finish}} 
