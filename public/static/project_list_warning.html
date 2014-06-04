@@ -58,10 +58,14 @@
 <div class="panel panel-warning"  ng-show="chk==0 || chk==''">
 <div class="panel panel-default">
   <div class="panel-body">
-   โครงการที่ต้องเร่งรัดติดตามในครึ่งปีแรก 
+   โครงการที่ล่าช้าในครึ่งปีแรก 
   </div>
   <div class="panel-footer">
-      <div ng-repeat="project in project_list_new.first.list_alert|orderBy:'-new_date_plan' " >
+      <div ng-repeat="project in project_list_new.first.type.lateowner.list|orderBy:'-new_date_plan' " >
+            {{project.owner}} : วันที่เริ่มดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
+            <a 
+              href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+              วันที่ขออนุมัติ -{{project.date_approval}} 
 
       </div>
     Panel footer
