@@ -162,7 +162,7 @@
 </div>
 
 <div class="panel panel-warning"  ng-show="chk==2" ng-hide="chk==0 || chk=='' ||chk==1">
-  <div class="panel-heading">โครงการครึ่งปีแรก</div>
+  <div class="panel-heading">โครงการครึ่งปีหลัง</div>
       <table class="table">
           <tr >
             <td>งานที่รับผิดชอบ</td>
@@ -170,10 +170,10 @@
             <td>โครงการ/กิจกรรม</td>
           </tr>
           <tr class="info">
-            <td colspan="3" ><blockquote><p>ครึ่งแรก</p></blockquote></td>
+            <td colspan="3" ><blockquote><p>ครึ่งหลัง</p></blockquote></td>
           </tr>
         <tbody
-          ng-repeat="(key,value) in project_list_new.first.allowner|orderBy:'-new_date_plan' " >
+          ng-repeat="(key,value) in project_list_new.second.allowner|orderBy:'-new_date_plan' " >
           <tr ng-show="value.list.length">
             <td>{{key}}</td>
             <td></td>
