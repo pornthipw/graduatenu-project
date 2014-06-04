@@ -69,7 +69,7 @@
             <td>{{key}}</td>
             <td></td>
           </tr>
-          <tr ng-repeat="project in value.list" ng-hide= "!value.list">
+          <tr ng-repeat="project in value.list" ng-show= "value.list.name">
             <td></td>
             <td>
             {{project.owner}} : วันที่เริ่มดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
