@@ -57,6 +57,22 @@
             </td>
           </tr>
         </tbody>
+        <tbody
+          ng-repeat="(key,value) in project_list_new.second.alertowner|orderBy:'-new_date_plan' " >
+          <tr ng-show="value.list.length">
+            <td>{{key}}</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr ng-repeat="project in value.list" >
+            <td></td>
+            <td>{{project.date_plan}}-{{project.end_date_plan}}</td>
+            <td>
+            <a
+              href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+            </td>
+          </tr>
+        </tbody>
       </table>
 </div>
 
