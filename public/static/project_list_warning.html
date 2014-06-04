@@ -90,7 +90,7 @@
             <td>โครงการ/กิจกรรม</td>
           </tr>
           <tr class="info">
-            <td colspan="3" ><p class="text-center">ครึ่งแรก</p></td>
+            <td colspan="3" ><blockquote><p>ครึ่งแรก</p></blockquote></td>
           </tr>
         <tbody 
           ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
@@ -109,7 +109,7 @@
           </tr>
         </tbody>
           <tr class="info">
-            <td colspan="3" ><blockquote><p class="text-center">ครึ่งปีหลัง</p></blockquote></td>
+            <td colspan="3" ><blockquote><p>ครึ่งปีหลัง</p></blockquote></td>
           </tr>
         <tbody 
           ng-repeat="(key,value) in project_list_new.second.lateowner|orderBy:'-new_date_plan' " >
