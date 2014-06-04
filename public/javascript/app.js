@@ -712,7 +712,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
         $("#change").click(function(){
           if ($("#list").val() == "A")
           {
-            options.colors: ["#FE9A2E", "#21610B", "#0B173B", "#DF0101"]
+            //options.colors: ["#FE9A2E", "#21610B", "#0B173B", "#DF0101"]
             options.series = [{
                 type: 'pie',
                 name: 'คิดเป็น',
