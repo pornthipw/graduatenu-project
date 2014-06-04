@@ -80,14 +80,9 @@
             <td></td>
             <td>{{project.date_plan}}-{{project.end_date_plan}}</td> 
             <td>
-             <span ng-show="project.name">
             <a 
               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
               
-             </span>
-             <span ng-show="!project[0].name">
-              ไม่พบข้อมูล 
-             </span>
              
             </td>
           </tr>
