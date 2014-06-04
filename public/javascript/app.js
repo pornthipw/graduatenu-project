@@ -507,12 +507,19 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
                  'a':0,
                  'c':0,
                  'list_alert':[],
+                 'alertowner':{},
                  'list_late':[],
                  'list_project':[],
                  'alert':0,
                  'late':0};
             }
          
+            if(!(project.owner in dict[project.year]['type'][project.type]['alertowner'])) {
+               dict[project.year]['type'][project.type]['alertowner'][project.owner] = 
+                {'list':[]};
+                 //dict[project.year]['type'][project.type]['list_alert'].push(project);
+            }
+
             if( project.new_date_plan < ndateToday && ndateToday < project.new_date_check){
                  dict[project.year]['type'][project.type]['list_project'].push(project);
             } else {
@@ -526,6 +533,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
                  dict[project.year]['owner'][project.owner]['alert']+=1;
                  dict[project.year]['type'][project.type]['alert']+=1;
                  dict[project.year]['type'][project.type]['list_alert'].push(project);
+                 dict[project.year]['type'][project.type]['alertowner'][project.owner]['list'].push(project);
             }else{
                 if(project.status == "ยังไม่ได้ดำเนินการ" && project.new_date_plan < ndateToday && ndateToday > project.new_date_check){
                   dict[project.year]['late']+=1;

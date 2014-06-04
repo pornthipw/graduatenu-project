@@ -56,5 +56,15 @@
 </div>
 
 <div class="panel panel-warning"  ng-show="chk==0 || chk==''">
+<div class="panel panel-default">
+  <div class="panel-body">
+   โครงการที่ต้องเร่งรัดติดตามในครึ่งปีแรก 
+  </div>
+  <div class="panel-footer">
+      <div ng-repeat="project in project_list_new.first.list_alert|orderBy:'-new_date_plan' " >
 
+      </div>
+    Panel footer
+  </div>
+</div>
 </div>
