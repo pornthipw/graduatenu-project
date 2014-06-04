@@ -71,7 +71,7 @@
          </tread>
         <tbody 
           ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
-          <tr >
+          <tr ng-show="value.list.length">
             <td>{{key}}</td>
             <td></td>
             <td></td>
