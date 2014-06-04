@@ -31,43 +31,44 @@
     Select Browsers => Desktop share by version. Download as tsv. -->
 
 </div>
-<div class="panel panel-warning"  ng-show="chk==0 || chk==''">
-  <div class="panel-heading">
-    <h3 class="panel-title">โครงการที่ยังไม่ได้ดำเนินการ</h3>
-  </div>
-  <div class="panel-body">
-    <div class="alert alert-warning"> 
-      <div ng-repeat="project in project_list_new.first.list_alert|orderBy:'-new_date_plan' " >
-            {{project.owner}} : วันที่เริ่มดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
-            <a 
-              href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
-              วันที่ขออนุมัติ -{{project.date_approval}} 
-      </div>
-    </div>
-    <div class="alert alert-danger">
-      <div ng-repeat="project in project_list_new.first.list_late|orderBy:'-new_date_plan' " >
-            {{project.owner}} : วันที่เริ่มดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
-            <a 
-              href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
-              วันที่ขออนุมัติ -{{project.date_approval}} 
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="panel panel-warning"  ng-show="chk==0 || chk==''">
-<div class="panel panel-danger">
-  <div class="panel-heading">โครงการที่ล่าช้าในครึ่งปีแรก</div>
-  <div class="panel-body"> 
-  </div>
+  <div class="panel-heading">โครงการที่ตั้องเร่งรัดในครึ่งปีแรก</div>
+  <div class="panel-body"> </div>
       <table class="table">
-        <tread>
           <tr >
             <td>งานที่รับผิดชอบ</td>
             <td>วันที่ดำเนินการตามแผน</td>
             <td>โครงการ/กิจกรรม</td>
           </tr>
-         </tread>
+        <tbody
+          ng-repeat="(key,value) in project_list_new.first.alertowner|orderBy:'-new_date_plan' " >
+          <tr ng-show="value.list.length">
+            <td>{{key}}</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr ng-repeat="project in value.list" >
+            <td></td>
+            <td>{{project.date_plan}}-{{project.end_date_plan}}</td>
+            <td>
+            <a
+              href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+
+<div class="panel panel-danger" ng-show="chk==0 || chk==''">
+  <div class="panel-heading">โครงการที่ล่าช้าในครึ่งปีแรก</div>
+  <div class="panel-body"> </div>
+      <table class="table">
+          <tr >
+            <td>งานที่รับผิดชอบ</td>
+            <td>วันที่ดำเนินการตามแผน</td>
+            <td>โครงการ/กิจกรรม</td>
+          </tr>
         <tbody 
           ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
           <tr ng-show="value.list.length">
@@ -81,11 +82,8 @@
             <td>
             <a 
               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
-              
-             
             </td>
           </tr>
         </tbody>
       </table>
-  </div>
 </div>
