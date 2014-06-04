@@ -508,6 +508,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
                  'c':0,
                  'list_alert':[],
                  'alertowner':{},
+                 'lateowner':{},
                  'list_late':[],
                  'list_project':[],
                  'alert':0,
@@ -516,6 +517,11 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
          
             if(!(project.owner in dict[project.year]['type'][project.type]['alertowner'])) {
                dict[project.year]['type'][project.type]['alertowner'][project.owner] = 
+                {'list':[]};
+                 //dict[project.year]['type'][project.type]['list_alert'].push(project);
+            }
+            if(!(project.owner in dict[project.year]['type'][project.type]['lateowner'])) {
+               dict[project.year]['type'][project.type]['lateowner'][project.owner] = 
                 {'list':[]};
                  //dict[project.year]['type'][project.type]['list_alert'].push(project);
             }
@@ -540,6 +546,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
                   dict[project.year]['owner'][project.owner]['late']+=1;
                   dict[project.year]['type'][project.type]['late']+=1;
                   dict[project.year]['type'][project.type]['list_late'].push(project);
+                  dict[project.year]['type'][project.type]['lateowner'][project.owner]['list'].push(project);
                 }
             }
 
