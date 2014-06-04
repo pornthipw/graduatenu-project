@@ -765,7 +765,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
                   //data: [3,2,1,2,3]
               }]
              }
-
+           }
           } 
           
           var chart = new Highcharts.Chart(options);    
