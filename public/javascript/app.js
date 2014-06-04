@@ -482,7 +482,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
             //console.log(new_date_plan);
             var formattedDate_check = dateSplitted[1]+'/'+dateSplitted[0]+'/'+dateSplitted[2];
             var new_date_check =  new Date(formattedDate_check);
-            var day_check = new_date_check.getDate()+15;
+            var day_check = new_date_check.getDate()+30;
             //console.log(day_check);
             var formattedDate_new = dateSplitted[1]+'/'+day_check+'/'+dateSplitted[2];
             //console.log(formattedDate_new);
