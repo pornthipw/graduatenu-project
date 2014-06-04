@@ -62,13 +62,17 @@
   </div>
   <div class="panel-footer">
       <table>
-        <tr><td></td></tr>
+          <tr >
+            <td>งานที่รับผิดชอบ</td>
+            <td>วันที่ดำเนินการตามแผน</td>
+            <td>โครงการ/กิจกรรม</td>
+          </tr>
         <tbody 
           ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
           <tr >
             <td>{{key}}</td>
-            <td>วันที่ดำเนินการตามแผน</td>
-            <td>โครงการ/กิจกรรม</td>
+            <td></td>
+            <td></td>
           </tr>
           <tr ng-repeat="project in value.list" >
             <td></td>
