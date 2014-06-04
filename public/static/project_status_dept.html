@@ -131,6 +131,11 @@ i-->
                            <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
                            <a href="#/project/task/{{project._id}}" >
                            </a>
+
+                          <span ng-show="project.project.permitdocument">
+                            <a href="{{project.project.permitdocument}}" 
+                          target="_blank"><span class="glyphicon glyphicon-download"></span></a>
+                          </span>
                        </div>
                        <div class="col-lg-1">
                          {{project.start_balance}}
