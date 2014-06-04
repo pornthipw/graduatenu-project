@@ -90,8 +90,30 @@
             <td>วันที่ดำเนินการตามแผน</td>
             <td>โครงการ/กิจกรรม</td>
           </tr>
+          <tr class="info">
+            <td colspan="3" class="info">ครึ่งแรก</td>
+          </tr>
         <tbody 
           ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
+          <tr ng-show="value.list.length">
+            <td>{{key}}</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr ng-repeat="project in value.list" >
+            <td></td>
+            <td>{{project.date_plan}}-{{project.end_date_plan}}</td> 
+            <td>
+            <a 
+              href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
+            </td>
+          </tr>
+        </tbody>
+          <tr class="info">
+            <td colspan="3" class="info">ครึ่งปีหลัง</td>
+          </tr>
+        <tbody 
+          ng-repeat="(key,value) in project_list_new.second.lateowner|orderBy:'-new_date_plan' " >
           <tr ng-show="value.list.length">
             <td>{{key}}</td>
             <td></td>
