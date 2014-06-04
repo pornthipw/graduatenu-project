@@ -62,11 +62,13 @@
   </div>
   <div class="panel-footer">
       <table>
+        <tread>
           <tr >
             <td>งานที่รับผิดชอบ</td>
             <td>วันที่ดำเนินการตามแผน</td>
             <td>โครงการ/กิจกรรม</td>
           </tr>
+         </tread>
         <tbody 
           ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
           <tr >
@@ -78,9 +80,15 @@
             <td></td>
             <td>{{project.date_plan}}-{{project.end_date_plan}}</td> 
             <td>
+             <span ng-show="project.name">
             <a 
               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
               
+             </span>
+             <span ng-show="!project.name">
+              ไม่พบข้อมูล 
+             </span>
+             
             </td>
           </tr>
         </tbody>
