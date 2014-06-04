@@ -67,15 +67,16 @@
           ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
           <tr >
             <td>{{key}}</td>
-            <td></td>
+            <td>วันที่ดำเนินการตามแผน</td>
+            <td>โครงการ/กิจกรรม</td>
           </tr>
           <tr ng-repeat="project in value.list" >
             <td></td>
+            <td>{{project.date_plan}}-{{project.end_date_plan}}</td> 
             <td>
-            {{project.owner}} : วันที่เริ่มดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
             <a 
               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
-              วันที่ขออนุมัติ -{{project.date_approval}} 
+              
             </td>
           </tr>
         </tbody>
