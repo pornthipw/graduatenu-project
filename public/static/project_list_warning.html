@@ -33,13 +33,16 @@
 </div>
 
 <div class="panel panel-warning"  ng-show="chk==0 || chk==''">
-  <div class="panel-heading">โครงการที่ต้องเร่งรัดในครึ่งปีแรก</div>
+  <div class="panel-heading">โครงการที่ต้องเร่งรัด</div>
   <div class="panel-body"> </div>
       <table class="table">
           <tr >
             <td>งานที่รับผิดชอบ</td>
             <td>วันที่ดำเนินการตามแผน</td>
             <td>โครงการ/กิจกรรม</td>
+          </tr>
+          <tr>
+            <td colspan="3">ครึ่งปีแรก</td>
           </tr>
         <tbody
           ng-repeat="(key,value) in project_list_new.first.alertowner|orderBy:'-new_date_plan' " >
@@ -57,6 +60,9 @@
             </td>
           </tr>
         </tbody>
+          <tr>
+            <td colspan="3">ครึ่งปีหลัง</td>
+          </tr>
         <tbody
           ng-repeat="(key,value) in project_list_new.second.alertowner|orderBy:'-new_date_plan' " >
           <tr ng-show="value.list.length">
