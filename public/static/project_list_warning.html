@@ -83,14 +83,14 @@
 
 <div class="panel panel-danger" ng-show="chk==0 || chk==''">
   <div class="panel-heading">โครงการที่ล่าช้าในครึ่งปีแรก</div>
-      <table class="table">
+      <table class="table table-hover">
           <tr >
             <td>งานที่รับผิดชอบ</td>
             <td>วันที่ดำเนินการตามแผน</td>
             <td>โครงการ/กิจกรรม</td>
           </tr>
           <tr class="info">
-            <td colspan="3" class="info">ครึ่งแรก</td>
+            <td colspan="3" >ครึ่งแรก</td>
           </tr>
         <tbody 
           ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
@@ -109,7 +109,7 @@
           </tr>
         </tbody>
           <tr class="info">
-            <td colspan="3" class="info">ครึ่งปีหลัง</td>
+            <td colspan="3" >ครึ่งปีหลัง</td>
           </tr>
         <tbody 
           ng-repeat="(key,value) in project_list_new.second.lateowner|orderBy:'-new_date_plan' " >
