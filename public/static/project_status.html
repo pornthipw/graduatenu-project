@@ -908,8 +908,6 @@
                     <div class="col-lg-5">
                         {{project.pid}}-
                         <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
-                           <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/" 
-                             target="_blank"><span class="glyphicon glyphicon-list-alt"></span>
                         <a href="#/project/task/{{project._id}}" >
                         </a>
                         <span ng-show="project.permitdocument">
@@ -925,7 +923,10 @@
 
                     </div>
                     <div class="col-lg-2">
-                        {{project.start_balance}}
+                           <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/" 
+                             target="_blank">
+                               {{project.start_balance}}
+                            </a>
                     </div>
                   </div>
                 </div>
