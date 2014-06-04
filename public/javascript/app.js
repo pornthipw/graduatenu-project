@@ -702,7 +702,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
 
         //niew gedeelte
         var options = {
-           colors: [],
+          colors: [],
           chart: {
             renderTo: 'container1',
             defaultSeriesType: 'spline'
@@ -712,7 +712,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
         $("#change").click(function(){
           if ($("#list").val() == "A")
           {
-           colors: ["#FE9A2E", "#21610B", "#0B173B", "#DF0101", "#aaeeee", "#ff0066", "#eeaaee","#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+           options.colors: ["#FE9A2E", "#21610B", "#0B173B", "#DF0101", "#aaeeee", "#ff0066", "#eeaaee","#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
             options.series = [{
                 type: 'pie',
                 name: 'คิดเป็น',
