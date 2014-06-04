@@ -733,6 +733,26 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
               }]
               //$.get('/dough/includes/live-chart.php?mode=newmode'
              } 
+            else
+ 
+             {
+            if ($("#list").val() == "C")
+              {
+              options.series = [{
+                  type: 'pie',
+                  name: 'สถานภาพโครงการครึ่งปีหลังปี'+$routeParams.year, 
+                  data: [
+                    ['ยังไม่ได้ดำเนินการ',   result_alert[0].list.type.second.n],
+                    ['อยู่ระหว่างดำเนินการ', result_alert[0].list.type.second.w],
+                    ['ดำเนินการแล้ว', result_alert[0].list.type.second.f],
+                    ['ยกเลิก', result_alert[0].list.type.second.c]
+                  ]
+                  //data: [3,2,1,2,3]
+              }]
+              //$.get('/dough/includes/live-chart.php?mode=newmode'
+
+             }
+
              else
              {
                options.series = [{
