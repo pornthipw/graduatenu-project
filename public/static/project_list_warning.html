@@ -65,7 +65,8 @@
       <div ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
          
          {{key}}
-          <div ng-repeate="project in value">
+         {{value}}
+          <div ng-repeate="project in value.list">
 
                 {{project.name}}
           </div>
