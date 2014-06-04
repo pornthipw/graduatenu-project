@@ -143,7 +143,7 @@
             <td colspan="3" ><blockquote><p>ครึ่งแรก</p></blockquote></td>
           </tr>
         <tbody
-          ng-repeat="(key,value) in project_list_new.first.list_project|orderBy:'-new_date_plan' " >
+          ng-repeat="(key,value) in project_list_new.first.allowner|orderBy:'-new_date_plan' " >
           <tr ng-show="value.list.length">
             <td>{{key}}</td>
             <td></td>
