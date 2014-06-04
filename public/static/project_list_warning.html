@@ -139,9 +139,6 @@
             <td>วันที่ดำเนินการตามแผน</td>
             <td>โครงการ/กิจกรรม</td>
           </tr>
-          <tr class="info">
-            <td colspan="3" ><blockquote><p>ครึ่งแรก</p></blockquote></td>
-          </tr>
         <tbody
           ng-repeat="(key,value) in project_list_new.first.allowner|orderBy:'-new_date_plan' " >
           <tr ng-show="value.list.length">
@@ -168,9 +165,6 @@
             <td>งานที่รับผิดชอบ</td>
             <td>วันที่ดำเนินการตามแผน</td>
             <td>โครงการ/กิจกรรม</td>
-          </tr>
-          <tr class="info">
-            <td colspan="3" ><blockquote><p>ครึ่งหลัง</p></blockquote></td>
           </tr>
         <tbody
           ng-repeat="(key,value) in project_list_new.second.allowner|orderBy:'-new_date_plan' " >
