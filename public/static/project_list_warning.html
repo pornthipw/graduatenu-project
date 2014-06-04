@@ -65,11 +65,11 @@
         <tr><td></td></tr>
         <tbody 
           ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
-          <tr>
+          <tr ng-show="value.ilist.name">
             <td>{{key}}</td>
             <td></td>
           </tr>
-          <tr ng-repeat="project in value.list" ng-show= "project>0">
+          <tr ng-repeat="project in value.list" >
             <td></td>
             <td>
             {{project.owner}} : วันที่เริ่มดำเนินการตามแผน - {{project.date_plan}}-{{project.end_date_plan}} 
