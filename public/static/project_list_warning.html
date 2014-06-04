@@ -61,11 +61,9 @@
    โครงการที่ล่าช้าในครึ่งปีแรก 
   </div>
   <div class="panel-footer">
-       {{project_list_new.first.lateowner}}
       <div ng-repeat="(key,value) in project_list_new.first.lateowner|orderBy:'-new_date_plan' " >
-         
          {{key}}
-         {{value}}
+         {{value.list}}
           <div ng-repeate="project in value.list">
 
                 {{project.name}}
