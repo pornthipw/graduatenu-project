@@ -33,10 +33,10 @@
               ng-repeat="entry in entry_list|filter:search|orderBy:predicate:reverse|orderBy:'paper_id':reverse" ng-click="show_entry(entry._id)">
 -->
                 <td></td>
+                <td><a href="/project/finance/info/{{project.name}}/{{project.financeid}}">{{project.name}}</a></td>
                 <td>
-                   <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/">{{project.name}}</a></td>
+                   <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/">{{project.financeid}}</a></td>
 
-                <td></td>
                 <td></td>
                 <td></td>
               </tr>
