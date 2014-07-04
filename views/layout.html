@@ -250,11 +250,19 @@
                           <li ng-repeat="year in year_list">
                             <a href="" ng-click="filter(year)">
                               <span ng-bind="year"></span>
-                              
                             </a>
                            <ul class="nav nav-third-level">
                              <li>
-                               <a href="#">Third Level Item</a>
+                               <a href="#">สืบค้นข้อมูลโครงการ</a>
+                             </li> 
+                             <li>
+                               <a href="#">รายงานผลการดำเนินโครงการ</a>
+                             </li> 
+                             <li>
+                               <a href="#/projects/warning/{{year}}">ติดตามสถานภาพ</a>
+                             </li> 
+                             <li>
+                               <a href="#">รายงาน</a>
                              </li> 
                            </ul>
                           </li>
