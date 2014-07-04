@@ -321,6 +321,7 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
   //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
   Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
     $scope.project_list = project_list;
+    //$scope.selectedOwner = [];
     console.log("test"); 
     console.log(project_list); 
   });
