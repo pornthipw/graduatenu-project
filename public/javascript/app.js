@@ -321,7 +321,7 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
   //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
   Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
     console.log("test"); 
-  }):
+  });
 }
 function getThaiDate(datevalue, cb) {
       var date_new = {};
