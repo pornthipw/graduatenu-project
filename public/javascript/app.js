@@ -57,7 +57,7 @@ app.config(function($routeProvider) {
     templateUrl:'static/project_info.html'
   });   
   
-  $routeProvider.when('/project/list', {
+  $routeProvider.when('/project/list/:year', {
     controller:ProjectListController, 
     templateUrl:'static/project_list.html'
   });
@@ -1383,7 +1383,7 @@ function YearListController($scope, GradDB,$location, $timeout,$routeParams,Proj
     $location.path('/task/create');
   }
   $scope.filter5 = function(year) {
-    $location.path('/project/list');
+    $location.path('/project/list/'+year);
   }
 }
 
