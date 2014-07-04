@@ -1,4 +1,32 @@
-
-<div class="page-header">
-  <h3>โครงการ/กิจกรรมประจำปี {{year}} <small>ตามแผนปฏิบัติการ </small></h3>
-</div>
+     <!--<div ng-repeat="project in p_list|orderBy:'project.fund' ">
+       <div ng-show="CreateHeader(project.project.fund)">
+        <span ng-show="project.project.fund=='A'">กองทุนทั่วไป</span> 
+        <span ng-show="project.project.fund=='B'">กองทุนกิจการนิสิต</span> 
+        <span ng-show="project.project.fund=='C'">กองทุนวิจัย</span> 
+        <span ng-show="project.project.fund=='D'">กองทุนทำนุบำรุงศิลปวัฒนธรรม</span> 
+      </div>
+        {{project.project.name}} 
+     </div>
+     -->
+     <table class="table">
+            <thead>
+              <tr>
+                <th>ลำดับที่</th>
+                <th>ชื่อโครงการ</th>    
+                <th>งบประมาณที่ได้รับ</th>    
+                <th>งบประมาณที่ใช้ไป</th>    
+                <th>คงเหลือ</th>    
+                <th>รออนุมัติ่่</th>    
+                <th>คงเหลือสุทธิ</th>    
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="project in project_list">
+                <td></td>
+                <td>{{project.name}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
