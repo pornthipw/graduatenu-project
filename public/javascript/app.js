@@ -1376,6 +1376,9 @@ function YearListController($scope, GradDB,$location, $timeout,$routeParams,Proj
   $scope.filter4 = function(year) {
     $location.path('/task/create');
   }
+  $scope.filter5 = function(year) {
+    $location.path('/project/list');
+  }
 }
 
 function YearListReportController($scope, GradDB,$location, $timeout,$routeParams,Project,User, Logout) {
