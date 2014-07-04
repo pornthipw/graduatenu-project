@@ -8,6 +8,11 @@
         {{project.project.name}} 
      </div>
      -->
+  <div class="col-lg-3 input-group">
+    <span class="input-group-addon">@</span>
+    <input type="text"
+      class = "form-control" placeholder="สืบค้นโครงการ" ng-model="search">
+  </div>
      <table class="table">
             <thead>
               <tr>
@@ -21,9 +26,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="project in project_list">
+              <tr ng-repeat="project in project_list|filter:search">
+  <!--
+   <tr style="cursor:pointer"
+              ng-class="{'warning':entry.cancel}"
+              ng-repeat="entry in entry_list|filter:search|orderBy:predicate:reverse|orderBy:'paper_id':reverse" ng-click="show_entry(entry._id)">
+-->
                 <td></td>
-                <td>{{project.name}}</td>
+                <td>
+                   <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/">{{project.name}}</a></td>
+
                 <td></td>
                 <td></td>
                 <td></td>
