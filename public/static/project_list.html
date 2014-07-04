@@ -23,7 +23,7 @@
         </li>
         <li>
             <div class="btn-group" data-ng-class="{open: open}">
-                <button class="btn">Filter by Company</button>
+                <button class="btn">Filter by Owner</button>
                 <button class="btn dropdown-toggle" data-ng-click="open=!open"><span class="caret"></span>
 
                 </button>
@@ -75,7 +75,7 @@
                 <td>
                    <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/">{{project.financeid}}</a></td>
 
-                <td></td>
+                <td>{{project.owner}}</td>
             </tr>
         </tbody>
 
