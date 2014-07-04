@@ -111,7 +111,7 @@ app.config(function($routeProvider) {
 
   $routeProvider.when('/projects/:year', {
     controller:ProjectListByYearController, 
-    templateUrl:'static/project_list.html'
+    templateUrl:'static/project_main.html'
   });   
 /*
   $routeProvider.when('/projects/report/:year', {
