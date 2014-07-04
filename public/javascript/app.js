@@ -305,6 +305,7 @@ function RoleController($scope, Role, User, Logout, Admin) {
 }
 
 function ProjectListController($scope, $routeParams, Project, User, Logout) {
+  /*
   $scope.user = User.get(function(response) {
     console.log("test");
     console.log(response);
@@ -314,6 +315,7 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
       }); 
     }
   });
+  */
 
   $scope.current_year = $routeParams.year;
   //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
