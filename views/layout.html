@@ -244,12 +244,11 @@
                     <li>
                         <a href="#"><i class="fa fa-dashboard fa-fw"></i>Home</a>
                     </li>
-                    <li class="dropdown" ng-controller="YearListController">
+                    <li ng-controller="YearListController">
                         <a href="#"><i class="fa fa-files-o fa-fw"></i>แผนปฏิบัติการประจำปี<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           <li ng-repeat="year in year_list">
-                            <a href="" >
-                              <span ng-bind="year"></span>
+                            <a href="" ><span ng-bind="year"></span>
                               <span class="fa arrow"></span>
                             </a>
                            <ul class="nav nav-third-level">
