@@ -13,26 +13,75 @@
     <input type="text"
       class = "form-control" placeholder="สืบค้นโครงการ" ng-model="search">
   </div>
-     <table class="table">
-            <thead>
-              <tr>
-                <th>ลำดับที่</th>
-                <th>ชื่อโครงการ</th>    
-                <th>ข้อมูลการเบิกจ่ายงบประมาณ</th>    
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="project in project_list|filter:search">
-  <!--
-   <tr style="cursor:pointer"
-              ng-class="{'warning':entry.cancel}"
-              ng-repeat="entry in entry_list|filter:search|orderBy:predicate:reverse|orderBy:'paper_id':reverse" ng-click="show_entry(entry._id)">
--->
-                <td></td>
-                <td><a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a></td>
+<div data-ng-controller="ClientCtrl">
+    <ul class="inline">
+        <li>
+            <div class="alert alert-info">
+                 <h4>Total Filtered Client: {{filtered.length}}</h4>
+
+            </div>
+        </li>
+        <li>
+            <div class="btn-group" data-ng-class="{open: open}">
+                <button class="btn">Filter by Company</button>
+                <button class="btn dropdown-toggle" data-ng-click="open=!open"><span class="caret"></span>
+
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                    <li><a data-ng-click="checkAll()"><i class="icon-ok-sign"></i>  Check All</a>
+
+                    </li>
+                    <li><a data-ng-click="selectedCompany=[];"><i class="icon-remove-sign"></i>  Uncheck All</a>
+
+                    </li>
+                    <li class="divider"></li>
+                    <li data-ng-repeat="company in companyList"> <a data-ng-click="setSelectedClient()">{{company.name}}<span data-ng-class="isChecked(company.id)"></span></a>
+
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+    <hr/>
+     <h3>Clients Table:</h3>
+
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th style="width:10%">#</th>
+                <th style="width:20%">Name</th>
+                <th style="width:40%">Designation</th>
+                <th style="width:30%">Company</th>
+            </tr>
+        </thead>
+       <!--
+        <tbody>
+            <tr data-ng-repeat="client in filtered = (clients | companyFilter:selectedCompany)">
+                <td>{{$index + 1}}</td>
+                <td><em>{{client.name}}</em>
+
+                </td>
+                <td>{{client.designation}}</td>
+                <td>{{client.company.name}}</td>
+            </tr>
+        </tbody>
+        -->
+         <tbody>
+            <tr ng-repeat="project in project_list|filter:search">
+            <!--<tr data-ng-repeat="client in filtered = (clients | companyFilter:selectedCompany)">
+            -->
+                <td>{{$index + 1}}</td>
+                <td><em><a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a></em></td>
                 <td>
                    <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/">{{project.financeid}}</a></td>
 
-              </tr>
-            </tbody>
-          </table>
+                <td></td>
+            </tr>
+        </tbody>
+
+    </table>
+    <!-- <pre>{{selectedCompany|json}}</pre>
+<pre>{{companyList|json}}</pre>
+<pre>{{clients|json}}</pre>
+-->
+</div>
