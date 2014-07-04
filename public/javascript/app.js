@@ -1365,6 +1365,10 @@ function YearListController($scope, GradDB,$location, $timeout,$routeParams,Proj
     $location.path('/projects/'+year);
   
   }
+  $scope.filter1 = function(year) {
+    $location.path('/projects/warning'+year);
+  
+  }
 }
 
 function YearListReportController($scope, GradDB,$location, $timeout,$routeParams,Project,User, Logout) {
