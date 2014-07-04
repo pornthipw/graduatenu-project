@@ -248,12 +248,12 @@
                         <a href="#"><i class="fa fa-files-o fa-fw"></i>แผนปฏิบัติการประจำปี<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           <li ng-repeat="year in year_list">
-                            <a href="" ><span ng-bind="year"></span>
+                            <a href="" ng-click="filter(year)"><span ng-bind="year"></span>
                               <span class="fa arrow"></span>
                             </a>
                            <ul class="nav nav-third-level">
                              <li>
-                               <a href="#">สืบค้นข้อมูลโครงการ</a>
+                               <a href="#" ng-click="filter5(year)">สืบค้นข้อมูลโครงการ</a>
                              </li> 
                              <li>
                                <a href="" ng-click="filter1(year)">
