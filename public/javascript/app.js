@@ -314,6 +314,12 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
       }); 
     }
   });
+
+  $scope.current_year = $routeParams.year;
+  //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
+  Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
+    console.log("test"); 
+  }):
 }
 function getThaiDate(datevalue, cb) {
       var date_new = {};
