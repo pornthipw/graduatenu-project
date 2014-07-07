@@ -31,11 +31,11 @@
                     <li><a data-ng-click="checkAll()"><i class="icon-ok-sign"></i>  Check All</a>
 
                     </li>
-                    <li><a data-ng-click="selectedCompany=[];"><i class="icon-remove-sign"></i>  Uncheck All</a>
+                    <li><a data-ng-click="selectedStatus=[];"><i class="icon-remove-sign"></i>  Uncheck All</a>
 
                     </li>
                     <li class="divider"></li>
-                    <li data-ng-repeat="company in companyList"> <a data-ng-click="setSelectedClient()">{{company.name}}<span data-ng-class="isChecked(company.id)"></span></a>
+                    <li data-ng-repeat="company in statusList"> <a data-ng-click="setSelectedStatus()">{{project.status}}<span data-ng-class="isChecked(status)"></span></a>
 
                     </li>
                 </ul>
