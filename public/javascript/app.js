@@ -344,7 +344,7 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
         }
         return false;
     };
-    $scope.isChecked = function (id) {
+    $scope.isChecked = function (name) {
         if (_.contains($scope.selectedStatus, name)) {
             return 'icon-ok pull-right';
         }
