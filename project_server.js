@@ -33,12 +33,22 @@ var mongo = mongo_con.Mongo({
 });
 */
 
+app.register('.html', {
+  compile: function (str, options) {
+    var template = _.template(str);
+    return function (locals) {
+      return template(locals);
+    };
+  }
+});
+
 app.configure(function() {
 	app.use(express.cookieParser('keyboard cat'));
   	app.use(express.bodyParser());
       app.use(express.favicon());
   	app.use(express.static(__dirname + '/public'));    
   	app.set('views', __dirname + '/views');
+  	//app.engine('html', handlebars.__express);  
   	//app.engine('html', handlebars.__express);  
   	app.set('view engine', 'html');      
   	app.use(express.methodOverride());
