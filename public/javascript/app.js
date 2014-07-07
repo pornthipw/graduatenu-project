@@ -354,13 +354,6 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
  $scope.checkAll = function () {
         $scope.selectedStatus = _.pluck($scope.statusList, 'status');
     };
-var arr = [1, 2, 3];
-
-
-//If contains 3 then true
-var containTest = _.contains(arr, 3);
-
-console.log(containTest); // True
 
 
 }
