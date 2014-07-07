@@ -1,4 +1,4 @@
-var app = angular.module('projectplan', ['mongorest_service','codemirror','$strap.directives','highcharts-ng']);
+var app = angular.module('projectplan', ['mongorest_service','codemirror','$strap.directives','highcharts-ng','app.filters']);
 
 app.filter('skip', function() {
   return function(input, start) {
@@ -316,6 +316,16 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
     }
   });
   */
+  $scope.selectedStatus = [];
+  $scope.statusList = [{
+        name: 'อยู่ระหว่างดำเนินการ'
+    }, {
+        name: 'ดำเนินการแล้ว'
+    }, {
+        name: 'ยังไม่ได้ดำเนินการ'
+    }, {
+        name: 'ยกเลิก'
+    }];
 
   $scope.current_year = $routeParams.year;
   //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
@@ -325,6 +335,26 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
     console.log("test"); 
     console.log(project_list); 
   });
+ $scope.setSelectedStatus = function () {
+        var id = this.status;
+        if (_.contains($scope.selectedStatus, name)) {
+            $scope.selectedStatus = _.without($scope.selectedStatus, name);
+        } else {
+            $scope.selectedStatus.push(name);
+        }
+        return false;
+    };
+    $scope.isChecked = function (id) {
+        if (_.contains($scope.selectedStatus, name)) {
+            return 'icon-ok pull-right';
+        }
+        return false;
+    };
+ $scope.checkAll = function () {
+        $scope.selectedStatus = _.pluck($scope.statusList, 'name');
+    };
+
+
 }
 function getThaiDate(datevalue, cb) {
       var date_new = {};
@@ -2101,3 +2131,21 @@ function CreateNewProjectController($scope, $location, Project, $routeParams,Use
     };
   });
 }
+
+angular.module('app.filters', []).filter('companyFilter', [function () {
+    return function (project_list, selectedStatus) {
+        if (!angular.isUndefined(project_list) && !angular.isUndefined(selectedStatus) && selectedStatus.length > 0) {
+            var tempProject_lists = [];
+            angular.forEach(selectedStatus, function (name) {
+                angular.forEach(project_list, function (project) {
+                    if (angular.equals(project.status, name)) {
+                        tempPorject_lists.push(project);
+                    }
+                });
+            });
+            return tempProject_lists;
+        } else {
+            return project_list;
+        }
+    };
+}]);
