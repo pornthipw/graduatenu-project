@@ -336,16 +336,16 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
     console.log(project_list); 
   });
  $scope.setSelectedStatus = function () {
-        var status = this.status;
-        if (_.contains($scope.selectedStatus, status)) {
-            $scope.selectedStatus = _.without($scope.selectedStatus, status);
+        var id = this.status;
+        if (_.contains($scope.selectedStatus, id)) {
+            $scope.selectedStatus = _.without($scope.selectedStatus, id);
         } else {
-            $scope.selectedStatus.push(status);
+            $scope.selectedStatus.push(id);
         }
         return false;
     };
-    $scope.isChecked = function (status) {
-        if (_.contains($scope.selectedStatus, status)) {
+    $scope.isChecked = function (id) {
+        if (_.contains($scope.selectedStatus, id)) {
             return 'icon-ok pull-right';
         }
         return false;
@@ -2136,10 +2136,10 @@ angular.module('app.filters', []).filter('companyFilter', [function () {
     return function (project_list, selectedStatus) {
         if (!angular.isUndefined(project_list) && !angular.isUndefined(selectedStatus) && selectedStatus.length > 0) {
             var tempProject_lists = [];
-            angular.forEach(selectedStatus, function (status) {
+            angular.forEach(selectedStatus, function (id) {
                 angular.forEach(project_list, function (project) {
-                    if (angular.equals(project.status, status)) {
-                        tempPorject_lists.push(project);
+                    if (angular.equals(project.status, id)) {
+                        tempProject_lists.push(project);
                     }
                 });
             });
