@@ -45,9 +45,10 @@ app.register('.html', {
 app.configure(function() {
 	app.use(express.cookieParser('keyboard cat'));
   	app.use(express.bodyParser());
-      app.use(express.favicon());
+        app.use(express.favicon());
   	app.use(express.static(__dirname + '/public'));    
   	app.set('views', __dirname + '/views');
+        app.engine('html', require('uinexpress').__express)
   	//app.engine('html', handlebars.__express);  
   	//app.engine('html', handlebars.__express);  
   	app.set('view engine', 'html');      
