@@ -68,7 +68,9 @@
         </tbody>
         -->
          <tbody>
-            <tr ng-repeat="project in project_list|filter:search">
+            <tr data-ng-repeat="project in filtered = (project_list | companyFilter:selectedStatus)">
+            <!--<tr ng-repeat="project in project_list|filter:search">
+            -->
             <!--<tr data-ng-repeat="client in filtered = (clients | companyFilter:selectedCompany)">
             -->
                 <td>{{$index + 1}}</td>
