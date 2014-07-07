@@ -1,14 +1,6 @@
-//'use strict';
-var app = angular.module('projectplan', ['mongorest_service','codemirror','$strap.directives','highcharts-ng','app.filters']);
 
-app.filter('skip', function() {
-  return function(input, start) {
-    start=+start;
-    if(input) {
-      return input.slice(parseInt(start));
-    }
-  }
-});
+var app = angular.module('projectplan', ['mongorest_service','codemirror','$strap.directives','highcharts-ng','app.filters']); 
+
 
 app.filter('hide', function() {
   return function(input, key) {
@@ -345,8 +337,8 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
         }
         return false;
     };
-    $scope.isChecked = function (id) {
-        if (_.contains($scope.selectedStatus, id)) {
+    $scope.isChecked = function (status) {
+        if (_.contains($scope.selectedStatus, status)) {
             return 'glyphicon glyphicon-ok pull-right';
         }
         return false;
