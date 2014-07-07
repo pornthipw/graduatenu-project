@@ -316,6 +316,10 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
     }
   });
   */
+
+  $scope.current_year = $routeParams.year;
+  //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
+  Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
   $scope.selectedStatus = [];
   $scope.statusList = [{
         name: 'อยู่ระหว่างดำเนินการ'
@@ -326,10 +330,6 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
     }, {
         name: 'ยกเลิก'
     }];
-
-  $scope.current_year = $routeParams.year;
-  //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
-  Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
     $scope.project_list = project_list;
     //$scope.selectedOwner = [];
     console.log("test"); 
