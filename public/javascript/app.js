@@ -1,7 +1,5 @@
-'use strict';
+//'use strict';
 var app = angular.module('projectplan', ['mongorest_service','codemirror','$strap.directives','highcharts-ng','app.filters']);
-
-
 
 app.filter('skip', function() {
   return function(input, start) {
