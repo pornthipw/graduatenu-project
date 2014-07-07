@@ -48,6 +48,14 @@ app.configure(function() {
   	app.use(passport.session());  	
   	app.use(app.router);
 });
+app.register('.html', {
+  compile: function (str, options) {
+    var template = _.template(str);
+    return function (locals) {
+      return template(locals);
+    };
+  }
+});
 
 passport.serializeUser(function(user, done) {
   console.log("test");
