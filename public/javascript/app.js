@@ -346,7 +346,7 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
     };
     $scope.isChecked = function (id) {
         if (_.contains($scope.selectedStatus, id)) {
-            return 'icon-ok pull-right';
+            return 'glyphicon glyphicon-ok pull-right';
         }
         return false;
     };
