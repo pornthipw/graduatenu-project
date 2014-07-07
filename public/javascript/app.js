@@ -317,6 +317,13 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
     }
   });
   */
+var arr = [1, 2, 3];
+
+
+//If contains 3 then true
+var containTest = _.contains(arr, 3);
+
+console.log(containTest); // True
 
   $scope.current_year = $routeParams.year;
   $scope.selectedStatus = [];
