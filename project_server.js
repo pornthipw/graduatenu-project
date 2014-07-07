@@ -39,7 +39,7 @@ app.configure(function() {
       app.use(express.favicon());
   	app.use(express.static(__dirname + '/public'));    
   	app.set('views', __dirname + '/views');
-  	app.engine('html', handlebars.__express);  
+  	//app.engine('html', handlebars.__express);  
   	app.set('view engine', 'html');      
   	app.use(express.methodOverride());
   //	app.use(express.cookieSession());
@@ -47,14 +47,6 @@ app.configure(function() {
   	app.use(passport.initialize());
   	app.use(passport.session());  	
   	app.use(app.router);
-});
-app.register('.html', {
-  compile: function (str, options) {
-    var template = _.template(str);
-    return function (locals) {
-      return template(locals);
-    };
-  }
 });
 
 passport.serializeUser(function(user, done) {
