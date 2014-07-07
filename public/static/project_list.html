@@ -35,7 +35,7 @@
 
                     </li>
                     <li class="divider"></li>
-                    <li data-ng-repeat="company in statusList"> <a data-ng-click="setSelectedStatus()">{{project.status}}<span data-ng-class="isChecked(status)"></span></a>
+                    <li data-ng-repeat="project in statusList"> <a data-ng-click="setSelectedStatus()">{{project.status}}<span data-ng-class="isChecked(status)"></span></a>
 
                     </li>
                 </ul>
