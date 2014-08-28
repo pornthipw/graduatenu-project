@@ -44,11 +44,11 @@
           <dd> {{project.project.money_percent}} 
                          <p class="text-danger" 
                            ng-hide="project[0].money.total_expend==0">
-                           {{100-((project[0].money.total_expend*100)/project[0].money.total_start) | number:2}}
+                           {{((project[0].money.total_expend*100)/project[0].money.total_start) | number:2}}
                          </p>
                          <p class="text-primary" 
                            ng-hide="project[0].money.total_expend!=0">
-                           {{100-((project[0].money.total_expend*100)/project[0].money.total_start) | number:2}}
+                           {{((project[0].money.total_expend*100)/project[0].money.total_start) | number:2}}
                          </p>
           </dd>
           <dt>สถานที่: </dt><dd> {{project.project.place}} </dd>

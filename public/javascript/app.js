@@ -313,13 +313,13 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
   $scope.current_year = $routeParams.year;
   $scope.selectedStatus = [];
   $scope.statusList = [{
-        status: 'อยู่ระหว่างดำเนินการ'
+        'status': 'กำลังดำเนินการ'
     }, {
-        status: 'ดำเนินการแล้ว'
+        'status': 'ดำเนินการแล้ว'
     }, {
-        status: 'ยังไม่ได้ดำเนินการ'
+        'status': 'ยังไม่ได้ดำเนินการ'
     }, {
-        status: 'ยกเลิก'
+        'status': 'ยกเลิก'
     }];
   //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
   Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
@@ -329,11 +329,13 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
     console.log(project_list); 
   });
  $scope.setSelectedStatus = function () {
-        var id = this.status;
-        if (_.contains($scope.selectedStatus, id)) {
-            $scope.selectedStatus = _.without($scope.selectedStatus, id);
+        var self = this;
+        var status = self.project.status;
+        console.log(self);
+        if (_.contains($scope.selectedStatus, status)) {
+            $scope.selectedStatus = _.without($scope.selectedStatus, status);
         } else {
-            $scope.selectedStatus.push(id);
+            $scope.selectedStatus.push(status);
         }
         return false;
     };
@@ -2129,9 +2131,9 @@ angular.module('app.filters', []).filter('companyFilter', [function () {
     return function (project_list, selectedStatus) {
         if (!angular.isUndefined(project_list) && !angular.isUndefined(selectedStatus) && selectedStatus.length > 0) {
             var tempProject_lists = [];
-            angular.forEach(selectedStatus, function (id) {
+            angular.forEach(selectedStatus, function (status) {
                 angular.forEach(project_list, function (project) {
-                    if (angular.equals(project.status, id)) {
+                    if (angular.equals(project.status, status)) {
                         tempProject_lists.push(project);
                     }
                 });

@@ -164,7 +164,7 @@ i-->
                          </p>
                          <p class="text-primary" 
                            ng-hide="project.sum_expend!=0">
-                           {{100-((project.sum_expend*100)/project.start_balance) | number:2}}
+                           {{((project.sum_expend*100)/project.start_balance) | number:2}}
                          </p>
                        </div>
                        <div class="col-lg-1">
