@@ -1887,11 +1887,18 @@ function ProjectFinanceViewController($scope, User,Project, $routeParams, GradDB
        };
 
        console.log($scope.project);
-    var query_obj = {'type':"post_message",'project_id':$scope.project.project._id};
-    Project.query({query:JSON.stringify(query_obj)}, function (result) {
-      $scope.message_list = result;
-      console.log($scope.message_list);
-    });
+       $scope.sendEmail = function(email, subject, body){
+    var link = "mailto:"+ email
+             + "?subject=New%20email " + escape(subject);
+             + "&body=" + escape(body); 
+
+    window.location.href = link;
+ }; 
+       var query_obj = {'type':"post_message",'project_id':$scope.project.project._id};
+       Project.query({query:JSON.stringify(query_obj)}, function (result) {
+         $scope.message_list = result;
+         console.log($scope.message_list);
+       });
   });  
   //console.log($scope.project);
 };
