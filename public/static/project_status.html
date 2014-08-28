@@ -68,7 +68,7 @@
                   คงเหลือ
                 </div>
                 <div class="col-lg-1">
-                 ร้อยละ 
+                 % การใช้ไป 
                 </div>
                 <div class="col-lg-1">
                   สถานะ 
@@ -118,11 +118,11 @@
                     <div class="col-lg-1">
                       <p class="text-danger" 
                         ng-hide="project.sum_expend==0">
-                        {{100-((project.sum_expend*100)/project.start_balance) | number:2}}
+                        {{((project.sum_expend*100)/project.start_balance) | number:2}}
                       </p>
                       <p class="text-primary" 
                         ng-hide="project.sum_expend!=0">
-                        {{100-((project.sum_expend*100)/project.start_balance) | number:2}}
+                        {{(((project.sum_expend-project.sum_out)*100)/project.start_balance) | number:2}}
                       </p>
                     </div>
                     <div class="col-lg-1">

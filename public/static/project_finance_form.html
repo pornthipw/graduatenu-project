@@ -148,6 +148,7 @@
             <option ng-selected="project.reportor=='ปุณยนุช ภัทรมล'">ปุณยนุช ภัทรมล</option>
             <option ng-selected="project.reportor=='พัฒน์ศักดิ์ กระต่ายน้อย'">พัฒน์ศักดิ์ กระต่ายน้อย</option>
             <option ng-selected="project.reportor=='พิมพ์พาภรณ์ ดวงสาโรจน์'">พิมพ์พาภรณ์ ดวงสาโรจน์</option>
+            <option ng-selected="project.coordinator=='พรทิพย์ เม่นสิน'">พรทิพย์ เม่นสิน</option>
             <option ng-selected="project.reportor=='ภัคคีณี เทิดสิทธิกุล'">ภัคคีณี เทิดสิทธิกุล</option>
             <option ng-selected="project.reportor=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
             <option ng-selected="project.reportor=='สรญา แสงเย็นพันธ์'">สรญา แสงเย็นพันธ์</option>
@@ -160,19 +161,6 @@
             <option ng-selected="project.reportor=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
           </select>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="inputName">วันเดือนปีที่ขออนุมัติ: </label>
-            <input type="text" ng-model="project.date_approval" 
-              class="form-control" 
-              data-date-format="dd/mm/yyyy" bs-datepicker>
-      </div>
-      <div class="control-group">
-      <label class="control-label" for="inputName">เอกสารการขออนุมัติ: </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="ที่อยู่ลิงค์ของเอกสารการขออนุมัติโครงการ" ng-model="project.permitdocument">
-      </div>
-      
       <div class="control-group">
         <label class="control-label" 
           for="inputName">ระยะเวลาดำเนินโครงการ: </label>
@@ -189,6 +177,20 @@
               data-date-format="dd/mm/yyyy" bs-datepicker>
       </div>
 
+      <div class="control-group">
+        <label class="control-label" for="inputName">วันเดือนปีที่ขออนุมัติ: </label>
+            <input type="text" ng-model="project.date_approval" 
+              class="form-control" 
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+
+      <div class="control-group">
+      <label class="control-label" for="inputName">เอกสารการขออนุมัติ: </label>
+          <input type="text" id="inputName" 
+            class="form-control"
+            placeholder="ที่อยู่ลิงค์ของเอกสารการขออนุมัติโครงการ" ng-model="project.permitdocument">
+      </div>
+      
       <div class="control-group">
         <label class="control-label" for="inputName">วันเดือนปีที่จัด: </label>
             <input type="text" ng-model="project.date_manage" 
