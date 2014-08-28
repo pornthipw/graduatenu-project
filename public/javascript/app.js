@@ -1887,7 +1887,9 @@ function ProjectFinanceViewController($scope, User,Project, $routeParams, GradDB
        };
 
        console.log($scope.project);
-       $scope.sendEmail = function(email, subject, body){
+       $scope.sendEmail = function(email){
+    var subject = "ทดสอบ"; 
+    var body = "ทดสอบเนื้อหา";
     var link = "mailto:"+ email
              + "?subject=New%20email " + escape(subject);
              + "&body=" + escape(body); 

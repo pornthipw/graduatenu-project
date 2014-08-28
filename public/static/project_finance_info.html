@@ -72,7 +72,7 @@
         <strong>ผู้รับผิดชอบ : </strong> {{project.project.owner}} 
         <strong>สถานะโครงการ : </strong> {{project.project.status}} 
         <strong>mail : </strong> {{project.project.contactmail}}
-        <button type="button" ng-click="sendEmail(message.Email, message.subject, message.body)" >Send</button> 
+        <button type="button" ng-click="sendEmail(project.project.contactmail)" >Send</button> 
       </div>
     </div>
   </div>
