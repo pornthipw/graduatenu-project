@@ -12,7 +12,8 @@
     "passport" : "*",
     "passport-openid":"*",
     "generic-pool":"*",
-    "mongo-connect":"*"
+    "mongo-connect":"*",
+    "nodemailer": "0.3.29"
   },
   "scripts" : {
     "start" :"project_server.js"

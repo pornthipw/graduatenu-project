@@ -85,19 +85,19 @@ i-->
             </thead>
             <tbody ng-repeat="p in result | orderBy:'orderProp'" ng-hide="p.docID" >
               <tr class="success">
-                <td >
+                <td> 
                   {{p.owner}}
                 </td>
-                <td colspan="6">
+                <td colspan="10">
                    <div class="row">
-                     <div class="col-lg-6">
+                     <div class="col-lg-4">
                        โครงการ
                      </div>
                      <div class="col-lg-1">
                         ได้รับ
                      </div>
                      <div class="col-lg-1">
-                       โอนออก 
+                       เงินโอน 
                      </div>
                      <div class="col-lg-1">
                         ใช้ไป
@@ -109,24 +109,30 @@ i-->
                        % การใช้ไป 
                      </div>
                      <div class="col-lg-1">
+                        คงเหลือจริง
+                     </div>
+                     <div class="col-lg-1">
+                       % การใช้ไปจริง 
+                     </div>
+                     <div class="col-lg-1">
                        สถานะ 
                      </div>
                    </div>
                 </td> 
               </tr>
               <tr ng-repeat="(key,value) in p.count.fund" >
-                 <td>
+                 <td >
                    <span ng-show="key=='A'">กองทุนทั่วไป</span> 
                    <span ng-show="key=='B'">กองทุนกิจการนิสิต</span> 
                    <span ng-show="key=='C'">กองทุนวิจัย</span> 
                    <span ng-show="key=='D'">กองทุนทำนุบำรุงศิลปวัฒนธรรม</span> 
                    <span ng-show="key=='Z'">กองทุน</span> 
                  </td>
-                 <td colspan="5">
+                 <td colspan="10">
                    <div ng-repeat="project in value " class="row">
                    <div class="col-lg-12">
                      <div class="row">
-                       <div class="col-lg-6">
+                       <div class="col-lg-4">
                          {{$index+1}}. {{project.pid}}-
                            <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
                            <a href="#/project/task/{{project._id}}" >
@@ -137,25 +143,34 @@ i-->
                           </span>
                        </div>
                        <div class="col-lg-1">
-                         {{project.start_balance}}
+                         {{project.start_balance-sum_wait | currency :""}}
                        </div>
                        <div class="col-lg-1">
-                         {{project.sum_out}}
+                         <p  ng-show="project.sum_out==0 && project.sum_in==0">
+                             0
+                         </p>
+                         <p class="text-info" 
+                           ng-hide="project.sum_in==0">
+                            {{project.sum_in | currency :""}}
+                         </p>
+                         <p class="text-danger" ng-hide="project.sum_out==0">
+                         (-{{project.sum_out | currency :""}})
+                         </p>
                        </div>
                        <div class="col-lg-1">
                           <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/" 
                              target="_blank">
                              <p class="text-danger" 
                                ng-hide="project.sum_expend==0">
-                               ({{project.sum_expend-project.sum_out}})
+                               ({{project.sum_expend-project.sum_out | currency :""}})
                              </p>
                           </a>
                          <p class="text-primary" 
                            ng-hide="project.sum_expend!=0">
-                         {{project.sum_expend-project.sum_out}}
+                         {{project.sum_expend-project.sum_out | currency :""}}
                        </div>
                        <div class="col-lg-1">
-                         {{project.start_balance-project.sum_expend}}
+                         {{project.start_balance-project.sum_expend | currency :""}}
                        </div>
                        <div class="col-lg-1">
                          <p class="text-danger" 
@@ -165,6 +180,19 @@ i-->
                          <p class="text-primary" 
                            ng-hide="project.sum_expend!=0">
                            {{(((project.sum_expend-project.sum_out)*100)/project.start_balance) | number:2}}
+                         </p>
+                       </div>
+                       <div class="col-lg-1">
+                         {{project.start_balance-project.sum_expend+project.sum_out | currency :""}}
+                       </div>
+                       <div class="col-lg-1">
+                         <p class="text-danger" 
+                           ng-hide="project.sum_expend==0">
+                         {{((project.sum_expend-project.sum_out)*100/project.start_balance) | number:2}}
+                         </p>
+                         <p class="text-primary" 
+                           ng-hide="project.sum_expend!=0">
+                         {{((project.sum_expend-project.sum_out)*100/project.start_balance) | number:2}}
                          </p>
                        </div>
                        <div class="col-lg-1">

@@ -95,25 +95,26 @@
                           </span>
                     </div>
                     <div class="col-lg-1">
-                        {{project.start_balance}}
+                        {{project.start_balance| currency :""}}
                     </div>
                     <div class="col-lg-1">
-                        {{project.sum_out}}
+                        {{project.sum_out| currency :""}}
                     </div>
                     <div class="col-lg-1">
                           <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/" 
                              target="_blank">
                              <p class="text-danger" 
                                ng-hide="project.sum_expend==0">
-                               ({{project.sum_expend-project.sum_out}})
+                               ({{project.sum_expend-project.sum_out| currency :""}})
                              </p>
                           </a>
                         <p class="text-primary" 
                           ng-hide="project.sum_expend!=0">
-                            {{project.sum_expend}}
+                            {{project.sum_expend| currency :""}}
+                        </p>
                     </div>
                     <div class="col-lg-1">
-                        {{project.start_balance-project.sum_expend}}
+                        {{project.start_balance-project.sum_expend| currency :""}}
                     </div>
                     <div class="col-lg-1">
                       <p class="text-danger" 
@@ -576,21 +577,24 @@
                     <span ng-show="p.owner=='D'">กองทุนทำนุบำรุงศิลปวัฒนธรรม</span> 
                     <span ng-show="p.owner=='Z'">กองทุน</span> 
                   </td>
-                  <td colspan="5">
+                  <td colspan="6">
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="row">
                           <div class="col-lg-6">
                             โครงการ
                           </div>
-                          <div class="col-lg-2">
+                          <div class="col-lg-1">
                             งปม.ที่ได้รับ 
                           </div>
-                          <div class="col-lg-2">
+                          <div class="col-lg-1">
+                            เงินโอนออก
+                          </div>
+                          <div class="col-lg-1">
                             งปม.ที่ใช้จริง 
                           </div>
-                          <div class="col-lg-2">
-                            คิดเป็นร้อยละ 
+                          <div class="col-lg-1">
+                            คิดเป็น(%) 
                           </div>
                         </div>
                       </div>
@@ -603,7 +607,7 @@
                   <td>
                     {{key}}
                   </td>
-                  <td colspan="5">
+                  <td colspan="6">
                     <div ng-repeat="project in value.project" class="row">
                       <div class="col-lg-12" 
                         ng-show="project.status=='ดำเนินการแล้ว'">
@@ -612,13 +616,38 @@
                             -
                             <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
                           </div>
-                          <div class="col-lg-2">
-                            <h6></h6> 
+                          <div class="col-lg-1">
+                            <h6>{{project.start_balance | currency :""}}</h6> 
                           </div>
-                          <div class="col-lg-2">
-                            <h6></h6> 
+                          <div class="col-lg-1">
+                            <h6>{{project.sum_out | currency:""}}</h6> 
                           </div>
-                          <div class="col-lg-2">
+                          <div class="col-lg-1">
+                            <h6>
+
+                          <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/" 
+                             target="_blank">
+                             <p class="text-danger" 
+                               ng-hide="project.sum_expend==0">
+                               ({{project.sum_expend-project.sum_out | currency:""}})
+                             </p>
+                          </a>
+                        <p class="text-primary" 
+                          ng-hide="project.sum_expend!=0">
+                            {{project.sum_expend | currency:""}}
+                         </p>
+                            </h6> 
+                          </div>
+                          <div class="col-lg-1">
+                         <p class="text-danger" 
+                           ng-hide="project.sum_expend==0">
+                         {{((project.sum_expend-project.sum_out)*100/project.start_balance) | number:2}}
+                         </p>
+                         <p class="text-primary" 
+                           ng-hide="project.sum_expend!=0">
+                         {{((project.sum_expend-project.sum_out)*100/project.start_balance) | number:2}}
+                         </p>
+                       </div>
                           </div>
                         </div>
                       </div>
@@ -920,12 +949,12 @@
                         {{project.date_plan}}-{{project.end_date_plan}}
                     </div>
                     <div class="col-lg-1">
-
+                        {{project.date_manage}}
                     </div>
                     <div class="col-lg-2">
                            <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/" 
                              target="_blank">
-                               {{project.start_balance}}
+                               {{project.start_balance| currency :""}}
                             </a>
                     </div>
                   </div>
@@ -993,7 +1022,7 @@
                         {{project.date_plan}}-{{project.end_date_plan}}
                     </div>
                     <div class="col-lg-2">
-                        {{project.start_balance}}
+                        {{project.start_balance| currency :""}}
                     </div>
                   </div>
                 </div>

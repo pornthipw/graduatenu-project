@@ -1,5 +1,6 @@
 var express = require("express");
 var handlebars = require("hbs");
+var nodemailer = require("nodemailer");
 //var mongodb = require('mongodb');
 var _ = require('underscore');
 var passport = require('passport');
@@ -81,6 +82,69 @@ passport.use(new OpenIDStrategy({
     });
   }
 ));
+
+app.get('/sendmail', function(req, res) {  
+  console.log("test");
+  console.log(req.query.query);
+  var new1 = JSON.parse(req.query.query);
+  console.log(new1.email);
+  
+  var smtpTransport = nodemailer.createTransport("SMTP",{
+      service: "Gmail",
+      auth: {
+          user: "pornthip.wong@gmail.com",
+          pass: "yod15963"
+          //user: "graduate.nu@gmail.com",
+          //pass: "g,jolbo1979"
+      }
+  });
+ 
+  var mailOptions = {
+      //from: "graduate.nu@gmail.com",
+      from: "pornthip.wong@gmail.com",
+      //to: "graduate.nu@gmail.com",
+      to: JSON.stringify(new1.email),
+      subject:  JSON.stringify(new1.name),
+      text: "ส่งข้อความจากระบบอัตโนมัติ ✔"+ JSON.stringify(new1.message)+"✔ กรุณาคลิก Login ที่ปุ่ม Login With Google ที่เมนูบนขวามือก่อนด้วยค่ะ" // plaintext body // html: "Name: <b>" + req.query.name + "</b><br>Body: " + req.query.message + "<br>Email:" + req.qyery.email
+  }
+ 
+  smtpTransport.sendMail(mailOptions, function(error, response){
+      if(error){
+          console.log(error);
+          res.send(500, 'Something broke');
+      }else{
+          console.log("Message sent: " + response.message);
+          smtpTransport.close();
+          //res.redirect('/');
+      }
+  });
+});
+
+/*
+var smtpTransport = nodemailer.createTransport("SMTP",{
+   service: "Gmail",
+   auth: {
+       user: "mail",
+       pass: "pass"
+   }
+});
+
+var mailOptions = {
+   from: "pornthip.wong@gmail.com", // sender address
+   to: "pornthip.wong@gmail.com", // list of receivers
+   subject: "Hello ✔", // Subject line
+   text: "Hello world ✔" // plaintext body
+}
+
+smtpTransport.sendMail(mailOptions, function(error, response){
+   if(error){
+       console.log(error);
+   }else{
+       console.log("Message sent: " + response.message);
+   }
+});
+*/
+
 
 app.get('/auth/openid', 
 	passport.authenticate('openid', { failureRedirect: '/login' }),

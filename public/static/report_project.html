@@ -1,4 +1,53 @@
+ <button ng-click="exportData()" >Export</button>
+<div class="row">
+  <div class="col-lg-12" id="exportable"> 
+  <table width="100%">
+    <thead>
+      <tr><th>แบบสอบถามการติดตามประเมินผลแผนปฏิบัติการประจำปี 2558 </th></tr>
+      <tr><th>บัณฑิตวิทยาลัย มหาวิทยาลัยนเรศวร</th></tr>
+    </thead>
+    <tr><td><br><br></td></tr>
+    <tr><td>โครงการ/กิจกรรม: {{project.project.name}}</td></tr>
+    <tr><td><br></td></tr>
+    <tr><td><strong>ตอนที่ 1 ข้อมูลทั่วไปของผู้ให้ข้อมูล</strong></td></tr>
+    <tr><td>1.1 ชื่อ นามสกุล {{project.project.reportor}}</td></tr>
+    <tr><td>1.2 สังกัด {{project.project.owner}}</td></tr>
+    <tr><td><br></td></tr>
+    <tr><td><strong>ตอนที่ 2 ข้อมูลการปฏิบัติงานตามแผนปฏิบัติการประจำปี</strong></td></tr>
+    <tr><td>2.1  วัน เดือน ปี ที่จัดโครงการ/กิจกรรม {{project.project.date_manage}}</td></tr>
+    <tr><td>2.2  จำนวนผู้เข้าร่วมโครงการ {{project.project.party}} คน</td></tr>
+    <tr><td>2.3  สถานะของโครงการ {{project.project.status}}</td></tr>
+    <tr><td><br></td></tr>
+    <tr><td><strong>ตอนที่ 3 ข้อมูลการการประเมินผลสัมฤทธิ์ของโครงการ</strong></td></tr>
+    <tr><td>3.1  วัตถุประสงค์ของโครงการ </td></tr>
+    <tr><td><p>{{project.project.objectiveinfo}}</p></td></tr>
+    <tr><td>3.2  วัตถุประสงค์ของโครงการ {{project.project.object}}</td></tr>
+    <tr><td>3.3  เป้าหมายของโครงการ {{project.project.goal}}</td></tr>
+    <tr><td>3.4  ตัวชี้วัดของโครงการ {{project.project.kpi}}</td></tr>
+    <tr><td><br></td></tr>
+    <tr><td><strong>ตอนที่ 4 ข้อมูลการใช้จ่ายเงินงบประมาณของโครงการตามแผนปฏิบัติการประจำปี</strong></td></tr>
+    <tr><td>4.1  งบประมาณโครงการ {{project[0].money.total_start+project[0].money.total_receive| currency :""}} </td></tr>
+    <tr><td>4.2  งบประมาณที่ใช้จริง  <span class="text-danger" ng-hide="project[0].money.total_expend==0">({{project[0].money.total_expend-project[0].money.total_out| currency :""}})</span>
+    </td></tr>
+    <tr><td>4.3  ยอดเงินคงเหลือจริง {{(project[0].money.total_receive-project[0].money.total_expend)+project[0].money.total_out| currency :""}}</td></tr>
+    <tr><td>4.4  ร้อยละของงบประมาณที่ใช้ไป  
+                         <span class="text-danger"
+                           ng-hide="project[0].money.total_expend==0">
+                           {{(((project[0].money.total_expend-project[0].money.total_out)*100)/(project[0].money.total_start+project[0].money.total_receive)) | number:2}}
+                         </span>
+                         <span class="text-primary"
+                           ng-hide="project[0].money.total_expend!=0">
+                           {{(((project[0].money.total_expend-project[0].money.total_out)*100)/(project[0].money.total_start+project[0].money.total_receive)) | number:2}}
+                         </span>
+</td></tr>
+    <tr><td><br></td></tr>
 
+  </table>
+  </div>
+</div>
+
+
+<!--
 <div class="row">
 
   <div class="col-lg-12"> 
@@ -22,7 +71,7 @@
           | <a href="#/projects/warning/{{project.project.year}}">ติดตาม:เร่งด่วน</a>
           | <a href="#/projects/{{project.project.year}}/status">ติดตาม:กองทุน</a>
           | <a href="http://www.db.grad.nu.ac.th/django/officers/projectassessment/" target="_blank">ผลประเมินความพึงพอใจ </a>
-          | <a href="" ng-click="reportclick()" type="button" class="btn">พิมพ์แบบสอบถามการติดตามฯ</a> 
+          | <a href="" ng-click="test()" type="button" class="btn">export</a> 
 
         </strong>
       </div>
@@ -54,7 +103,6 @@
           <dt>จำนวนผู้ตอบ: </dt><dd>{{project.project.respon}}</dd>
           <dt>ค่าเฉลี่ย:</dt><dd> {{project.project.percent}}</dd>
           <dt>ระดับความพึงพอใจ:</dt><dd>{{project.project.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
           <dt>โหลดข้อมูล:</dt>
             <dd>
               <span ng-show="project.project.Load">
@@ -99,7 +147,6 @@
         <strong>ผู้รับผิดชอบ : </strong> {{project.project.owner}} 
         <strong>สถานะโครงการ : </strong> {{project.project.status}} 
         <strong>mail : </strong> {{project.project.contactmail}}
-          <a href="" ng-click="trackclick()" type="button" class="btn">ติดตามฯ</a> 
         
       </div>
     </div>
@@ -151,7 +198,6 @@
           <dt>จำนวนผู้ตอบ: </dt><dd>{{p.respon}}</dd>
           <dt>ค่าเฉลี่ย:</dt><dd> {{p.percent}}</dd>
           <dt>ระดับความพึงพอใจ:</dt><dd>{{p.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
           <dt>โหลดข้อมูล:</dt>
             <dd>
               <span ng-show="p.Load">
@@ -190,7 +236,6 @@
 	  <dt>จำนวนผู้ตอบ: </dt><dd>{{p1.respon}}</dd>
           <dt>ค่าเฉลี่ย:</dt><dd> {{p1.percent}}</dd>
           <dt>ระดับความพึงพอใจ:</dt><dd>{{p1.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
           <dt>โหลดข้อมูล:</dt>
             <dd>
               <span ng-show="p1.Load">
@@ -229,7 +274,6 @@
 	  <dt>จำนวนผู้ตอบ: </dt><dd>{{p2.respon}}</dd>
           <dt>ค่าเฉลี่ย:</dt><dd> {{p2.percent}}</dd>
           <dt>ระดับความพึงพอใจ:</dt><dd>{{p2.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
           <dt>โหลดข้อมูล:</dt>
             <dd>
               <span ng-show="p2.Load">
@@ -268,7 +312,6 @@
 	  <dt>จำนวนผู้ตอบ: </dt><dd>{{p3.respon}}</dd>
           <dt>ค่าเฉลี่ย:</dt><dd> {{p3.percent}}</dd>
           <dt>ระดับความพึงพอใจ:</dt><dd>{{p3.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
           <dt>โหลดข้อมูล:</dt>
             <dd>
               <span ng-show="p3.Load">
@@ -285,4 +328,4 @@
     </div>
   </div>
 </div>
-
+-->

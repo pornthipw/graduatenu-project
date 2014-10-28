@@ -26,6 +26,11 @@ app.factory('GridDB', function($resource) {
     return GridDB;
 });
 
+app.factory('Sendmail', function($resource) {
+    var Sendmail  = $resource('sendmail/', {},{});                 
+    return Sendmail;
+});
+
 
 app.factory('User', function($resource) {
     var User = $resource(prefix + '/user', {}, {});    

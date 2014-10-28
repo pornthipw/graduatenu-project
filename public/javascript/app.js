@@ -75,6 +75,10 @@ app.config(function($routeProvider) {
     templateUrl:'static/project_finance_info.html'
   });
   
+  $routeProvider.when('/project/report/:projectId/:financeId', {
+    controller:ProjectReportController, 
+    templateUrl:'static/report_project.html'
+  });
   $routeProvider.when('/project/finance/create/:id', {
     controller:CreateProjectFinanceController, 
     templateUrl:'static/project_finance_form.html'
@@ -85,6 +89,11 @@ app.config(function($routeProvider) {
     //templateUrl:'static/project_new_form.html'
   });    
  
+
+  $routeProvider.when('/project/sub/:projectId', {
+    controller:ProjectSubController, 
+    templateUrl:'static/sub_project_form.html'
+  });
 
   $routeProvider.when('/project/task/:projectId', {
     controller:MessageController, 
@@ -171,7 +180,7 @@ function CreateTaskByProjectController($scope, $filter, GradDB, User,Project ) {
 
   ];
 
-      getMoney(GradDB, Project,"52ccee70f564a17d4100002b", function(m, a, b, c ,o) {
+      getMoney(GradDB, Project,"52ccee70f564a17d4100002b", function(m, a, b, c ,o,i) {
        console.log(m);
         //owner_dict[res.owner]['total_start']+=m;      
       });
@@ -375,6 +384,7 @@ function getMoney(GradDB, Project, projectId, cb) {
        var total_wait = 0;
        var total_receive = 0;
        var total_out = 0;
+       var total_in = 0;
        var dict ={};
        if(f_list.length > 0) {
          var finance = f_list[0];
@@ -387,19 +397,22 @@ function getMoney(GradDB, Project, projectId, cb) {
              if (record.mode == "O"||record.mode == "E"||record.mode == "U" ) {
                total_expend+=record.amount;
              } else{
-               if (record.mode == "P") {
+               if (record.mode == "W") {
                  total_wait+=record.amount;
                } else {
-                   total_receive+=record.amount;
+                     total_receive+=record.amount;
                }
              }
               
                if (record.mode == "O") {
                    total_out+=record.amount;
                }
+               if (record.mode == "I") {
+                   total_in+=record.amount;
+               }
             }
            );
-           cb(finance.amount, total_wait, total_expend, total_receive, total_out);
+           cb(finance.amount, total_wait, total_expend, total_receive, total_out, total_in);
          }); 
        } 
      });
@@ -486,6 +499,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
               'total_wait':0,
               'total_receive':0,
               'total_out':0,
+              'total_in':0,
               'fund':{}
             };
           }      
@@ -504,7 +518,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
 
           if(!(project.year in dict_sum)) {
             dict_sum[project.year]={'start':0,
-            'wait':0,'receive':0,'expend':0,'balance':0,'out':0};
+            'wait':0,'receive':0,'expend':0,'balance':0,'out':0,'in':0};
             //dict_sum.push(project.year);
           }
           owner_dict[project.owner]['fund'][project.fund].push(project);
@@ -876,6 +890,7 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
             'total_wait':0,
             'total_receive':0,
             'total_out':0,
+            'total_in':0,
             'fund':{},
             'listproject':[]
             };
@@ -890,23 +905,25 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
 
       if(!(project.year in dict_sum)) {
         dict_sum[project.year]={'start':0,
-           'wait':0,'receive':0,'expend':0,'balance':0,'out':0,
+           'wait':0,'receive':0,'expend':0,'balance':0,'out':0,'in':0,
            'status_working':0,'status_finish':0,'status_no':0,'status_cancle':0};
         //dict_sum.push(project.year);
 
       }
       owner_dict[project.owner]['fund'][project.fund].push(project);
       // console.log(owner_dict);
-      getMoney(GradDB, Project, project._id, function(m, a, b, c, o) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o,i) {
         owner_dict[project.owner]['total_start']+=m;      
         owner_dict[project.owner]['total_expend']+=b;      
         owner_dict[project.owner]['total_wait']+=a;      
         owner_dict[project.owner]['total_receive']+=c;      
         owner_dict[project.owner]['total_out']+=o;      
+        owner_dict[project.owner]['total_in']+=i;      
         dict_sum[project.year]['start']+=m;
         dict_sum[project.year]['wait']+=a;
         dict_sum[project.year]['receive']+=c;
         dict_sum[project.year]['out']+=o;
+        dict_sum[project.year]['in']+=i;
         dict_sum[project.year]['expend']+=b;
         dict_sum[project.year]['balance']+=m+c-b;
 
@@ -914,6 +931,7 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
         project.start_balance = m+c-b;
         project.sum_expend = b;
         project.sum_out = o;
+        project.sum_in = i;
         //owner_dict[project.owner]['listproject'].push(project);      
         //console.log('getMoney');
         var f_b = parseFloat(b);
@@ -1187,6 +1205,7 @@ function ProjectListByYearStatusDeptController($scope, CurrentDate,GradDB,$route
             'total_wait':0,
             'total_receive':0,
             'total_out':0,
+            'total_in':0,
             'fund':{},
             'listproject':[]
             };
@@ -1201,16 +1220,18 @@ function ProjectListByYearStatusDeptController($scope, CurrentDate,GradDB,$route
 
       owner_dict[project.owner]['fund'][project.fund].push(project);
       // console.log(owner_dict);
-      getMoney(GradDB, Project, project._id, function(m, a, b, c, o) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o, i) {
         owner_dict[project.owner]['total_start']+=m;      
         owner_dict[project.owner]['total_expend']+=b;      
         owner_dict[project.owner]['total_wait']+=a;      
         owner_dict[project.owner]['total_receive']+=c;      
         owner_dict[project.owner]['total_out']+=o;      
+        owner_dict[project.owner]['total_in']+=i;      
 
         project.start_balance = m+c;
         project.sum_expend = b;
         project.sum_out = o;
+        project.sum_in = i;
         //console.log('Money  s ' + project.name+ ' '+m);
         //console.log('Money  a ' + project.name+ ' '+a);
         //console.log('Money  b'+b);
@@ -1239,7 +1260,7 @@ function ProjectListByYearStatusDeptController($scope, CurrentDate,GradDB,$route
       }
 
     });    
-    //console.log(owner_dict);
+    console.log(owner_dict);
     
     var result = [];
     
@@ -1252,7 +1273,7 @@ function ProjectListByYearStatusDeptController($scope, CurrentDate,GradDB,$route
     $scope.year = $routeParams.year;
 
     //$scope.project_list =  project_list;
-    //console.log(project_list);
+    console.log(project_list);
 
     //$scope.project['sum_expend']=result[0].sum_expend;
     //$scope.project['sum_wait']=result[0].sum_wait;
@@ -1287,6 +1308,7 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
             'total_wait':0,
             'total_receive':0,
             'total_out':0,
+            'total_in':0,
             'owner':{},
             'listproject':[]
             };
@@ -1306,20 +1328,36 @@ function ProjectListByYearStatusController($scope, GradDB,$routeParams, Project,
       
       if(!(project.owner in dict[project.fund]['owner'])) {
         //dict[project.fund]['owner'][project.owner] = [];
-        dict[project.fund]['owner'][project.owner] = {'project':[],'w':0,'f':0,'n':0,'c':0};
+        dict[project.fund]['owner'][project.owner] = {'project':[],'w':0,'f':0,'n':0,'c':0,'type':{}};
       } 
+
+       //var query_obj_sub = {'type':"post_subproject",'project_id':project._id};
+       //Project.query({query:JSON.stringify(query_obj_sub)}, function (result1) {
+         //$scope.p_list = result1;
+         if(!(project.name in dict[project.fund]['owner'][project.owner]['type'])) {
+           dict[project.fund]['owner'][project.owner]['type'][project.name] = {'project':[],'subpname':{}};
+          }
+      dict[project.fund]['owner'][project.owner]['type'][project.name]['project'].push(project);
+       var query_obj_sub = {'type':"post_subproject",'project_id':project._id};
+       Project.query({query:JSON.stringify(query_obj_sub)}, function (result1) {
+          console.log(result1);
+       });
+        //$scope.p_list = result1;
+
       dict[project.fund]['owner'][project.owner]['project'].push(project);
       // console.log(owner_dict);
-      getMoney(GradDB, Project, project._id, function(m, a, b, c, o) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o, i) {
         dict[project.fund]['total_start']+=m;      
         dict[project.fund]['total_expend']+=b;      
         dict[project.fund]['total_wait']+=a;      
         dict[project.fund]['total_receive']+=c;      
         dict[project.fund]['total_out']+=o;      
+        dict[project.fund]['total_in']+=i;      
 
         project.start_balance = m+c;
         project.sum_expend = b;
         project.sum_out = o;
+        project.sum_in = i;
       });
        dict[project.fund]['listproject'].push(project);      
       if(project.status == "กำลังดำเนินการ") {
@@ -1583,6 +1621,154 @@ function ProjectEditController($scope, $routeParams, $location, Project,User, Lo
 
 }
 
+function ProjectSubController($scope, $routeParams, $location, Project,User, Logout) {
+    console.log("test");
+  var self = this;
+  self.messageAlert = function(messageAlert) {
+    $scope.messageAlert= messageAlert;
+    setTimeout(function() {      
+      $scope.$apply(function() {
+        $scope.messageAlert = null;
+      });
+    }, 3000);
+  };
+  $scope.user = User.get(function(response) {
+    $scope.views = {
+      project_form : 'static/project_form.html'
+    }
+    Project.get({id:$routeParams.projectId},function (response) {
+      $scope.project = response;
+      $scope.current_id = $scope.project._id;
+      //console.log($scope.project._id);
+      if (response) {
+        console.log(response);
+        var query_obj = {"project_id":$scope.project._id, 
+             type:"post_subproject"}; 
+        Project.query({query:JSON.stringify(query_obj)}, function (result) {
+          $scope.subproject_list = result;
+          console.log(result);
+        });
+      }
+    });
+
+    if (!response.user) {
+      self.messageAlert("You are not authorized to update content");  
+    } else {
+      //updateMessage
+      $scope.editField = function(mes) {
+        $scope.selectMessage = mes;
+        console.log($scope.selectMessage);
+        $scope.subproject = Project.get({id:$scope.selectMessage},function(result){
+          console.log(result);
+        });
+      }
+
+      //createMessage
+      $scope.createMessage = function(){
+        $scope.subproject = null;
+        Project.save({_id:undefined},
+          angular.extend({}, 
+          {_id:undefined,subname:"sub",
+            project_id:$routeParams.projectId,
+            //owner:$scope.user.user.profile.name.givenName,
+            type:"post_subproject"}),
+          function(result) { 
+            console.log(result);
+            if(result.success) {
+              self.messageAlert("Message Saved");
+              Project.query({project_id:$routeParams.projectId}, function (result2) {
+                $scope.subproject_list = result2;
+              });
+            } else {
+              self.messageAlert("Message don't Saved");
+            }
+            var query_obj = {"project_id":$scope.project._id}; 
+            Project.query({query:JSON.stringify(query_obj)}, function (result2) {
+              $scope.subproject_list = result2;
+            });
+          });
+      };
+
+      //SaveTask
+      $scope.subProjectSave = function () { 
+        if(!$scope.selectMessage) {
+          Project.save({_id:undefined},
+            angular.extend({}, 
+            $scope.subproject,
+            {_id:undefined,project_id:$routeParams.projectId,
+              //owner:$scope.user.user.profile.name.givenName,
+              type:"post_subproject"}),
+            function(result) { 
+              //console.log(result);
+              if(result.success) {
+                self.messageAlert("Message Saved");
+                Project.query({project_id:$routeParams.projectId}, function (result2) {
+                  $scope.subproject_list = result2;
+                });
+              } else {
+                self.messageAlert("Message don't Saved");
+              }
+              var query_obj = {"project_id":$scope.project._id}; 
+              Project.query({query:JSON.stringify(query_obj)}, function (result2) {
+                $scope.subproject_list = result2;
+              });
+            });
+        } else {
+          Project.update({
+            id:$scope.selectMessage
+          }, angular.extend({},
+            $scope.subproject,
+            {_id:undefined,
+              project_id:$routeParams.projectId,
+              //owner:$scope.user.user.profile.name.givenName,
+              type:"post_subproject"}),
+          function(result) {
+            if(result.success) {
+              self.messageAlert("Message Saved");
+              var query_obj = {"project_id":$scope.project._id};
+              Project.query({query:JSON.stringify(query_obj)}, function (result2) {
+                $scope.subproject_list = result2;
+              });
+            }
+          });
+
+        }
+      };
+
+      //RemoveTask
+      $scope.remove_message = function (sub_id) {
+        Project.delete({
+          id:sub_id
+        },function(result) {
+          if(result.success) {
+            var query_obj = {"project_id":$scope.project._id};
+            Project.query({query:JSON.stringify(query_obj)}, function (result) {
+                $scope.subproject_list = result;
+            });
+          }
+        });
+      };
+
+      //UpdateProject
+      $scope.save = function () {		
+        Project.update({      
+          id:$routeParams.projectId
+        }, angular.extend({}, $scope.project,
+          {_id:undefined}), function(result) {
+            $scope.save_result = result;
+            if(result.success) {
+              self.messageAlert("Project Updated");
+            } else {
+              console.log("not");
+            }
+        });    
+      };
+
+    };
+   });
+
+}
+
 function MessageController($scope, $routeParams, $location, Project,User, Logout) {
   var self = this;
   self.messageAlert = function(messageAlert) {
@@ -1733,6 +1919,7 @@ function MessageController($scope, $routeParams, $location, Project,User, Logout
           }
         });
       };
+
     }
   });
 }
@@ -1767,6 +1954,7 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
      var total_wait = 0;
      var total_receive = 0;
      var total_out = 0;
+     var total_in = 0;
      var dict ={};
      if (finance.length > 0) {
        angular.forEach(finance, function(entry) { 
@@ -1781,6 +1969,7 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
              'sum_expend':0,
              'sum_wait':0,
              'sum_out':0,
+             'sum_in':0,
              'start_balance':balance_start,
              'record':[],
              'finance':[]};
@@ -1799,8 +1988,13 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
                //console.log("เงินโอน"+record.amount);
                if(!(dict[entry.id]['record'][key] in dict)){
                  dict[entry.id]['record'][key] = {'balance_start':balance_start
-                 ,'total_receive':0,'total_out':0
+                 ,'total_receive':0,'total_out':0,'total_in':0
                  ,'total_expend':0,'total_wait':0};
+               }
+               if (record.mode == "I") {
+                 total_out+=record.amount;
+                 dict[entry.id]['record'][key]['total_in']+=record.amount;
+                 dict[entry.id]['sum_in']+=record.amount;
                }
 
                if (record.mode == "O") {
@@ -1853,7 +2047,15 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
  }); 
 };
 
-function ProjectFinanceViewController($scope, User,Project, $routeParams, GradDB) {
+function ProjectReportController($scope, User,Project, $routeParams, GradDB) {
+  console.log("test");
+
+ $scope.exportData = function () {
+        var blob = new Blob([document.getElementById('exportable').innerHTML], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+        });
+        saveAs(blob, "Report.xls");
+    };
   Project.get({id:$routeParams.projectId},function(project){
              //$scope.project['record']=result[0].record;
     var dict = {};
@@ -1863,48 +2065,206 @@ function ProjectFinanceViewController($scope, User,Project, $routeParams, GradDB
             'total_expend':0,
             'total_wait':0,
             'total_receive':0,
-            'total_out':0
+            'total_out':0,
+            'total_in':0
             };
       }      
-      getMoney(GradDB, Project, project._id, function(m, a, b, c, o) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o, i) {
         dict[project.name]['total_start']+=m;      
         dict[project.name]['total_expend']+=b;      
         dict[project.name]['total_wait']+=a;      
         dict[project.name]['total_receive']+=c;      
         dict[project.name]['total_out']+=o;      
+        dict[project.name]['total_in']+=i;      
 
       });
     
-    var result = [];
+      var result = [];
     
-    angular.forEach(dict, function(value, key) {
+      angular.forEach(dict, function(value, key) {
          result.push({'name':key, 'money':value});
-    });
-       $scope.project = result;
-       $scope.project['project'] = project;
-       $scope.doTheBack = function() {
+      });
+      $scope.project = result;
+      console.log($scope.project);
+      $scope.project['project'] = project;
+      $scope.doTheBack = function() {
          window.history.back();
+      };
+
+       var query_obj_sub = {'type':"post_subproject",'project_id':$scope.project.project._id};
+       Project.query({query:JSON.stringify(query_obj_sub)}, 
+           function (result1) {
+              $scope.p_list = result1;
+              $scope.p = result1[0];
+              $scope.p1 = result1[1];
+              $scope.p2 = result1[2];
+              $scope.p3 = result1[3];
+              console.log(result1)
+       });
+
+   });
+
+}
+
+function ProjectFinanceViewController($scope, Sendmail, User,Project, $routeParams, GradDB,$location) {
+  Project.get({id:$routeParams.projectId},function(project){
+             //$scope.project['record']=result[0].record;
+  var self = this;
+  self.messageAlert = function(messageAlert) {
+    $scope.messageAlert= messageAlert;
+    setTimeout(function() {      
+      $scope.$apply(function() {
+        $scope.messageAlert = null;
+      });
+    }, 3000);
+  };
+  $scope.user = User.get(function(response) {
+    if (!response.user) {
+      self.messageAlert("You are not authorized to update content");  
+    }else{
+
+    }
+  });
+    var dict = {};
+      if(!(project.name in dict)) {
+        dict[project.name] = {
+            'total_start':0,
+            'total_expend':0,
+            'total_wait':0,
+            'total_receive':0,
+            'total_out':0,
+            'total_in':0
+            };
+      }      
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o, i) {
+        dict[project.name]['total_start']+=m;      
+        dict[project.name]['total_expend']+=b;      
+        dict[project.name]['total_wait']+=a;      
+        dict[project.name]['total_receive']+=c;      
+        dict[project.name]['total_out']+=o;      
+        dict[project.name]['total_in']+=i;      
+
+      });
+    
+      var result = [];
+    
+      angular.forEach(dict, function(value, key) {
+         result.push({'name':key, 'money':value});
+      });
+      $scope.project = result;
+      console.log($scope.project);
+      $scope.project['project'] = project;
+      $scope.doTheBack = function() {
+         window.history.back();
+      };
+      $scope.reportclick = function(){
+        console.log("test");
+        $location.path('/project/report/'+$routeParams.projectId+'/'+$routeParams.financeId);
+      };
+      
+      $scope.trackclick = function(){
+      var d = new Date();
+      var curr_date = d.getDate();
+      var curr_month = d.getMonth()+1;
+      var curr_year = d.getFullYear();
+      var ndateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
+      var currenttime_date =  new Date(ndateToday).getTime();
+
+      var date_plan = $scope.project.project.date_plan;
+            //var end_date_plan = project.end_date_plan;
+      var dateSplitted = date_plan.split('/');
+      var formattedDate = dateSplitted[1]+'/'+dateSplitted[0]+'/'+dateSplitted[2];
+      var new_date_plan =  new Date(formattedDate).getTime();
+      $scope.project.project.new_date_plan =  new Date(formattedDate).getTime();
+      //console.log(new_date_plan);
+      var formattedDate_check = dateSplitted[1]+'/'+dateSplitted[0]+'/'+dateSplitted[2];
+      var new_date_check =  new Date(formattedDate_check);
+      var day_check = new_date_check.getDate()+30;
+      //console.log(day_check);
+      var formattedDate_new = dateSplitted[1]+'/'+day_check+'/'+dateSplitted[2];
+      //console.log(formattedDate_new);
+      var new_date =  new Date(formattedDate_new).getTime();
+      //console.log(new_date);
+      $scope.project.project.new_date_check =  new_date;
+      //-----------------------------------------------------
+      var date_permit = $scope.project.project.date_approval;
+      var date_manage = $scope.project.project.date_manage;
+      var datepermitSplitted = date_permit.split('/');
+      var datemanageSplitted = date_manage.split('/');
+      var formattedpermitDate = datepermitSplitted[1]+'/'+datepermitSplitted[0]+'/'+datepermitSplitted[2];
+      var formattedmanageDate = datemanageSplitted[1]+'/'+datemanageSplitted[0]+'/'+datemanageSplitted[2];
+      var new_date_permit =  new Date(formattedpermitDate).getTime();
+      var new_date_manage =  new Date(formattedmanageDate).getTime();
+      //$scope.project.project.new_date_permit =  new Date(formattedpermitDate).getTime();
+      //$scope.project.project.new_date_manage =  new Date(formattedmanageDate).getTime();
+      var formattedmanageDate_check = datemanageSplitted[1]+'/'+datemanageSplitted[0]+'/'+datemanageSplitted[2];
+      var new_date_manage_check =  new Date(formattedmanageDate_check);
+      var day_check_2 = new_date_manage_check.getDate()+3;
+      var formattedmanageDate_new = datemanageSplitted[1]+'/'+day_check_2+'/'+datemanageSplitted[2];
+      var new_date2 =  new Date(formattedmanageDate_new).getTime();
+      //----------------------------------------------------------
+
+       //console.log($scope.project);
+       //$scope.sendEmail = function(){
+       //console.log(formattedpermitDate);
+       //console.log(new_date_permit);
+       //console.log(formattedmanageDate_new);
+       //console.log(new_date_manage);
+       if ((currenttime_date < new_date && new_date_plan<new_date) && (new_date_permit == "")){
+         var subject = "กรุณาขออนุมัติ"+$scope.project.project.name; 
+         var str = "เข้าสู่ระบบติดตามโครงการ/กิจกรรม เพื่อขออนุมัติโครงการ!";
+         var URL = "http://www.db.grad.nu.ac.th/apps/grad-project/#/project/finance/info/"+$scope.project.project._id+"/"+$scope.project.project.financeid;
+         var body = str.link(URL);
+         var query_obj = {
+             'name':subject,
+             'message':body,
+             'email':$scope.project.project.contactmail};
+         Sendmail.get({query:JSON.stringify(query_obj)}, function (result) {
+           console.log("ok");
+         });
+       }
+       if ($scope.project.project.date_manage){
+           if (currenttime_date > new_date2 && (new_date_manage<new_date2 && $scope.project.project.status == 'กำลังดำเนินการ')){
+                var subject = "กรุณา ปรับปรุงสถานะ"+$scope.project.project.name+" ที่ท่านรับผิดชอบให้เป็นปัจจุบัน"; 
+                //var body = "สามารถเข้าไปที่"+$location.path('/project/finance/list/'+$scope.project.year);
+                var str = "เข้าสู่ระบบติดตามโครงการ/กิจกรรม!";
+                var URL = "http://www.db.grad.nu.ac.th/apps/grad-project/#/project/finance/info/"+$scope.project.project._id+"/"+$scope.project.project.financeid;
+                var body = str.link(URL);
+
+                var query_obj = {
+                    'name':subject,
+                    'message':body,
+                    'email':$scope.project.project.contactmail
+                    };
+                Sendmail.get({query:JSON.stringify(query_obj)}, 
+                    function (result) {
+                        console.log("ok");
+                });
+           }
+       }
        };
-
-       console.log($scope.project);
-       $scope.sendEmail = function(email){
-    console.log(email);
-    var subject = "ทดสอบ"; 
-    var body = "ทดสอบเนื้อหา";
-    var link = "mailto:"+ email
-             + "?subject=New%20email " + escape(subject);
-             + "&body=" + escape(body); 
-
-    window.location.href = link;
- }; 
+       //}; 
+       /*
        var query_obj = {'type':"post_message",'project_id':$scope.project.project._id};
        Project.query({query:JSON.stringify(query_obj)}, function (result) {
          $scope.message_list = result;
-         console.log($scope.message_list);
        });
+       */
+       var query_obj_sub = {'type':"post_subproject",'project_id':$scope.project.project._id};
+       Project.query({query:JSON.stringify(query_obj_sub)}, function (result1) {
+         $scope.p_list = result1;
+         $scope.p = result1[0];
+         $scope.p1 = result1[1];
+         $scope.p2 = result1[2];
+         $scope.p3 = result1[3];
+         console.log(result1)
+       });
+         
   });  
   //console.log($scope.project);
 };
+
+
 
 function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, User, Logout, $location) {
  //var thai_year = parseInt($routeParams.year)-543;
@@ -1939,6 +2299,7 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
            var total_wait = 0;
            var total_receive = 0;
            var total_out = 0;
+           var total_in = 0;
            var dict ={};
            var balance_start = project_obj.amount;
            var thai_year = parseInt(project_obj.year)+543;
@@ -1950,6 +2311,7 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
                'sum_expend':0,
                'sum_wait':0,
                'sum_out':0,
+               'sum_in':0,
                'start_balance':balance_start,
                'sum_start_balance':0,
                'name':project_obj.name,
@@ -1970,10 +2332,13 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
                  if(!(dict[project_obj.id] in dict)){
                    dict[project_obj.id]['record'][key] = {
                      'balance_start':balance_start
-                     ,'total_receive':0,'total_out':0
+                     ,'total_receive':0,'total_out':0,'total_in':0
                      ,'total_expend':0,'total_wait':0};
                  }
 
+                 if (record.mode == "I") {
+                   total_in+=record.amount;
+                 }
                  if (record.mode == "O") {
                    total_out+=record.amount;
                  }
