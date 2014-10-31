@@ -126,7 +126,7 @@ app.config(function($routeProvider) {
     templateUrl:'static/project_status.html'
   });   
 
-  $routeProvider.when('/task/create', {
+  $routeProvider.when('/task/create/:year', {
     controller:CreateTaskByProjectController,  
     templateUrl:'static/task_create.html'
   }); 
@@ -179,13 +179,14 @@ function CreateTaskByProjectController($scope, $filter, GradDB, User,Project ) {
     {'name':'นัดหมายการแต่งกาย'},
 
   ];
+Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {
 
       getMoney(GradDB, Project,"52ccee70f564a17d4100002b", function(m, a, b, c ,o,i) {
        console.log(m);
         //owner_dict[res.owner]['total_start']+=m;      
       });
   
-  $scope.project_list = Project.query({query:'{"type":"post_project","status":"กำลังดำเนินการ"}'}, function(res) {
+  $scope.project_list = Project.query({query:'{"type":"post_project","status":"กำลังดำเนินการ","year":"'+$routeParams.year+'"}'}, function(res) {
 
     if(res.length>0) {
       $scope.current_project = res[0];
