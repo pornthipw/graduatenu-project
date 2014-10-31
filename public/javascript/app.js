@@ -179,7 +179,6 @@ function CreateTaskByProjectController($scope, $filter, GradDB, User,Project ) {
     {'name':'นัดหมายการแต่งกาย'},
 
   ];
-Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {
 
       getMoney(GradDB, Project,"52ccee70f564a17d4100002b", function(m, a, b, c ,o,i) {
        console.log(m);
