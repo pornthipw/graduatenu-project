@@ -162,7 +162,7 @@ function MainController($scope, $filter, GradDB, User,Project ) {
 
 };
 
-function CreateTaskByProjectController($scope, $filter, GradDB, User,Project ) {   
+function CreateTaskByProjectController($scope, $filter, GradDB, User,Project ,$routeParams ) {   
   $scope.tasktype_list = [
     {'name':'ติดต่อวิทยากร'},
     {'name':'ติดต่อสถานที่'},
@@ -184,12 +184,12 @@ function CreateTaskByProjectController($scope, $filter, GradDB, User,Project ) {
        console.log(m);
         //owner_dict[res.owner]['total_start']+=m;      
       });
-  
+
   $scope.project_list = Project.query({query:'{"type":"post_project","status":"กำลังดำเนินการ","year":"'+$routeParams.year+'"}'}, function(res) {
 
     if(res.length>0) {
       $scope.current_project = res[0];
-      var query = {'type':"post_message",'project_id':$scope.current_project._id};
+      var query = {'type':"post_message",'project_id':$scope.current_project._id,"year":$routeParams.year};
         $scope.message_list = Project.query({query:JSON.stringify(query)});          
     }
   });
