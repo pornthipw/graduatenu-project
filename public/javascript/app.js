@@ -589,7 +589,14 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
               if(project.new_date_plan < ndateToday && ndateToday > project.new_date_check){
                  dict[project.year]['type'][project.type]['list_project'].push(project);
                  dict[project.year]['type'][project.type]['allowner'][project.owner]['list'].push(project);
-              }
+              } else {
+                if(project.new_date_plan > ndateToday && ndateToday < project.new_date_check){
+                 dict[project.year]['type'][project.type]['list_project'].push(project);
+                 dict[project.year]['type'][project.type]['allowner'][project.owner]['list'].push(project);
+              
+                }
+             }
+              
             }
 
             if(project.status == "ยังไม่ได้ดำเนินการ" && project.new_date_plan < ndateToday && ndateToday < project.new_date_check){
