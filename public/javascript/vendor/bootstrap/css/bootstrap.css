@@ -261,12 +261,12 @@ table {
   box-sizing: border-box;
 }
 html {
-  font-size: 62.5%;
+  font-size: 32.5%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 10px;
   line-height: 1.428571429;
   color: #333333;
   background-color: #ffffff;
@@ -1372,7 +1372,7 @@ th {
 }
 .table {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 .table > thead > tr > th,
 .table > tbody > tr > th,
@@ -3726,6 +3726,8 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .navbar-brand:hover,
 .navbar-brand:focus {
   text-decoration: none;
+  color: #ffffff;
+  
 }
 @media (min-width: 768px) {
   .navbar > .container .navbar-brand {
@@ -3912,8 +3914,11 @@ textarea.input-group-sm > .input-group-btn > .btn {
   background-color: #f8f8f8;
   border-color: #e7e7e7;
 }
+.navbar-default-color {
+  background-color: #43BFBF;
+  border-color: #7BD2D2;
+}
 .navbar-default .navbar-brand {
-  color: #777777;
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {

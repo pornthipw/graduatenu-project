@@ -13,11 +13,16 @@
           <ul class="dropdown-menu">
             <li ><a href="#/projects/{{year}}/status">จำแนกตามกองทุน</a></li>
             <li><a href="#/projects/{{year}}/dept">จำแนกตามหน่วยงานที่รับผิดชอบ</a></li>
-            <li><a href="#/projects/period/{{year}}">จำแนกตามระยะเวลา</a></li>
+            <li><a href="#/projects/{{year}}/dept">จำแนกตามเวลา</a></li>
           </ul>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+        </form>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -32,6 +37,20 @@
 
  <p ng-repeat="project in project_list|filter:dateToday" ng-bind="project">
  </p>
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    ระยะเวลาดำเนินโครงการ <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li class="divider"></li>
+    <li><a ng-click="filterProject(0)">
+       ติดตามความก้าวหน้าโครงการ</a></li>
+    <li><a ng-click="filterProject(1)">
+       ครึ่งปีแรก (ตุลาคม {{current_year-1}}- มีนาคม{{current_year}}</a></li>
+    <li><a ng-click="filterProject(2)">
+       ครึ่งปีหลัง (เมษายน {{current_year}}- กันยายน{{current_year}}</a></li>
+  </ul>
+</div>
 <p></p>
 
 <div class="panel panel-warning" ng-show="chk==0 || chk==''">
@@ -58,10 +77,9 @@
             <td>งานที่รับผิดชอบ</td>
             <td>วันที่ดำเนินการตามแผน</td>
             <td>โครงการ/กิจกรรม</td>
-            <td>ติดตาม</td>
           </tr>
           <tr class="info">
-            <td colspan="4" ><blockquote><p>ครึ่งแรก</p></blockquote></td>
+            <td colspan="3" ><blockquote><p>ครึ่งแรก</p></blockquote></td>
           </tr>
         <tbody
           ng-repeat="(key,value) in project_list_new.first.alertowner|orderBy:'-new_date_plan' " >
@@ -69,7 +87,6 @@
             <td>{{key}}</td>
             <td></td>
             <td></td>
-            <td></td>
           </tr>
           <tr ng-repeat="project in value.list" >
             <td></td>
@@ -78,19 +95,10 @@
             <a
               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
             </td>
-            <td>
-              <span ng-show="user.user&&user.user.role[0]=='admin'">
-               <a href="" ng-click="trackclick(project._id,project.name,project.financeid,project.contactmail)" type="button" class="btn">{{project.reportor}}</a>
-              </span>
-              <span ng-show="user.user&&user.user.role[0]!='admin'||user.user==null">
-               {{project.reportor}}
-              </span>
-              
-            </td>
           </tr>
         </tbody>
           <tr class="info">
-            <td colspan="4" ><blockquote><p>ครึ่งปีหลัง</p></blockquote></td>
+            <td colspan="3" ><blockquote><p>ครึ่งปีหลัง</p></blockquote></td>
           </tr>
         <tbody
           ng-repeat="(key,value) in project_list_new.second.alertowner|orderBy:'-new_date_plan' " >
@@ -98,7 +106,6 @@
             <td>{{key}}</td>
             <td></td>
             <td></td>
-            <td></td>
           </tr>
           <tr ng-repeat="project in value.list" >
             <td></td>
@@ -106,9 +113,6 @@
             <td>
             <a
               href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a>
-            </td>
-            <td>
-               <a href="" ng-click="trackclick(project._id,project.name,project.financeid,project.contactmail)" type="button" class="btn">{{project.reportor}}</a>
             </td>
           </tr>
         </tbody>

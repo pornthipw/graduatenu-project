@@ -1,288 +1,432 @@
-
 <div class="row">
-
-  <div class="col-lg-12"> 
-    <legend>
-      <img style="border: 0px" 
-        src="img/icon_project.jpg" 
-        alt="With Twitter">
-        รายละเอียดโครงการ/กิจกรรม
-    </legend> 
+  <div class="col-lg-12">
+    <h1 class="page-header">Project View</h1>
   </div>
+ <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-  <div class="col-lg-6"> 
-    <div class="panel panel-success">
-      <div class="panel-heading">
-        <strong> 
-            {{project.project.pid}} : {{project.project.name}} 
-          <a href="#/project/finance/edit/{{project.project._id}}/{{project.project.financeid}}"><span class="glyphicon glyphicon-edit"></span> ปรับปรุงข้อมูล </a>
-          <br> 
-          | <a href="" ng-click="doTheBack()"> back </a>
-          | <a href="#/projects/warning/{{project.project.year}}">ติดตาม:เร่งด่วน</a>
-          | <a href="#/projects/{{project.project.year}}/status">ติดตาม:กองทุน</a>
-          | <a href="http://www.db.grad.nu.ac.th/django/officers/projectassessment/" target="_blank">ผลประเมินความพึงพอใจ </a>
-          | <a href="" ng-click="reportclick()" type="button" class="btn">พิมพ์แบบสอบถามการติดตามฯ</a> 
+  <div class="col-lg-12">
+    <div class="alert alert-info">
+      <div class="row">
+        <div class="col-xs-3">
+          <i class="fa fa-file-text-o fa-5x"></i>
+        </div>
+        <div class="col-xs-9 text-right">
+         <div class="row"> 
+           <div class="col-xs-12">
+             <div class="medi">
+               {{project.project.pid}} : {{project.project.name}} 
+             </div>
+             <div>
+               <strong> ผู้รับผิดชอบ  </strong>{{project.project.owner}}
+                 | <strong> สถานะโครงการ </strong> {{project.project.status}}
+             </div>
+           </div>
+         </div> 
+         <div class="row"> 
+           <div class="col-xs-9 text-right">
+           </div>
+           <div class="col-xs-3 text-right" ng-show="project.project.status=='ยังไม่ได้ดำเนินการ'">
 
-        </strong>
-      </div>
-        <div>
-        <dl class="dl-horizontal">
-          <dt>โครงการประจำปี :</dt><dd>{{project.project.year}}</dd>
-          <dt>ประเภท: </dt><dd> {{project.project.ptype}} </dd>
-          <dt>ระยะเวลาตามแผน:</dt><dd> {{project.project.date_plan}} 
-            <span  ng-show="project.project.end_date_plan">
-             - {{project.project.end_date_plan}}</span></dd>
-        </dl>
-        </div>
-        <div>
-        ข้อมูลการปฏิบัติงานตามแผนปฏิบัติการประจำปี       
-        <dl class="dl-horizontal">
-          <dt>วันที่ขออนุมัติ(หลัก): </dt><dd> {{project.project.date_approval}} 
-              <span ng-show="project.project.permitdocument">
-                <a href="{{project.project.permitdocument}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <span ng-hide="project.project.psub == 'กลุ่ม'">
-          <dt>วันเดือนปีที่จัด:</dt><dd> {{project.project.date_manage}} 
-            <span ng-show="project.project.end_date_manage">
-             - {{project.project.end_date_manage}}</span></dd>
-          <dt>วันเดือนปีที่รายงาน: </dt><dd> {{project.project.date_report}} 
-          <dt>สถานที่: </dt><dd> {{project.project.place}} </dd>
-          <dt>จำนวนผู้เข้าร่วม:</dt><dd> {{project.project.party}} </dd>
-          <dt>จำนวนผู้ตอบ: </dt><dd>{{project.project.respon}}</dd>
-          <dt>ค่าเฉลี่ย:</dt><dd> {{project.project.percent}}</dd>
-          <dt>ระดับความพึงพอใจ:</dt><dd>{{project.project.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
-          <dt>โหลดข้อมูล:</dt>
-            <dd>
-              <span ng-show="project.project.Load">
-                <a href="{{project.project.Load}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <dt>ปัญหา/อุปสรรค(ถ้ามี):</dt><dd> {{project.project.problem}} </dd>
-        </dl>
-        </div>
-        <div>
-        ข้อมูลการประเมินสัมฤทธิ์ผลของโครงการ 
-        <dl class="dl-horizontal">
-          <dt>วัตถุประสงค์ </dt><dd> {{project.project.objectiveinfo}} </dd>
-          <dt>วัตถุประสงค์ของโครงการ: </dt><dd>{{project.project.object}}</dd>
-          <dt>เป้าหมาย </dt><dd> {{project.project.targetinfo}} </dd>
-          <dt>เป้าหมายของโครงการ: </dt><dd>{{project.project.goal}}</dd>
-          <dt>ตัวชี้วัดของโครงการ</dt><dd>{{project.project.kpi}}</dd>
-          </span>
-        </dl>
-        </div>
-        <div>
-        ข้อมูลการใช้จ่ายเงินงบประมาณของโครงการตามแผนปฏิบัติการประจำปี 
-        <dl class="dl-horizontal">
-          <dt>งบประมาณที่ขอ: </dt><dd> {{project[0].money.total_start+project[0].money.total_receive| currency :""}} </dd>
-          <dt>งบประมาณ(ที่ใช้):</dt><dd> {{project[0].money.total_expend| currency :""}} </dd>
-          <dt>งบประมาณ(ที่รออนุมัติ):</dt><dd> {{project[0].money.total_wait| currency :""}} </dd>
-          <dt>ร้อยละงบประมาณที่ใช้: </dt>
-          <dd> {{project.project.money_percent}} 
-                         <p class="text-danger" 
-                           ng-hide="project[0].money.total_expend==0">
-                           {{((project[0].money.total_expend*100)/(project[0].money.total_start++project[0].money.total_receive)) | number:2}}
-                         </p>
-                         <p class="text-primary" 
-                           ng-hide="project[0].money.total_expend!=0">
-                           {{((project[0].money.total_expend*100)/(project[0].money.total_start+project[0].money.total_receive)) | number:2}}
-                         </p>
-          </dd>
-        </dl>
-        </div>
-      <div class="panel-footer">
-        <strong>ผู้รับผิดชอบ : </strong> {{project.project.owner}} 
-        <strong>สถานะโครงการ : </strong> {{project.project.status}} 
-        <strong>mail : </strong> {{project.project.contactmail}}
-          <a href="" ng-click="trackclick()" type="button" class="btn">ติดตามฯ</a> 
-        
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-6"> 
-    <div class="panel panel-warning">
-      <div class="panel-heading">ผลดำเนินงาน</div>
-      <table  ng-show="message_list.length>0" 
-        class="table table-hover table-striped">
-        <tr>
-          <th >วันที่</th>
-          <th >ผลการดำเนินงาน</th>
-          <th >ผู้รายงาน</th>
-          <th ng-show="user_logon"></th>
-        </tr>
-        <tr ng-repeat="message in message_list">
-        <tr style="cursor:pointer" 
-          ng-class="{'warning':entry.cancel}"
-          ng-repeat="message in message_list|orderBy:'-date_record'" >
-          <td>{{message.date_record}}</td>
-          <td>{{message.task_name}}</td>
-          <td>{{message.owner.profile.displayName}}</td>
-          <td ng-show="user_logon"> 
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-</div>
+             <div class="progress progress-striped active" >
+               <div class="progress-bar progress-bar-danger"
+                 role="progressbar"
+                 aria-valuenow="10"
+                 aria-valuemin="0"
+                 aria-valuemax="100" style="width: 10%">
+                 <span class="sr-only">0% Complete</span>
+               </div>
+             </div>
 
-<div class="row" ng-show="p && project.project.psub=='กลุ่ม'" >
-  <div class="col-lg-6" > 
-    <div class="panel panel-success" >
-      <div class="panel-heading"></div>
-      <div class="panel-body">
-        <dl class="dl-horizontal">
-          <dt>ชื่อโครงการ/กิจกรรมย่อย:</dt><dd> {{p.subname}}</dd>
-          <dt>วันเดือนปีที่ขออนุมัติ: </dt><dd> {{p.date_approval}} 
-              <span ng-show="p.permitdocument">
-                <a href="{{p.permitdocument}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <dt>วันเดือนปีที่จัด:</dt><dd> {{p.date_manage}} 
-            <span ng-show="p.end_date_manage">
-             - {{p.end_date_manage}}</span></dd>
-          <dt>สถานที่: </dt><dd> {{p.place}} </dd>
-          <dt>จำนวนผู้เข้าร่วม:</dt><dd> {{p.party}} </dd>
-          <dt>จำนวนผู้ตอบ: </dt><dd>{{p.respon}}</dd>
-          <dt>ค่าเฉลี่ย:</dt><dd> {{p.percent}}</dd>
-          <dt>ระดับความพึงพอใจ:</dt><dd>{{p.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
-          <dt>โหลดข้อมูล:</dt>
-            <dd>
-              <span ng-show="p.Load">
-                <a href="{{p.Load}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <dt>วัตถุประสงค์ของโครงการ: </dt><dd>{{p.object}}</dd>
-          <dt>เป้าหมายของโครงการ: </dt><dd>{{p.goal}}</dd>
-          <dt>ตัวชี้วัดของโครงการ</dt><dd>{{p.kpi}}</dd>
-        </dl>
+           </div>
+
+           <div class="col-xs-3 text-right" ng-show="project.project.status=='ดำเนินการแล้ว'">
+           
+             <div class="progress progress-striped active" >
+               <div class="progress-bar progress-bar-success" 
+                 role="progressbar" 
+                 aria-valuenow="100" 
+                 aria-valuemin="0" 
+                 aria-valuemax="100" style="width: 100%">
+                 <span class="sr-only">100% Complete</span>
+               </div>
+             </div>
+
+           </div>
+           <div class="col-xs-3 text-right" ng-show="project.project.status=='กำลังดำเนินการ'">
+
+             <div class="progress progress-striped active" >
+               <div class="progress-bar progress-bar-warning"
+                 role="progressbar"
+                 aria-valuenow="50"
+                 aria-valuemin="0"
+                 aria-valuemax="100" style="width: 50%">
+                 <span class="sr-only">50% Complete</span>
+               </div>
+             </div>
+           </div>
+           <div class="col-xs-3 text-right" ng-show="project.project.status=='ยกเลิก'">
+
+             <div class="progress progress-striped active" >
+               <div class="progress-bar progress-bar-info"
+                 role="progressbar"
+                 aria-valuenow="50"
+                 aria-valuemin="0"
+                 aria-valuemax="100" style="width: 50%">
+                 <span class="sr-only">50% Complete</span>
+               </div>
+             </div>
+           </div>
+
+
+         </div>
+
+          <div>
+             <strong>เอกสารขออนุมัติ </strong>
+           <a href="{{project.project.permitdocument}}"
+              target="_blank">
+              <span class="glyphicon glyphicon-download"></span>
+           </a>
+          </div>
+          <div>
+          <a class="alert-link" 
+              href="http://www.db.grad.nu.ac.th/django/officers/projectassessment/" target="_blank">
+              <button type="button"class="btn btn-info btn-circle">
+                <i class="fa fa-upload"></i>
+              </button>
+            </a>
+
+           <a class="alert-link" href="" ng-click="reportclick()" type="button" class="btn">
+              <button type="button" class="btn btn-success btn-circle">
+                <i class="fa fa-print"></i>
+              </button>
+            </a>
+
+            <a class="alert-link" href="#/project/finance/edit/{{project.project._id}}/{{project.project.financeid}}">
+              <button type="button" class="btn btn-warning btn-circle">
+                <i class="fa fa-pencil"></i>
+              </button>
+            </a>
+
+          </div>
+        </div>
       </div>
-      </div>
+
     </div>
   </div>
 </div>
 <br>
-<div class="row" ng-show="p1 && project.project.psub == 'กลุ่ม'">
-  <div class="col-lg-6"> 
-    <div class="panel panel-success" >
-      <div class="panel-heading"></div>
-      <div class="panel-body">
-        <dl class="dl-horizontal">
-          <dt>ชื่อโครงการ/กิจกรรมย่อย:</dt><dd> {{p1.subname}}</dd>
-          <dt>วันเดือนปีที่ขออนุมัติ: </dt><dd> {{p1.date_approval}} 
-              <span ng-show="p1.permitdocument">
-                <a href="{{p1.permitdocument}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <dt>วันเดือนปีที่จัด:</dt><dd> {{p1.date_manage}} 
-            <span ng-show="p1.end_date_manage">
-             - {{p1.end_date_manage}}</span></dd>
-          <dt>สถานที่: </dt><dd> {{p1.place}} </dd>
-          <dt>จำนวนผู้เข้าร่วม:</dt><dd> {{p1.party}} </dd>
-	  <dt>จำนวนผู้ตอบ: </dt><dd>{{p1.respon}}</dd>
-          <dt>ค่าเฉลี่ย:</dt><dd> {{p1.percent}}</dd>
-          <dt>ระดับความพึงพอใจ:</dt><dd>{{p1.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
-          <dt>โหลดข้อมูล:</dt>
-            <dd>
-              <span ng-show="p1.Load">
-                <a href="{{p1.Load}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <dt>วัตถุประสงค์ของโครงการ: </dt><dd>{{p1.object}}</dd>
-          <dt>เป้าหมายของโครงการ: </dt><dd>{{p1.goal}}</dd>
-          <dt>ตัวชี้วัดของโครงการ</dt><dd>{{p1.kpi}}</dd>
-        </dl>
-      </div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">
+    รายละเอียดโครงการ/กิจกรรม
+  </div>
+  <!-- /.panel-heading -->
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-9 text-right">
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <strong> โครงการ </strong>
+              </div>
+              <div class="col-md-9 text-left">
+                {{project.project.pid}} :  {{project.project.name}}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 text-right">
+          </div>
+        </div>
       </div>
     </div>
+    <br>
+
+    <!-------->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-9 text-right">
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <strong> หน่วยงานที่รับผิดชอบ </strong>
+              </div>
+              <div class="col-md-9 text-left">
+                {{project.project.owner}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <strong>  ผู้รับผิดชอบ </strong>
+              </div>
+              <div class="col-md-9 text-left">
+                {{project.project.head}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <strong> ผุ้ประสานงาน </strong>
+              </div>
+              <div class="col-md-9 text-left">
+                {{project.project.coordinator}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <strong> ผู้รายงาน  </strong>
+              </div>
+              <div class="col-md-9 text-left">
+                <a href="" ng-click="trackclick()" type="button" class="btn">{{project.project.reportor}}</a> </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <strong>วัตถุประสงค์  </strong>
+              </div>
+              <div class="col-md-9 text-left">
+                {{project.project.objectiveinfo}}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <strong>เป้าหมายของโครงการ  </strong>
+              </div>
+              <div class="col-md-9 text-left">
+                 {{project.project.targetinfo}}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <strong>งบประมาณโครงการ  </strong>
+              </div>
+              <div class="col-md-9 text-left">
+               งบประมาณรายได้ = {{project[0].money.total_start+project[0].money.total_receive| currency :""}} บาท
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 text-right">
+            <div class="panel panel-green">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-money fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div>{{project[0].money.total_expend| currency :""}} บาท
+                    </div>
+                    <div class="medi">
+                     {{project.project.money_percent}} 
+                         <p class="text-danger" 
+                           ng-hide="project[0].money.total_expend==0">
+                           {{((project[0].money.total_expend*100)/(project[0].money.total_start++project[0].money.total_receive)) | number:2}}%
+                         </p>
+                         <p class="text-primary" 
+                           ng-hide="project[0].money.total_expend!=0">
+                           {{((project[0].money.total_expend*100)/(project[0].money.total_start+project[0].money.total_receive)) | number:2}}%
+                         </p>
+                    <!--<div class="huge">12</div>-->
+                    </div>
+                    <div>งบประมาณที่ใช้</div>
+                  </div>
+                </div>
+              </div>
+              <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.project.financeid}}/detial/" target="_blank">
+                   <div class="panel-footer">
+                     <span class="pull-left">View Details</span>
+                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                     <div class="clearfix"></div>
+                   </div>
+               </a>
+
+              <a href="#">
+                <div class="panel-footer">
+                  <span class="pull-left"></span>
+                  <span class="pull-right"></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-9 text-right">
+            <div class="row">
+              <div class="col-md-3 text-right">
+                <strong>วัน เวลาดำเนินการ  </strong>
+              </div>
+              <div class="col-md-9 text-left">
+                {{project.project.date_plan}} 
+                  <span  ng-show="project.project.end_date_plan">
+                      - {{project.project.end_date_plan}}</span>
+                  </div>
+            </div>
+          </div>
+          <div class="col-md-3 text-right">
+
+          </div>
+        </div>
+       </div>
+    </div>
+<br>
+    <div class="row">
+      <div class="col-md-12">
+       <table class="table table-condensed table-bordered" >
+          <tr>
+              <th >ชื่อโครงการ/กิจกรรมย่อย</th>
+              <th >วันที่ขออนุมัติ</th>
+              <th >วันที่จัด</th>
+              <th>สถานะ</th>
+          </tr>
+          <tr ng-repeat="message in p_list" >
+            <td><a href="#/project/sub/{{message.project_id}}" >{{message.subname}}</a>
+
+          <a href="" ng-click="remove_message(message._id)"><span class="glyphicon glyphicon-remove-circle"></span></a>
+            </td>
+            <td>{{message.date_approval}}</td>
+            <td>{{message.date_manage}}</td>
+            <td>{{message.substatus}}</td>
+          </tr>
+        </table>
+
+      </div>
+    </div>
+
   </div>
 </div>
 
-<div class="row" ng-show="p2 && project.project.psub == 'กลุ่ม'">
-  <div class="col-lg-6"> 
-    <div class="panel panel-success" >
-      <div class="panel-heading"></div>
-      <div class="panel-body">
-        <dl class="dl-horizontal">
-          <dt>ชื่อโครงการ/กิจกรรมย่อย:</dt><dd> {{p2.subname}}</dd>
-          <dt>วันเดือนปีที่ขออนุมัติ: </dt><dd> {{p2.date_approval}} 
-              <span ng-show="p2.permitdocument">
-                <a href="{{p2.permitdocument}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <dt>วันเดือนปีที่จัด:</dt><dd> {{p2.date_manage}} 
-            <span ng-show="p2.end_date_manage">
-             - {{p2.end_date_manage}}</span></dd>
-          <dt>สถานที่: </dt><dd> {{p2.place}} </dd>
-          <dt>จำนวนผู้เข้าร่วม:</dt><dd> {{p2.party}} </dd>
-	  <dt>จำนวนผู้ตอบ: </dt><dd>{{p2.respon}}</dd>
-          <dt>ค่าเฉลี่ย:</dt><dd> {{p2.percent}}</dd>
-          <dt>ระดับความพึงพอใจ:</dt><dd>{{p2.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
-          <dt>โหลดข้อมูล:</dt>
-            <dd>
-              <span ng-show="p2.Load">
-                <a href="{{p2.Load}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <dt>วัตถุประสงค์ของโครงการ: </dt><dd>{{p2.object}}</dd>
-          <dt>เป้าหมายของโครงการ: </dt><dd>{{p2.goal}}</dd>
-          <dt>ตัวชี้วัดของโครงการ</dt><dd>{{p2.kpi}}</dd>
-        </dl>
-      </div>
-      </div>
-    </div>
+<div class="panel panel-info">
+  <div class="panel-heading">
+   ตัวชี้วัดความสำเร็จของโครงการ (KPI) 
+  </div>
+  <!-- /.panel-heading -->
+  <div class="panel-body">
+    <div class="dataTable_wrapper">
+      <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+        <thead>
+          <tr>
+            <th>ปริมาณ</th>
+            <th>คุณภาพ</th>
+            <th>เวลา</th>
+            <th>ต้นทุน</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="odd gradeX">
+            <td class="col-md-3">{{project.project.kpiquantity}}</td>
+            <td class="col-md-3">{{project.project.kpiquality}}</td>
+            <td></td>
+            <td class="center"></td>
+          </tr>
+        </tbody>
+      </table>
   </div>
 </div>
 
-<div class="row" ng-show="p3 && project.project.psub == 'กลุ่ม'">
-  <div class="col-lg-6"> 
-    <div class="panel panel-success" >
-      <div class="panel-heading"></div>
-      <div class="panel-body">
-        <dl class="dl-horizontal">
-          <dt>ชื่อโครงการ/กิจกรรมย่อย:</dt><dd> {{p3.subname}}</dd>
-          <dt>วันเดือนปีที่ขออนุมัติ: </dt><dd> {{p3.date_approval}} 
-              <span ng-show="p3.permitdocument">
-                <a href="{{p3.permitdocument}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <dt>วันเดือนปีที่จัด:</dt><dd> {{p3.date_manage}} 
-            <span ng-show="p3.end_date_manage">
-             - {{p3.end_date_manage}}</span></dd>
-          <dt>สถานที่: </dt><dd> {{p3.place}} </dd>
-          <dt>จำนวนผู้เข้าร่วม:</dt><dd> {{p3.party}} </dd>
-	  <dt>จำนวนผู้ตอบ: </dt><dd>{{p3.respon}}</dd>
-          <dt>ค่าเฉลี่ย:</dt><dd> {{p3.percent}}</dd>
-          <dt>ระดับความพึงพอใจ:</dt><dd>{{p3.sd}}</dd>
-          <!--<dt>ร้อยละค่าเฉลี่ย:</dt><dd>{{project.project.average}}</dd>-->
-          <dt>โหลดข้อมูล:</dt>
-            <dd>
-              <span ng-show="p3.Load">
-                <a href="{{p3.Load}}" 
-                  target="_blank"><span class="glyphicon glyphicon-download"></span></a>
-              </span>
-            </dd>
-          <dt>วัตถุประสงค์ของโครงการ: </dt><dd>{{p3.object}}</dd>
-          <dt>เป้าหมายของโครงการ: </dt><dd>{{p3.goal}}</dd>
-          <dt>ตัวชี้วัดของโครงการ</dt><dd>{{p3.kpi}}</dd>
-        </dl>
-      </div>
+<div class="panel panel-info">
+  <div class="panel-heading">
+  การติดตามและประเมินผลโครงการ
+  </div>
+  <!-- /.panel-heading -->
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-3 text-right">
+           <strong> เป้าหมาย/ผู้เข้าร่วมจริง(คน) </strong> 
+          </div>
+          <div class="col-md-9 text-left">
+            {{project.project.partytarget}}/{{project.project.party}} (คน)
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 text-right">
+            <strong>จำนวนผู้ตอบแบบสอบถาม(คน) </strong>
+          </div>
+          <div class="col-md-2 text-left">
+            {{project.project.respon}}
+          </div>
+          <div class="col-md-3">
+            <strong>ค่าเฉลี่ยของผู้ตอบแบบสอบถาม </strong> 
+          </div>
+          <div class="col-md-4 text-left">
+{{((project.project.respon*100)/project.project.party|number:2).toString()}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 text-right">
+           <strong>ระดับความพึงพอใจ </strong> 
+          </div>
+          <div class="col-md-2 text-left">
+            {{project.project.sd}}
+          </div>
+          <div class="col-md-3">
+           <strong> ร้อยละค่าเฉลี่ย </strong> 
+          </div>
+          <div class="col-md-4 text-left">
+            {{project.project.average}}
+          </div>
+        </div>
+
+
       </div>
     </div>
+
+  </div>
+</div>
+<div class="panel panel-info">
+  <div class="panel-heading">
+ ข้อมูลการประเมินสัมฤทธิ์ผลของโครงการ  
+ <a href="{{project.project.Load}}" target="_blank" >
+   <span class="glyphicon glyphicon-download"></span>
+ </a>
+  </div>
+  <!-- /.panel-heading -->
+  <div class="panel-body">
+    <div class="dataTable_wrapper">
+      <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+        <thead>
+          <tr>
+            <th>วัตถุประสงค์</th>
+            <th>เป้าหมาย</th>
+            <th>ตัวชี้วัด</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="odd gradeX">
+            <td class="col-md-1">{{project.project.object}}</td>
+            <td class="col-md-1">{{project.project.goal}}</td>
+            <td class="col-md-1">{{project.project.kpi}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-md-3 text-right">
+         <strong> ประโยชน์ที่ได้รับจากโครงการ </strong>
+      </div>
+      <div class="col-md-9 text-left">
+            {{project.project.advantage}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 text-right">
+       <strong> อุปสรรค/ปัญหา(ถ้ามี)</strong> 
+      </div>
+      <div class="col-md-9 text-left">
+            {{project.project.problem}}
+      </div>
+    </div>
+
+
+
+
   </div>
 </div>
 

@@ -30,25 +30,43 @@
         {{project.project.name}} 
      </div>
      -->
-<ol class="breadcrumb">
-  <li><a href="#">Home</a></li>
-  <li><a href="#/projects/{{current_year}}">แผนปฏิบัติการประจำปี {{current_year}} </a></li>
-  <li class="active">สถานภาพโครงการตามงาน</li>
-</ol>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li ><a href="#projects/{{year}}">สรุปสถานภาพโครงการภาพรวม</a>
+        <li ><a href="#projects/warning/{{year}}">ติดตามความก้าวหน้า</a>
+</li>
+        <li class="dropdown active">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> สรุปรายงานผลดำเนินการ <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#/projects/{{year}}/status">จำแนกตามกองทุน</a></li>
+            <li class="active"><a href="#/projects/{{year}}/dept">จำแนกตามหน่วยงานที่รับผิดชอบ</a></li>
+            <li ><a href="#/projects/period/{{year}}">จำแนกตามระยะเวลา</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+        </form>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
-<div class="page-header">
-  <h1>สถานะภาพโครงการตามงานผู้รับผิดชอบ <small>ตามแผนปฏิบัติการประจำปี 2557 </small></h1>
-</div>
 <div class="row">
-  <div class="col-lg-7">
+  <div class="col-lg-12">
+    <h1 class="page-header">สรุปรายงานผลดำเนินการ<small>ตามแผนปฏิบัติการประจำปี {{current_year}}  </small></h1>
   </div>
-  <div class="col-lg-2">
-  </div>
-  <div class="col-lg-3 input-group">
-    <span class="input-group-addon">@</span>
-    <input type="text" 
-      class = "form-control" placeholder="สืบค้นโครงการ" ng-model="search">    
-  </div>
+   <!-- /.col-lg-12 -->
+</div>
+
+
     <!--
   <div class="col-lg-2 ">
     <select ng-model="orderProp" class="form-control">
@@ -66,7 +84,7 @@ i-->
           <table class="table">
             <thead>
               <tr>
-                <th colspan="6">รายงานสถานภาพโครงการ</th>
+                <th colspan="6">จำแนกตามหน่วยงานผู้รับผิดชอบ</th>
               </tr>
               <tr>
                 <td colspan="6">

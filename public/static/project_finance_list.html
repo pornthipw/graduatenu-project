@@ -8,10 +8,30 @@
         {{project.project.name}} 
      </div>
      -->
-     <table class="table">
+<br>
+<div class="row">
+  <div class="col-lg-6">
+    <div class="input-group my-group">
+        <select class="form-control"
+                id="sel" class="input-block-level"
+                ng-model="list_category"
+                ng-options="obj.name for obj in list_categories.data" 
+                ng-change="updateYear()">
+          <option value="">กรุณาเลือกปีงบประมาณ</option>
+        </select>
+        <input type="text" ng-model="p_list.search"  id="projects_search"  class="form-control" placeholder="Search">
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+  <div class="col-lg-6">
+  </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+
+
+<br>
+     <table class="table" ng-show="list_category.name">
             <thead>
               <tr>
-                <th>ลำดับที่</th>
+                <th>ลำดับ</th>
                 <th>ชื่อโครงการ</th>    
                 <th>งบประมาณที่ได้รับ</th>    
                 <th>งบประมาณที่ใช้ไป</th>    
@@ -20,7 +40,7 @@
                 <th>คงเหลือสุทธิ</th>    
               </tr>
             </thead>
-             <tbody ng-repeat="project in p_list|orderBy:'project.fund' ">
+             <tbody ng-repeat="project in p_list| filter:p_list.search |orderBy:'project.fund' ">
                <tr class="success" ng-show="CreateHeader(project.project.fund)">
                  <th  colspan="7"  
                    ng-show="project.project.fund=='A'">
@@ -31,32 +51,33 @@
                  <th colspan = "7"  ng-show="project.project.fund=='D'">กองทุนทำนุบำรุงศิลปวัฒนธรรม</span> 
                  <th colspan = "7"  ng-show="project.project.fund=='E'">กองทุนบริการวิชาการ</span> 
               </tr>
-              <tr>
+              <tr ng-hide="project.project.found[0]!=null">
                 
                 <td>{{$index+1}}</td>
                 <td>
                    <!--<a href="#/project/finance/info/{{project.project.id}}">{{project.project.name}}</a>
                    -->
                    {{project.project.name}} {{project.project.id}}
+                   <span ng-hide="project.project.found[0]!=null">
                    <a href="#/project/finance/create/{{project.project.id}}">เพิ่ม</a>
+                   </span>
                 
                 </td>
                 <td>{{
-                project.project.start_balance}}</td>     
+                project.project.start_balance|currency:""}}</td>     
                 <td >
                   <p class="text-danger" ng-hide="project.project.sum_expend==0">
-                    ({{project.project.sum_expend}})
+                    ({{project.project.sum_expend|currency:""}})
                   </p>
                   <p class="text-primary" ng-hide="project.project.sum_expend!=0">
-                    {{project.project.sum_expend}}
+                    {{project.project.sum_expend|currency:""}}
                   </p>
                 </td>     
                 <td>{{
                 project.project.start_balance-
-                project.project.sum_expend     
-                }}</td>     
-                <td>{{project.project.sum_wait}}</td>
-                <td>{{project.project.start_balance-project.project.sum_wait-project.project.sum_expend}}</td>
+                project.project.sum_expend|currency:""}}</td>     
+                <td>{{project.project.sum_wait|currency:""}}</td>
+                <td>{{project.project.start_balance-project.project.sum_wait-project.project.sum_expend|currency:""}}</td>
               </tr>
             </tbody>
           </table>

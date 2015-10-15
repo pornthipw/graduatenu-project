@@ -7,363 +7,558 @@
     </div>
   </div>
 </div>
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">Project Form</h1>
+  </div>
+ <!-- /.col-lg-12 -->
+</div>
+<!--
+<div class="row" ng-show="user.user&&user.user.role[0]=='plan'||user.user.role[1]=='plan' || user.user.role[0]=='academic'||user.user.role[0]=='research'||user.user.role[0]=='press'">
+-->
+<!--<div class="row-fluid" ng-show="user.user">-->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="alert alert-warning">
+      <div class="row">
+        <div class="col-xs-3">
+          <i class="fa fa-file-text-o fa-5x"></i>
+        </div>
+        <div class="col-xs-9 text-right">
+          <div class="medi">
+            {{project.pid}} : <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}} </a>
+          </div>
+          <div>
+            ผู้รับผิดชอบ {{project.owner}} 
+            | สถานะโครงการ {{project.status}} 
+          </div>
+          <div>
+            เอกสารขออนุมัติ
+           <a href="{{project.permitdocument}}" 
+              target="_blank"> 
+              <span class="glyphicon glyphicon-download"></span> 
+           </a>
+          </div>
+          <div>
+            <span ng-show="project.psub == 'กลุ่ม'">
+             <a class = "alert-link" href="#/project/sub/{{project._id}}">
+              <button type="button"
+                      class="btn btn-success btn-circle">
+                <i class="glyphicon glyphicon glyphicon-list-alt"></i>
+              </button>
+            </a>
+            </span>
+             <a class ="alert-link" href="#/project/finance/info/{{project._id}}/{{project.financeid}}">
+                   <button type="button"
+                      class="btn btn-primary btn-circle">
+                      <i class="fa fa-info-circle"></i>
+                   </button>
+             </a>
+          </div>
+   
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
 
-<div class="row-fluid" ng-show="user.user">
-  <p class="lead">ติดตามโครงการ/กิจกรรม</p>
-  <blockquote>
-    <p><img style="border: 0px" src="img/icon_message1.jpg" alt="With Twitter">
-      {{project.pid}} : <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}} </a>
-    </p>
-    <small>ผู้รับผิดชอบ {{project.owner}} </small>
-    <small>สถานะโครงการ {{project.status}} </small>
-    <small>เอกสารขออนุมัติ<a href="{{project.permitdocument}}" target="_blank"> <span class="glyphicon glyphicon-download"></span> </a></small>
-  </blockquote>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="row">
+      <div class="col-xs-3">
+      </div>
+      <div class="col-xs-9 text-right">
+        <p>
+         <small> <span class="label label-primary"> A </span> = กองทุนทั่วไป</small>
+         <small> <span class="label label-primary"> B </span> = กองทุนกิจการนิสิต</small>
+          <span class="label label-primary"><small> C </span> = กองทุนวิจัย</small>
+          <span class="label label-primary"><small> D </span> = กองทุนทำนุบำรุงศิลปวัฒนธรรม</small>
+          <span class="label label-primary"><small> E </span> = กองทุนบริการวิชาการ</small>
+        <p>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="row" ng-show="user.user">
-<!--
-<div class="row" >
--->
-  <div class="col-lg-5"> 
-    <legend>โครงการ/กิจกรรม</legend>
-    <form class="form-horizontal" >  
-      <div class="control-group">
-        <label class="control-label" for="inputYear">โครงการประจำปี</label>
-          <input 
-            class="form-control" 
-            type="text" id="inputYear" 
-            placeholder="Year" ng-model="project.year" disabled>
-      </div>
-      
-      <div class="control-group">
-        <label class="control-label" for="inputName">ประเภท: </label> 
-          <select id="inputName"  
-            class="form-control" 
-            ng-model="project.ptype" >
-            <option ng-selected="project.ptype=='โครงการ'">โครงการ</option>
-            <option ng-selected="project.ptype=='กิจกรรม'">กิจกรรม</option>
-            <option ng-selected="project.ptype=='นอกแผน'">นอกแผน</option>
-          </select>
-      </div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    บันทึกผลการดำเนินงานโครงการ/กิจกรรม 
+  </div>
+  <!-- /.panel-heading -->
+  <div class="panel-body">
+    ข้อมูลพื้นฐาน
+    <form class="form-horizontal">
+       <div class="form-group">
+         <label for="inputPsub" class="col-sm-2 control-label">ลักษณะการรายงาน</label>
+         <div class="col-sm-10">
+           <select id="inputPtypeinfo"
+             class="form-control"
+             ng-model="project.ptypeinfo">
+             <option ng-selected="project.ptypeinfo=='กรอกข้อมูลพื้นฐาน'">กรอกข้อมูลพื้นฐาน</option>
+             <option ng-selected="project.ptypeinfo=='ขออนุมัติโครงการ'">ขออนุมัติโครงการ</option>
+             <option ng-selected="project.ptypeinfo=='รายงานผล'">รายงานผล</option>
+           </select>
+           <span ng-show="project.ptypeinfo == 'กรอกข้อมูลพื้นฐาน'">
+           </span>
+         </div>
+       </div>
+       <div class="form-group">
+         <label for="inputStatus" class="col-sm-2 control-label">สถานภาพโครงการ</label>
+         <div class="col-sm-10">
+           <select id="inputStatus"
+             class="form-control"
+             placeholder="Status" ng-model="project.status">
+             <option ng-selected="project.status=='ยังไม่ได้ดำเนินการ'">ยังไม่ได้ดำเนินการ</option>
+             <option ng-selected="project.status=='กำลังดำเนินการ'">กำลังดำเนินการ</option>
+             <option ng-selected="project.status=='ดำเนินการแล้ว'">ดำเนินการแล้ว</option>
+             <option ng-selected="project.status=='ยกเลิก'">ยกเลิก</option>
+           </select>
+         </div>
+       </div>
 
-      <div class="control-group">
-        <label class="control-label" for="inputName" >โครงการ/กิจกรรมย่อย: </label> 
-          <select id="inputName"  
-            class="form-control" 
-            ng-model="project.psub">
-            <option ng-selected="project.psub=='เดี่ยว'">เดี่ยว</option>
-            <option ng-selected="project.psub=='กลุ่ม'">กลุ่ม</option>
-          </select>
-      </div>
+       <span ng-show="project.ptypeinfo == 'กรอกข้อมูลพื้นฐาน'">
+         <div class="form-group"> 
+           <label class="control-label col-sm-2" for="inputYear">โครงการประจำปี</label>
+           <div class="col-sm-10">
+             <input 
+               class="form-control" 
+               type="text" id="inputYear" 
+               placeholder="Year" ng-model="project.year" disabled>
+           </div>
+         </div>
+
+         <div class="form-group">
+           <label for="inputName" class="col-sm-2 control-label">ประเภท</label>
+           <div class="col-sm-10">
+             <select id="inputName"  
+               class="form-control" 
+               ng-model="project.ptype" >
+               <option ng-selected="project.ptype=='โครงการ'">โครงการ</option>
+               <option ng-selected="project.ptype=='กิจกรรม'">กิจกรรม</option>
+               <option ng-selected="project.ptype=='นอกแผน'">โครงการ/กิจกรรมนอกแผนปฏิบัติการ</option>
+             </select>
+           </div>
+         </div>
+
+         <div class="form-group">
+           <label for="inputPsub" class="col-sm-2 control-label">ลักษณะโครงการ</label>
+           <div class="col-sm-10">
+             <select id="inputPsub"  
+               class="form-control" 
+               ng-model="project.psub">
+               <option ng-selected="project.psub=='เดี่ยว'">โครงการเดี่ยว</option>
+               <option ng-selected="project.psub=='กลุ่ม'">กิจกรรมย่อย</option>
+               <option ng-selected="project.psub=='ระยะ'">หลายระยะ</option>
+             </select>
+             <span ng-show="project.psub == 'กลุ่ม'">
+               <div class="control-group">
+                 <label class="control-label" for="inputName"></label>
+                 <a href="#/project/sub/{{project._id}}"><< เพิ่มกิจกรรมย่อย >></a>
+               </div>
+             </span>
+           </div>
+         </div>
+
+         <div class="form-group">
+           <label for="inputFund" class="col-sm-2 control-label">ชื่อกองทุน</label>
+           <div class="col-sm-10">
+             <input type="text" 
+               class="form-control" 
+               id="inputName" placeholder="ประเภทกองทุน" 
+               ng-model="project.fund" >
+           </div>
+         </div>
+         <div class="form-group">
+           <label for="inputPid" class="col-sm-2 control-label">รหัสโครงการ</label>
+           <div class="col-sm-10">
+             <input type="text" 
+               class="form-control" 
+               id="inputPid" placeholder="กรอกรหัสโครงการ" 
+               ng-model="project.pid">
+           </div>
+         </div>
+         <div class="form-group">
+           <label for="inputProjectname" class="col-sm-2 control-label">ชื่อโครงการ</label>
+           <div class="col-sm-10">
+             <input type="text" 
+               class="form-control" 
+               id="inputName" placeholder="Name" 
+               ng-model="project.name" >
+           </div>
+         </div>
+         <div class="form-group">
+           <label for="inputOwner" class="col-sm-2 control-label">หน่วยงานที่รับผิดชอบ</label>
+           <div class="col-sm-10">
+             <select id="inputOwner" placeholder="Owner" 
+               class="form-control" 
+               ng-model="project.owner" >
+               <option ng-selected="project.owner=='งานอำนวยการ'">งานอำนวยการ</option>
+               <option ng-selected="project.owner=='งานวิชาการ'">งานวิชาการ</option>
+               <option ng-selected="project.owner=='งานแผนและสารสนเทศ'">งานแผนและสารสนเทศ</option>
+               <option ng-selected="project.owner=='สำนักพิมพ์มหาวิทยาลัยนเรศวร'">สำนักพิมพ์มหาวิทยาลัยนเรศวร</option>
+               <option ng-selected="project.owner=='งานวิจัยและวิเทศสัมพันธ์'">งานวิจัยและวิเทศสัมพันธ์</option>
+             </select>
+           </div>
+         </div>
+         <div class="form-group">
+           <label for="inputHead" class="col-sm-2 control-label">ผู้รับผิดชอบ</label>
+           <div class="col-sm-10">
+             <select id="inputHead" placeholder="Head" 
+               class="form-control" 
+               ng-model="project.head" >
+               <option ng-selected="project.head=='รองคณบดีฝ่ายบริหารและวางแผน'">รองคณบดีฝ่ายบริหารและวางแผน</option>
+               <option ng-selected="project.head=='รองคณบดีฝ่ายวิชาการ'">รองคณบดีฝ่ายวิชาการ</option>
+               <option ng-selected="project.head=='รองคณบดีฝ่ายวิจัยและวิเทศสัมพันธ์'">รองคณบดีฝ่ายวิจัยและวิเทศสัมพันธ์</option>
+               <option ng-selected="project.head=='รองคณบดีฝ่ายพัฒนาและประกันคุณภาพอุดมศึกษา'">รองคณบดีฝ่ายพัฒนาและประกันคุณภาพอุดมศึกษา</option>
+               <option ng-selected="project.head=='รองคณบดีฝ่ายพัฒนาและประกันคุณภาพการศึกษา'">รองคณบดีฝ่ายพัฒนาและประกันคุณภาพการศึกษา</option>
+               <option ng-selected="project.head=='รองคณบดีฝ่ายกิจการพิเศษ'">รองคณบดีฝ่ายกิจการพิเศษ</option>
+               <option ng-selected="project.head=='ผู้ช่วยคณบดีบัณฑิตวิทยาลัย'">ผู้ช่วยคณบดีบัณฑิตวิทยาลัย</option>
+               <option ng-selected="project.head=='หัวหน้าสำนักงานเลขานุการบัณฑิตวิทยาลัย'">หัวหน้าสำนักงานเลขานุการบัณฑิตวิทยาลัย</option>
+               <option ng-selected="project.head=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
+               <option ng-selected="project.head=='สินีนาฏ พุ่มสอาด'">สินีนาฏ พุ่มสอาด</option>
+               <option ng-selected="project.head=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
+             </select>
+           </div>
+         </div>
+
+         <div class="form-group">
+           <label for="inputCoo" class="col-sm-2 control-label">ผู้ประสานงาน</label>
+           <div class="col-sm-10">
+             <select id="inputCoo" placeholder="Coordinator" 
+               class="form-control" 
+               ng-model="project.coordinator" >
+               <option ng-selected="project.coordinator=='กนกนกานต์ ยาห้องกาศ'">กนกนกานต์ ยาห้องกาศ</option>
+               <option ng-selected="project.coordinator=='เกียรติธำรง ตระกูลจันทร์'">เกียรติธำรง ตระกูลจันทร์</option>
+               <option ng-selected="project.coordinator=='กัลยกร เทียมแก้ว'">กัลยกร เทียมแก้ว</option>
+               <option ng-selected="project.coordinator=='จันทรรัตน์ เหนียมพ่วง'">จันทรรัตน์ เหนียมพ่วง</option>
+               <option ng-selected="project.coordinator=='จันนิกา ศรีใส'">จันนิกา ศรีใส</option>
+               <option ng-selected="project.coordinator=='ญารัชนี หม่องนันท์'">ญารัชนี หม่องนันท์</option>
+               <option ng-selected="project.coordinator=='ณิชาภา ฟักทอง'">ณิชาภา ฟักทอง</option>
+               <option ng-selected="project.coordinator=='ตรีรัส ดิเรกพิทักษ์'">ตรีรัส ดิเรกพิทักษ์</option>
+               <option ng-selected="project.coordinator=='ทวีทรัพย์ สุนันตา'">ทวีทรัพย์ สุนันตา</option>
+               <option ng-selected="project.coordinator=='ธราภรณ์ ธีรภาพวิเศษพงษ์'">ธราภรณ์ ธีรภาพวิเศษพงษ์</option>
+               <option ng-selected="project.coordinator=='ธิติมา สุบิน'">ธิติมา สุบิน</option>
+               <option ng-selected="project.coordinator=='นวิพรรณ ตันติพลาผล'">นวิพรรณ ตันติพลาผล</option>
+               <option ng-selected="project.coordinator=='มลฑา ฉัตรอภิวันท์'">มลฑา ฉัตรอภิวันท์</option>
+               <option ng-selected="project.coordinator=='รัตนเดช เสงี่ยมโปร่ง'">รัตนเดช เสงี่ยมโปร่ง</option>
+               <option ng-selected="project.coordinator=='ปาริชาติ พุ่มชม'">ปาริชาติ พุ่มชม</option>
+               <option ng-selected="project.coordinator=='ปุณยนุช ภัทรมล'">ปุณยนุช ภัทรมล</option>
+               <option ng-selected="project.coordinator=='พัฒน์ศักดิ์ กระต่ายน้อย'">พัฒน์ศักดิ์ กระต่ายน้อย</option>
+               <option ng-selected="project.coordinator=='พิมพ์พาภรณ์ ดวงสาโรจน์'">พิมพ์พาภรณ์ ดวงสาโรจน์</option>
+               <option ng-selected="project.coordinator=='พรทิพย์ เม่นสิน'">พรทิพย์ เม่นสิน</option>
+               <option ng-selected="project.coordinator=='ภัคคีณี เทิดสิทธิกุล'">ภัคคีณี เทิดสิทธิกุล</option>
+               <option ng-selected="project.coordinator=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
+               <option ng-selected="project.coordinator=='สรญา แสงเย็นพันธ์'">สรญา แสงเย็นพันธ์</option>
+               <option ng-selected="project.coordinator=='สายพิณ เม่นเกิด'">สายพิณ เม่นเกิด</option>
+               <option ng-selected="project.coordinator=='สินีนาฏ พุ่มสอาด'">สินีนาฏ พุ่มสอาด</option>
+               <option ng-selected="project.coordinator=='สุทธิพจน์ ดวงสาโรจน์'">สุทธิพจน์ ดวงสาโรจน์</option>
+               <option ng-selected="project.coordinator=='อนงค์ มีอาชา'">อนงค์ มีอาชา</option>
+               <option ng-selected="project.coordinator=='อรอุษา บำรุงไทย'">อรอุษา บำรุงไทย</option>
+               <option ng-selected="project.coordinator=='อัจจิมา มวลประสิทธิ์พร'">อัจจิมา มวลประสิทธิ์พร</option>
+               <option ng-selected="project.coordinator=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
+             </select>
+           </div>
+         </div>
+
+         <div class="form-group">
+           <label for="inputReportor" class="col-sm-2 control-label">ผู้รายงาน</label>
+           <div class="col-sm-10">
+             <select id="inputReportor" placeholder="Reportor" 
+               class="form-control" 
+               ng-model="project.reportor">
+               <option ng-selected="project.reportor=='กนกนกานต์ ยาห้องกาศ'">กนกนกานต์ ยาห้องกาศ</option>
+               <option ng-selected="project.reportor=='เกียรติธำรง ตระกูลจันทร์'">เกียรติธำรง ตระกูลจันทร์</option>
+               <option ng-selected="project.reportor=='กัลยกร เทียมแก้ว'">กัลยกร เทียมแก้ว</option>
+               <option ng-selected="project.reportor=='จันทรรัตน์ เหนียมพ่วง'">จันทรรัตน์ เหนียมพ่วง</option>
+               <option ng-selected="project.reportor=='จันนิกา ศรีใส'">จันนิกา ศรีใส</option>
+               <option ng-selected="project.reportor=='ญารัชนี หม่องนันท์'">ญารัชนี หม่องนันท์</option>
+               <option ng-selected="project.reportor=='ณิชาภา ฟักทอง'">ณิชาภา ฟักทอง</option>
+               <option ng-selected="project.reportor=='ตรีรัส ดิเรกพิทักษ์'">ตรีรัส ดิเรกพิทักษ์</option>
+               <option ng-selected="project.reportor=='ทวีทรัพย์ สุนันตา'">ทวีทรัพย์ สุนันตา</option>
+               <option ng-selected="project.reportor=='ธราภรณ์ ธีรภาพวิเศษพงษ์'">ธราภรณ์ ธีรภาพวิเศษพงษ์</option>
+               <option ng-selected="project.reportor=='ธิติมา สุบิน'">ธิติมา สุบิน</option>
+               <option ng-selected="project.reportor=='นวิพรรณ ตันติพลาผล'">นวิพรรณ ตันติพลาผล</option>
+               <option ng-selected="project.reportor=='มลฑา ฉัตรอภิวันท์'">มลฑา ฉัตรอภิวันท์</option>
+               <option ng-selected="project.reportor=='รัตนเดช เสงี่ยมโปร่ง'">รัตนเดช เสงี่ยมโปร่ง</option>
+               <option ng-selected="project.reportor=='ปาริชาติ พุ่มชม'">ปาริชาติ พุ่มชม</option>
+               <option ng-selected="project.reportor=='ปุณยนุช ภัทรมล'">ปุณยนุช ภัทรมล</option>
+               <option ng-selected="project.reportor=='พัฒน์ศักดิ์ กระต่ายน้อย'">พัฒน์ศักดิ์ กระต่ายน้อย</option>
+               <option ng-selected="project.reportor=='พิมพ์พาภรณ์ ดวงสาโรจน์'">พิมพ์พาภรณ์ ดวงสาโรจน์</option>
+               <option ng-selected="project.coordinator=='พรทิพย์ เม่นสิน'">พรทิพย์ เม่นสิน</option>
+               <option ng-selected="project.reportor=='ภัคคีณี เทิดสิทธิกุล'">ภัคคีณี เทิดสิทธิกุล</option>
+               <option ng-selected="project.reportor=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
+               <option ng-selected="project.reportor=='สรญา แสงเย็นพันธ์'">สรญา แสงเย็นพันธ์</option>
+               <option ng-selected="project.reportor=='สายพิณ เม่นเกิด'">สายพิณ เม่นเกิด</option>
+               <option ng-selected="project.reportor=='สินีนาฎ พุ่มสอาด'">สินีนาฎ พุ่มสอาด</option>
+               <option ng-selected="project.reportor=='สุทธิพจน์ ดวงสาโรจน์'">สุทธิพจน์ ดวงสาโรจน์</option>
+               <option ng-selected="project.reportor=='อนงค์ มีอาชา'">อนงค์ มีอาชา</option>
+               <option ng-selected="project.reportor=='อรอุษา บำรุงไทย'">อรอุษา บำรุงไทย</option>
+               <option ng-selected="project.reportor=='อัจจิมา มวลประสิทธิ์พร'">อัจจิมา มวลประสิทธิ์พร</option>
+               <option ng-selected="project.reportor=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
+             </select>
+           </div>
+         </div>
+
+         <div class="form-group">
+           <label for="inputContact" class="col-sm-2 control-label">E-mail ผู้ติดต่อ</label>
+           <div class="col-sm-10">
+             <input type="text" id="inputContact" 
+               class="form-control"
+               placeholder="ใส่ Email ผู้ติดต่อ" ng-model="project.contactmail">
+           </div>
+         </div>
+
+         <div class="form-group">
+           <label class="control-label col-sm-2" 
+             for="inputName">ระยะเวลาดำเนินโครงการ: </label>
+           <div class="col-sm-10">
+             <input type="text" ng-model="project.date_plan" 
+               class="form-control" 
+               data-date-format="dd/mm/yyyy" bs-datepicker>
+           </div>
+         </div>
       
-      <div class="control-group">
-        <label class="control-label" for="inputType">สถานภาพโครงการ(หลัก)</label>
-          <select id="inputStatus" 
-            class="form-control" 
-            placeholder="Status" ng-model="project.status">
-            <option ng-selected="project.status=='ยังไม่ได้ดำเนินการ'">ยังไม่ได้ดำเนินการ</option>
-            <option ng-selected="project.status=='กำลังดำเนินการ'">กำลังดำเนินการ</option>
-            <option ng-selected="project.status=='ดำเนินการแล้ว'">ดำเนินการแล้ว</option>
-            <option ng-selected="project.status=='ยกเลิก'">ยกเลิก</option>
-          </select>
+         <div class="form-group">
+           <label class="control-label col-sm-2" 
+             for="inputName">ถึง วันที่: </label>
+           <div class="col-sm-10">
+             <input type="text" ng-model="project.end_date_plan" 
+               class="form-control" 
+               data-date-format="dd/mm/yyyy" bs-datepicker>
+           </div>
+         </div>
+
+       </span>
+    </form>
+  </div>
+</div>
+
+<span ng-show="project.ptypeinfo == 'กรอกข้อมูลพื้นฐาน'">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-6">
+         <strong>ยุทธศาสตร์ พันธกิจ</strong>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="inputName">ชื่อกองทุน: </label>
-          <input type="text" 
-            class="form-control" 
-            id="inputName" placeholder="ประเภทกองทุน" 
-            ng-model="project.fund" >
+      <div class="col-xs-6 text-right">
+
       </div>
-      
-      <div class="control-group">
-        <label class="control-label" for="inputPid">รหัสโครงการ: </label>
-          <input type="text" 
-            class="form-control" 
-            id="inputPid" placeholder="Name" 
-            ng-model="project.pid">
-      </div>
-    
-      <div class="control-group">
-        <label class="control-label" for="inputName">ชื่อโครงการ: </label>
-          <input type="text" 
-            class="form-control" 
-            id="inputName" placeholder="Name" 
-            ng-model="project.name" >
-      </div>
-      
-      <div class="control-group">
-        <label class="control-label" for="inputName">หน่วยงานที่รับผิดชอบ: </label> 
-          <select id="inputName" placeholder="Owner" 
-            class="form-control" 
-            ng-model="project.owner" >
-            <option ng-selected="project.owner=='งานอำนวยการ'">งานอำนวยการ</option>
-            <option ng-selected="project.owner=='งานวิชาการ'">งานวิชาการ</option>
-            <option ng-selected="project.owner=='งานแผนและสารสนเทศ'">งานแผนและสารสนเทศ</option>
-            <option ng-selected="project.owner=='สำนักพิมพ์มหาวิทยาลัยนเรศวร'">สำนักพิมพ์มหาวิทยาลัยนเรศวร</option>
-            <option ng-selected="project.owner=='งานวิจัยและวิเทศสัมพันธ์'">งานวิจัยและวิเทศสัมพันธ์</option>
-          </select>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputName">ผู้รับผิดชอบ: </label> 
-          <select id="inputName" placeholder="Owner" 
-            class="form-control" 
-            ng-model="project.head" >
-            <option ng-selected="project.head=='รองคณบดีฝ่ายบริหารและวางแผน'">รองคณบดีฝ่ายบริหารและวางแผน</option>
-            <option ng-selected="project.head=='รองคณบดีฝ่ายวิชาการ'">รองคณบดีฝ่ายวิชาการ</option>
-            <option ng-selected="project.head=='รองคณบดีฝ่ายวิจัยและวิเทศสัมพันธ์'">รองคณบดีฝ่ายวิจัยและวิเทศสัมพันธ์</option>
-            <option ng-selected="project.head=='รองคณบดีฝ่ายพัฒนาและประกันคุณภาพอุดมศึกษา'">รองคณบดีฝ่ายพัฒนาและประกันคุณภาพอุดมศึกษา</option>
-            <option ng-selected="project.head=='รองคณบดีฝ่ายพัฒนาและประกันคุณภาพการศึกษา'">รองคณบดีฝ่ายพัฒนาและประกันคุณภาพการศึกษา</option>
-            <option ng-selected="project.head=='รองคณบดีฝ่ายกิจการพิเศษ'">รองคณบดีฝ่ายกิจการพิเศษ</option>
-            <option ng-selected="project.head=='ผู้ช่วยคณบดีบัณฑิตวิทยาลัย'">ผู้ช่วยคณบดีบัณฑิตวิทยาลัย</option>
-            <option ng-selected="project.head=='หัวหน้าสำนักงานเลขานุการบัณฑิตวิทยาลัย'">หัวหน้าสำนักงานเลขานุการบัณฑิตวิทยาลัย</option>
-            <option ng-selected="project.head=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
-            <option ng-selected="project.head=='สินีนาฏ พุ่มสอาด'">สินีนาฏ พุ่มสอาด</option>
-            <option ng-selected="project.head=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
-          </select>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputName">ผู้ประสานงาน: </label> 
-          <select id="inputName" placeholder="Coordinator" 
-            class="form-control" 
-            ng-model="project.coordinator" >
-            <option ng-selected="project.coordinator=='กนกนกานต์ ยาห้องกาศ'">กนกนกานต์ ยาห้องกาศ</option>
-            <option ng-selected="project.coordinator=='เกียรติธำรง ตระกูลจันทร์'">เกียรติธำรง ตระกูลจันทร์</option>
-            <option ng-selected="project.coordinator=='กัลยกร เทียมแก้ว'">กัลยกร เทียมแก้ว</option>
-            <option ng-selected="project.coordinator=='จันทรรัตน์ เหนียมพ่วง'">จันทรรัตน์ เหนียมพ่วง</option>
-            <option ng-selected="project.coordinator=='จันนิกา ศรีใส'">จันนิกา ศรีใส</option>
-            <option ng-selected="project.coordinator=='ญารัชนี หม่องนันท์'">ญารัชนี หม่องนันท์</option>
-            <option ng-selected="project.coordinator=='ณิชาภา ฟักทอง'">ณิชาภา ฟักทอง</option>
-            <option ng-selected="project.coordinator=='ตรีรัส ดิเรกพิทักษ์'">ตรีรัส ดิเรกพิทักษ์</option>
-            <option ng-selected="project.coordinator=='ทวีทรัพย์ สุนันตา'">ทวีทรัพย์ สุนันตา</option>
-            <option ng-selected="project.coordinator=='ธราภรณ์ ธีรภาพวิเศษพงษ์'">ธราภรณ์ ธีรภาพวิเศษพงษ์</option>
-            <option ng-selected="project.coordinator=='ธิติมา สุบิน'">ธิติมา สุบิน</option>
-            <option ng-selected="project.coordinator=='นวิพรรณ ตันติพลาผล'">นวิพรรณ ตันติพลาผล</option>
-            <option ng-selected="project.coordinator=='ปาริชาติ พุ่มชม'">ปาริชาติ พุ่มชม</option>
-            <option ng-selected="project.coordinator=='ปุณยนุช ภัทรมล'">ปุณยนุช ภัทรมล</option>
-            <option ng-selected="project.coordinator=='พัฒน์ศักดิ์ กระต่ายน้อย'">พัฒน์ศักดิ์ กระต่ายน้อย</option>
-            <option ng-selected="project.coordinator=='พิมพ์พาภรณ์ ดวงสาโรจน์'">พิมพ์พาภรณ์ ดวงสาโรจน์</option>
-            <option ng-selected="project.coordinator=='พรทิพย์ เม่นสิน'">พรทิพย์ เม่นสิน</option>
-            <option ng-selected="project.coordinator=='ภัคคีณี เทิดสิทธิกุล'">ภัคคีณี เทิดสิทธิกุล</option>
-            <option ng-selected="project.coordinator=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
-            <option ng-selected="project.coordinator=='สรญา แสงเย็นพันธ์'">สรญา แสงเย็นพันธ์</option>
-            <option ng-selected="project.coordinator=='สายพิณ เม่นเกิด'">สายพิณ เม่นเกิด</option>
-            <option ng-selected="project.coordinator=='สินีนาฏ พุ่มสอาด'">สินีนาฏ พุ่มสอาด</option>
-            <option ng-selected="project.coordinator=='สุทธิพจน์ ดวงสาโรจน์'">สุทธิพจน์ ดวงสาโรจน์</option>
-            <option ng-selected="project.coordinator=='อนงค์ มีอาชา'">อนงค์ มีอาชา</option>
-            <option ng-selected="project.coordinator=='อรอุษา บำรุงไทย'">อรอุษา บำรุงไทย</option>
-            <option ng-selected="project.coordinator=='อัจจิมา มวลประสิทธิ์พร'">อัจจิมา มวลประสิทธิ์พร</option>
-            <option ng-selected="project.coordinator=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
-          </select>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputName">ผู้รายงาน: </label> 
-          <select id="inputName" placeholder="Reportor" 
-            class="form-control" 
-            ng-model="project.reportor">
-            <option ng-selected="project.reportor=='กนกนกานต์ ยาห้องกาศ'">กนกนกานต์ ยาห้องกาศ</option>
-            <option ng-selected="project.reportor=='เกียรติธำรง ตระกูลจันทร์'">เกียรติธำรง ตระกูลจันทร์</option>
-            <option ng-selected="project.reportor=='กัลยกร เทียมแก้ว'">กัลยกร เทียมแก้ว</option>
-            <option ng-selected="project.reportor=='จันทรรัตน์ เหนียมพ่วง'">จันทรรัตน์ เหนียมพ่วง</option>
-            <option ng-selected="project.reportor=='จันนิกา ศรีใส'">จันนิกา ศรีใส</option>
-            <option ng-selected="project.reportor=='ญารัชนี หม่องนันท์'">ญารัชนี หม่องนันท์</option>
-            <option ng-selected="project.reportor=='ณิชาภา ฟักทอง'">ณิชาภา ฟักทอง</option>
-            <option ng-selected="project.reportor=='ตรีรัส ดิเรกพิทักษ์'">ตรีรัส ดิเรกพิทักษ์</option>
-            <option ng-selected="project.reportor=='ทวีทรัพย์ สุนันตา'">ทวีทรัพย์ สุนันตา</option>
-            <option ng-selected="project.reportor=='ธราภรณ์ ธีรภาพวิเศษพงษ์'">ธราภรณ์ ธีรภาพวิเศษพงษ์</option>
-            <option ng-selected="project.reportor=='ธิติมา สุบิน'">ธิติมา สุบิน</option>
-            <option ng-selected="project.reportor=='นวิพรรณ ตันติพลาผล'">นวิพรรณ ตันติพลาผล</option>
-            <option ng-selected="project.reportor=='ปาริชาติ พุ่มชม'">ปาริชาติ พุ่มชม</option>
-            <option ng-selected="project.reportor=='ปุณยนุช ภัทรมล'">ปุณยนุช ภัทรมล</option>
-            <option ng-selected="project.reportor=='พัฒน์ศักดิ์ กระต่ายน้อย'">พัฒน์ศักดิ์ กระต่ายน้อย</option>
-            <option ng-selected="project.reportor=='พิมพ์พาภรณ์ ดวงสาโรจน์'">พิมพ์พาภรณ์ ดวงสาโรจน์</option>
-            <option ng-selected="project.coordinator=='พรทิพย์ เม่นสิน'">พรทิพย์ เม่นสิน</option>
-            <option ng-selected="project.reportor=='ภัคคีณี เทิดสิทธิกุล'">ภัคคีณี เทิดสิทธิกุล</option>
-            <option ng-selected="project.reportor=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
-            <option ng-selected="project.reportor=='สรญา แสงเย็นพันธ์'">สรญา แสงเย็นพันธ์</option>
-            <option ng-selected="project.reportor=='สายพิณ เม่นเกิด'">สายพิณ เม่นเกิด</option>
-            <option ng-selected="project.reportor=='สินีนาฎ พุ่มสอาด'">สินีนาฎ พุ่มสอาด</option>
-            <option ng-selected="project.reportor=='สุทธิพจน์ ดวงสาโรจน์'">สุทธิพจน์ ดวงสาโรจน์</option>
-            <option ng-selected="project.reportor=='อนงค์ มีอาชา'">อนงค์ มีอาชา</option>
-            <option ng-selected="project.reportor=='อรอุษา บำรุงไทย'">อรอุษา บำรุงไทย</option>
-            <option ng-selected="project.reportor=='อัจจิมา มวลประสิทธิ์พร'">อัจจิมา มวลประสิทธิ์พร</option>
-            <option ng-selected="project.reportor=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
-          </select>
-      </div>
-      <div class="control-group">
-      <label class="control-label" for="inputName">Email ผู้ติดต่อ: </label>
-          <input type="text" id="inputName" 
+    </div>
+  </div>
+  <div class="panel-body">
+  <form class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-sm-2"
+          for="inputName">ยุทธศาสตร์บัณฑิตวิทยาลัย </label>
+        <div class="col-sm-10">
+          <select id="inputName"
             class="form-control"
-            placeholder="ใส่ Email ผู้ติดต่อ" ng-model="project.contactmail">
-      </div>
-      <div class="control-group">
-        <label class="control-label" 
-          for="inputName">ระยะเวลาดำเนินโครงการ: </label>
-            <input type="text" ng-model="project.date_plan" 
-              class="form-control" 
-              data-date-format="dd/mm/yyyy" bs-datepicker>
-      </div>
-      
-      <div class="control-group">
-        <label class="control-label" 
-            for="inputName">ถึง วันที่: </label>
-            <input type="text" ng-model="project.end_date_plan" 
-              class="form-control" 
-              data-date-format="dd/mm/yyyy" bs-datepicker>
-      </div>
+            ng-model="project.strategies">
+            <option 
+              ng-selected="project.strategies=='1'">
+                1 กำกับมาตรฐาน และควบคุมคุณภาพการจัดการศึกษาระดับบัณฑิตศึกษา 
+            </option>
+            <option 
+              ng-selected="project.strategies=='2'">
+                2 ประสานงานและอำนวยการกับคณะ/วิทยาลัยในการจัดการศึกษาระดับบัณฑิตศึกษา 
+            </option>
+            <option 
+              ng-selected="project.strategies=='3'">
+                3 มุ่งสร้างความเป็นเลิศทางวิชาการ 
+            </option>
+            <option 
+              ng-selected="project.strategies=='4'">
+                4 สร้างบัณฑิตวิทยาลัยให้เป็นองค์กรแห่งธรรมาภิบาล 
+            </option>
+            <option 
+              ng-selected="project.strategies=='5'">
+                5 ผลิตและเผยแพร่ผลงานทางวิชาการที่มีคุณภาพ 
+            </option>
+          </select>
 
-      <div class="control-group">
-        <label class="control-label" for="inputName">วันเดือนปีที่ขออนุมัติ(โครงการหลัก): </label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</span>
+
+<span ng-show="project.ptypeinfo == 'กรอกข้อมูลพื้นฐาน'">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-xs-6">
+         <strong>วัตถุประสงค์ เป้าหมาย ตัวชี้วัด วิธีการวัดผล</strong>
+        </div>
+        <div class="col-xs-6 text-right">
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-sm-2"
+            for="inputName">วัตถุประสงค์ของโครงการ: </label>
+          <div class="col-sm-10">
+            <textarea class="form-control"
+              rows="5" class="form-control"
+              ng-model="project.objectiveinfo"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2"
+            for="inputName">เป้าหมายของโครงการ: </label>
+          <div class="col-sm-10">
+            <textarea class="form-control"
+              rows="3" class="form-control"
+              ng-model="project.targetinfo"></textarea>
+          </div>
+        </div>
+ 
+        <span ng-hide="project.typeoutput== 'อื่นๆ'">
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="inputName">เป้าหมายผู้เข้าร่วม(คน): </label>
+            <div class="col-sm-10">
+              <input type="text" id="inputName" 
+                class="form-control"
+                placeholder="เป้าหมายผู้เข้าร่วมโครงการ" ng-model="project.partytarget">
+            </div>
+          </div>
+        </span>
+
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="inputName">ตัวชี้วัดเชิงปริมาณ: </label>
+            <div class="col-sm-10">
+              <input type="text" id="inputName"
+                class="form-control"
+                placeholder="กรอกข้อมูลตัวชี้วัดเชิงปริมาณ" ng-model="project.kpiquantity">
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="inputName">ตัวชี้วัดเชิงคุณภาพ: </label>
+            <div class="col-sm-10">
+              <textarea class="form-control" rows="3" 
+                placeholder="กรอกข้อมูลตัวชี้วัดเชิงคุณภาพ" 
+                ng-model="project.kpiquality"></textarea>
+            </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</span>
+
+<span ng-show="project.ptypeinfo == 'ขออนุมัติโครงการ'">
+  <div class="panel panel-warning">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-xs-6">
+         <strong>ข้อมูลความก้าวหน้า</strong>
+        </div>
+        <div class="col-xs-6 text-right">
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="inputApproval">วันเดือนปีที่ขออนุมัติ(โครงการหลัก): </label>
+          <div class="col-sm-10">
             <input type="text" ng-model="project.date_approval" 
               class="form-control" 
               data-date-format="dd/mm/yyyy" bs-datepicker>
-      </div>
-
-      <div class="control-group">
-      <label class="control-label" for="inputName">เอกสารการขออนุมัติ: </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="ที่อยู่ลิงค์ของเอกสารการขออนุมัติโครงการ" ng-model="project.permitdocument">
-      </div>
-      
-      <div class="control-group">
-        <label class="control-label" for="inputName">วันเดือนปีที่จัด(ล่าสุด): </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="inputPermit">เอกสารการขออนุมัติ: </label>
+          <div class="col-sm-10">
+            <input type="text" id="inputPermit" 
+              class="form-control"
+              placeholder="ที่อยู่ลิงค์ของเอกสารการขออนุมัติโครงการ" ng-model="project.permitdocument">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label  col-sm-2" for="inputName">วันเดือนปีที่จัด(ล่าสุด): </label>
+          <div class="col-sm-10">
             <input type="text" ng-model="project.date_manage" 
               class="form-control" 
               data-date-format="dd/mm/yyyy" bs-datepicker>
-      </div>
+          </div>
+        </div>
       
-      <div class="control-group">
-        <label class="control-label" for="inputName">ถึง วันที่: </label>
+        <div class="form-group">
+          <label class="control-label  col-sm-2" for="inputName">ถึง วันที่: </label>
+          <div class="col-sm-10">
             <input type="text" ng-model="project.end_date_manage" 
               class="form-control" 
               data-date-format="dd/mm/yyyy" bs-datepicker>
-      </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="inputPlace">สถานที่จัดโครงการ: </label>
+          <div class="col-sm-10">
+            <input type="text" id="inputPlace" 
+              class="form-control"
+              placeholder="กรอกสถานที่จัดโครงการ" ng-model="project.place">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</span>
 
-      <span ng-show="project.psub == 'กลุ่ม'">
-      <div class="control-group">
-        <label class="control-label" for="inputName"></label>
-        <a href="#/project/sub/{{project._id}}"><< รายงานผลโครงการ/กิจกรรมย่อย>></a>
+<span ng-show="project.ptypeinfo == 'รายงานผล'">
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-6">
+         <strong>รายงานผลประเมินโครงการ/กิจกรรม</strong>
       </div>
-      </span>
-      <span ng-hide="project.psub == 'กลุ่ม'">
-      <div class="control-group">
-        <label class="control-label" for="inputName">วันเดือนปีที่รายงาน: </label>
-            <input type="text" ng-model="project.date_report" 
-              class="form-control" 
-              data-date-format="dd/mm/yyyy" bs-datepicker>
+      <div class="col-xs-6 text-right">
+
       </div>
-      <div class="control-group">
-      <label class="control-label" for="inputName">สถานที่จัดโครงการ: </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="place" ng-model="project.place">
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputName" >ประเภทของเครื่องมือในการวัดผล: </label>
+    </div>
+  </div>
+  <div class="panel-body">
+    
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="inputName" >เครื่องมือในการวัดผล: </label>
+        <div class="col-sm-10">
           <select id="inputName"
             class="form-control"
             ng-model="project.typeoutput">
             <option ng-selected="project.typeoutput=='แบบประเมินความพึงพอใจ'">แบบประเมินความพึงพอใจ</option>
             <option ng-selected="project.typeoutput=='อื่นๆ'">อื่นๆ</option>
           </select>
-      </div>
- 
-      <span ng-hide="project.typeoutput== 'อื่นๆ'">
-      <div class="control-group">
-        <label class="control-label" for="inputName">เป้าหมายผู้เข้าร่วม(คน): </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="เป้าหมายผู้เข้าร่วมโครงการ" ng-model="project.partytarget">
+        </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label" for="inputName">จำนวนผู้เข้าร่วม(คน): </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="party" ng-model="project.party">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="inputName">วันเดือนปีที่รายงาน: </label>
+        <div class="col-sm-10">
+            <input type="text" ng-model="project.date_report" 
+              class="form-control" 
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+        </div>
       </div>
-
-      <div class="control-group">
-        <label class="control-label" for="inputName">จำนวนผู้ตอบแบบสอบถาม(คน): </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="party" ng-model="project.respon">
-      </div>
-      
-      <div class="control-group">
-        <label class="control-label" for="inputName">ค่าเฉลี่ยของผู้ตอบแบบสอบถาม: </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="percent" 
-            ng-model="project.percent" 
-            value = "{{((project.respon*100)/project.party|number:2).toString()}}">
-      </div>   
-      
-      <div class="control-group">
-        <label class="control-label" for="inputName">ระดับความพึงพอใจ: </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="sd" ng-model="project.sd">
-      </div> 
-      
-      <div class="control-group">
-        <label class="control-label" for="inputName">ร้อยละค่าเฉลี่ย: </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="average" 
-            ng-model="project.average" >
-      </div> 
-      
-      <div class="control-group">
-        <label class="control-label" for="inputName">โหลดข้อมูล: </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="load" ng-model="project.Load"> 
-          <a href="{{project.load}}" ng-show="project.load"> ไฟล์โครงการ</a>          
-      </div> 
-      </span> 
-      
-     
-      <div class="control-group">
-        <label class="control-label"
-          for="inputName">วัตถุประสงค์ของโครงการ: </label>
-          <textarea class="form-control"
-            rows="3" class="form-control"
-            ng-model="project.objectiveinfo"></textarea>
-          <!--
-          <input type="text" id="inputName"
-            class="form-control"
-            placeholder="sd" ng-model="project.objectiveinfo">
-          -->
-      </div>
- 
-      <div class="control-group">
-        <label class="control-label" for="inputName">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="inputName">
           วัตถุประสงค์ของโครงการ(ผลดำเนินการ): </label> 
-          <select id="inputName" placeholder="object" 
-            class="form-control"
+        <div class="col-sm-10">
+          <select id="inputName" placeholder="object" class="form-control"
             ng-model="project.object">
-            <option 
-              ng-selected="project.object=='บรรลุวัตถุประสงค์'">บรรลุวัตถุประสงค์</option>
-            <option 
-              ng-selected="project.object=='ไม่บรรลุวัตถุประสงค์'">ไม่บรรลุวัตถุประสงค์</option>
+            <option ng-selected="project.object=='บรรลุวัตถุประสงค์'">บรรลุวัตถุประสงค์</option>
+            <option ng-selected="project.object=='ไม่บรรลุวัตถุประสงค์'">ไม่บรรลุวัตถุประสงค์</option>
           </select>
+        </div>
       </div>
-      <div class="control-group">
-        <label class="control-label"
-          for="inputName">เป้าหมายของโครงการ: </label>
-          <textarea class="form-control"
-            rows="3" class="form-control"
-            ng-model="project.targetinfo"></textarea>
-          <!--
-          <input type="text" id="inputName"
-            class="form-control"
-            placeholder="sd" ng-model="project.objectiveinfo">
-          -->
-      </div>
-      
-       <div class="control-group">
-        <label class="control-label" for="inputName">เป้าหมายของโครงการ(ผลดำเนินการ): </label> 
+
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="inputName">เป้าหมายของโครงการ(ผลดำเนินการ): </label> 
+        <div class="col-sm-10">
           <select id="inputName" placeholder="goal" 
             class="form-control"
             ng-model="project.goal">
@@ -372,89 +567,139 @@
             <option 
               ng-selected="project.goal=='ไม่บรรลุเป้าหมาย'">ไม่บรรลุเป้าหมาย</option>
           </select>
+        </div>
       </div>   
 
-      <div class="control-group">
-        <label class="control-label" for="inputName">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="inputName">
           ตัวชี้วัดของโครงการ(ผลดำเนินการ): </label> 
+        <div class="col-sm-10">
           <select id="inputName" 
             class="form-control"
             placeholder="kpi" ng-model="project.kpi">
             <option ng-selected="project.kpi=='เป็นไปตามตัวชี้วัด'">เป็นไปตามตัวชี้วัด</option>
             <option ng-selected="project.kpi=='ไม่เป็นไปตามตัวชี้วัด'">ไม่เป็นไปตามตัวชี้วัด</option>
           </select>
+        </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label" for="inputName">ตัวชี้วัดเชิงปริมาณ: </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="กรอกข้อมูลตัวชี้วัดเชิงปริมาณ" ng-model="project.kpiquantity">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="inputName">ประโยชน์ที่ได้รับจากการจัดโครงการ: </label>
+        <div class="col-sm-10">
+          <textarea class="form-control" rows="5"  
+             placeholder="กรอกข้อมูลประโยชน์ที่ได้รับ" 
+             ng-model="project.advantage"></textarea>
+        </div>
       </div> 
 
-      <div class="control-group">
-        <label class="control-label" for="inputName">ตัวชี้วัดเชิงคุณภาพ: </label>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="inputName">อุปสรรค/ปัญหา(ถ้ามี): </label>
+        <div class="col-sm-10">
           <input type="text" id="inputName" 
             class="form-control"
-            placeholder="กรอกข้อมูลตัวชี้วัดเชิงคุณภาพ" ng-model="project.kpiquality">
-      </div> 
-
-      <div class="control-group">
-        <label class="control-label" for="inputName">ประโยชน์ที่ได้รับจากการจัดโครงการ: </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="กรอกข้อมูลประโยชน์ที่ได้รับ" ng-model="project.advantage">
-      </div> 
-      <div class="control-group">
-        <label class="control-label" for="inputName">อุปสรรค/ปัญหา(ถ้ามี): </label>
-          <input type="text" id="inputName" 
-            class="form-control"
-            placeholder="respon" ng-model="project.problem">
+            placeholder="กรอกอุปสรรค/ปัญหา(ถ้ามี)" ng-model="project.problem">
+        </div>
       </div>
-      </span>
-
-      <div class="row">&nbsp;</div>
-      <div class="input-append">
-        <button type="button" class="btn btn-danger " 
-          ng-click="del()" ng-show="project">
-          <i class="icon-remove icon-white"></i> 
-          ลบข้อมูลโครงการ
-        </button>  
-        <button type = "button" 
-          class="btn btn-primary" type="submit" ng-click="save()"> 
-          <i class="icon-ok"></i> บันทึกข้อมูล
-        </button>
-      </div>       
     </form>
   </div>
+</div>
+</span>
 
-  <div class="col-lg-1"> 
-  </div>
-  <div class="col-lg-3"> 
-    <div class="row">
-      <div class="col-lg-12">
-         <p><br></p>
-         <p></p>
-         <p></p>
-         <p></p>
-         <p></p>
+<span ng-show="project.ptypeinfo == 'รายงานผล'">
+  <span ng-hide="project.typeoutput== 'อื่นๆ'">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-xs-6">
+            <strong>รายงานผลประเมินความพึงพอใจ</strong>
+          </div>
+          <div class="col-xs-6 text-right"></div>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12">
-         <p></p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12">
-      <p><span class="label label-primary"> A </span> = กองทุนทั่วไป</p>
-      <p><span class="label label-primary"> B </span> = กองทุนกิจการนิสิต<p>
-      <p><span class="label label-primary"> C </span> = กองทุนวิจัย<p>
-      <p><span class="label label-primary"> D </span> = กองทุนทำนุบำรุงศิลปวัฒนธรรม<p>
-      <p><span class="label label-primary"> E </span> = กองทุนบริการวิชาการ<p>
+      <div class="panel-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="inputName">จำนวนผู้เข้าร่วม(คน): </label>
+            <div class="col-sm-10">
+              <input type="text" id="inputName" 
+                class="form-control"
+                placeholder="กรอกจำนวนผู้เข้าร่วมโครงการจริง" ng-model="project.party">
+            </div>
+          </div>
 
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="inputName">จำนวนผู้ตอบแบบสอบถาม(คน): </label>
+            <div class="col-sm-10">
+              <input type="text" id="inputName" 
+                class="form-control"
+                placeholder="กรอกจำนวนผู้ตอบแบบสอบถาม" ng-model="project.respon">
+            </div>
+          </div>
+      
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="inputName">ค่าเฉลี่ยของผู้ตอบแบบสอบถาม: </label>
+            <div class="col-sm-10">
+              <input type="text" id="inputName" 
+                class="form-control"
+                placeholder="percent" 
+                ng-model="project.percent" 
+                value = "{{((project.respon*100)/project.party|number:2).toString()}}">
+            </div>
+          </div>   
+      
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="inputName">ระดับความพึงพอใจ: </label>
+            <div class="col-sm-10">
+              <input type="text" id="inputName" 
+                class="form-control"
+                placeholder="กรอกระดับความพึงพอใจ" ng-model="project.sd">
+            </div>
+          </div> 
+      
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="inputName">ร้อยละค่าเฉลี่ย: </label>
+            <div class="col-sm-10">
+              <input type="text" id="inputName" 
+                class="form-control"
+                placeholder="average" 
+                ng-model="project.average" >
+            </div>
+          </div> 
+      
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="inputName">ที่อยู่เอกสารรายงานผลโครงการ: </label>
+            <div class="col-sm-10">
+              <input type="text" id="inputName" 
+                class="form-control"
+                 placeholder="http://www.db.grad.nu.ac.th/django/officers/projectassessment/" 
+                 ng-model="project.Load"> 
+              <a href="{{project.load}}" ng-show="project.load"> ไฟล์โครงการ</a>          
+            </div>
+          </div> 
+        </form>
       </div>
     </div>
+  </span> 
+</span> 
+
+<div class="panel panel-default">
+  <div class="panel-footer">
+    <button type="button" class="btn btn-danger "
+          ng-click="del()" ng-show="project">
+          <i class="icon-remove icon-white"></i>
+          ลบข้อมูลโครงการ
+    </button>
+    <button type = "button"
+          class="btn btn-primary" type="submit" ng-click="save()">
+          <i class="icon-ok"></i> บันทึกข้อมูล
+    </button>
   </div>
 </div>
+
+      <!-- /.panel-heading -->
+
+<!--<div class="row" ng-show="user.user">-->
+
+
+<!--<div class="row" ng-show="user.user">-->
 

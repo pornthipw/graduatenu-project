@@ -4,9 +4,9 @@ var nodemailer = require("nodemailer");
 //var mongodb = require('mongodb');
 var _ = require('underscore');
 var passport = require('passport');
-
 //var mongoac = require("mongo-ac");
 var mongo_con = require("mongo-connect");
+
 
 var userdb = require('./user_db');
 var routes = require('./routes');
@@ -14,12 +14,26 @@ var config = require('./config');
 var utils = require('./utils');
 
 var app = express();
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var GOOGLE_CLIENT_ID = config.google.google_client_id;
-var GOOGLE_CLIENT_SECRET = config.google.google_client_secret;
+var OpenIDStrategy = require('passport-openid').Strategy;
+
+//var userprofile = new userdb.userprofile(config.authorization.mongodb);
+/*var userprofile = new userdb.userprofile({
+  host:config.authorization.mongodb.host, 
+  port:config.authorization.mongodb.port,
+  db:config.authorization.mongodb.db,
+  collection_name:config.authorization.mongodb.collection_name
+});*/
 
 var userprofile = new userdb.userprofile(config.authorization.mongodb);
 var mongo = mongo_con.Mongo(config.mongo_connect);
+/*
+var mongo = mongo_con.Mongo({
+  host:'10.10.20.75',
+  //host:'localhost',
+  db:'projectplan'
+});
+*/
+
 
 app.configure(function() {
 	app.use(express.cookieParser('keyboard cat'));
@@ -33,7 +47,7 @@ app.configure(function() {
   	app.set('view engine', 'html');      
   	app.use(express.methodOverride());
   //	app.use(express.cookieSession());
-  	app.use(express.session({secret:'2WTl4fdv5SDA-Oj5MQwpLZ_E'}));
+  	app.use(express.session());
   	app.use(passport.initialize());
   	app.use(passport.session());  	
   	app.use(app.router);
@@ -41,40 +55,33 @@ app.configure(function() {
 console.log(_.range(10));
 
 passport.serializeUser(function(user, done) {
-  console.log("serializing user");
-    console.log(user);
-    userprofile.store(user,function(exists, user){
-      done(null, user.identifier);
-    });
+  console.log("test");
+  userprofile.store(user, function(exists, user) {  
+    done(null, user.identifier);
+  });
 });
 
-passport.deserializeUser(function(identifier, done) {
-  console.log("deserializing user");
-  console.log(identifier);
-    userprofile.retrieve(identifier, function(exists, profile){
-       if(profile) {
-         done(null, profile);
-       } else {
-         done(null, {identifier:identifier});
-       }
-    });
+passport.deserializeUser(function(identifier, done) {  
+  userprofile.retrieve(identifier, function(exists, profile) {  
+    if(profile) {    
+      done(null, profile);
+    } else {
+      done(null, {identifier : identifier});
+    }
+  });
 });
 
-passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: config.site.baseUrl+'auth/google/callback'
-  //enableProof: false,
-
-  },
-  function(accessToken, refreshToken, profile, done) {
-    console.log(profile);
-    process.nextTick(function () {
-      return done(null, {identifier: profile.id, profile:profile});
+passport.use(new OpenIDStrategy({
+  returnURL: config.site.baseUrl+'auth/openid/return',
+  // realm: config.site.baseUrl,
+  realm:'http://www.db.grad.nu.ac.th/', 
+  profile: true}, function(identifier, profile, done) {
+    //console.log(profile);
+    process.nextTick(function () {    
+      	return done(null, {identifier: identifier, profile:profile})
     });
   }
 ));
-
 
 app.get('/sendmail', function(req, res) {  
   console.log("test");
@@ -85,16 +92,20 @@ app.get('/sendmail', function(req, res) {
   var smtpTransport = nodemailer.createTransport("SMTP",{
       service: "Gmail",
       auth: {
-          user: config.mail.account,
-          pass: config.mail.password 
+          user: "pornthip.wong@gmail.com",
+          pass: "yod15963"
+          //user: "graduate.nu@gmail.com",
+          //pass: "g,jolbo1979"
       }
   });
  
   var mailOptions = {
-      from: config.mail.account,
+      //from: "graduate.nu@gmail.com",
+      from: "pornthip.wong@gmail.com",
+      //to: "graduate.nu@gmail.com",
       to: JSON.stringify(new1.email),
       subject:  JSON.stringify(new1.name),
-      text: "ส่งข้อความจากระบบอัตโนมัติ ✔"+ JSON.stringify(new1.message)+"✔ กรุณาคลิก Login ที่ปุ่ม Login With facebook ที่เมนูบนขวามือก่อนด้วยค่ะ" // plaintext body // html: "Name: <b>" + req.query.name + "</b><br>Body: " + req.query.message + "<br>Email:" + req.qyery.email
+      text: "ส่งข้อความจากระบบอัตโนมัติ ✔"+ JSON.stringify(new1.message)+"✔ กรุณาคลิก Login ที่ปุ่ม Login With Google ที่เมนูบนขวามือก่อนด้วยค่ะ" // plaintext body // html: "Name: <b>" + req.query.name + "</b><br>Body: " + req.query.message + "<br>Email:" + req.qyery.email
   }
  
   smtpTransport.sendMail(mailOptions, function(error, response){
@@ -109,31 +120,44 @@ app.get('/sendmail', function(req, res) {
   });
 });
 
-
-app.get('/login', function(req, res){
-  res.render('login', { user: req.user });
+/*
+var smtpTransport = nodemailer.createTransport("SMTP",{
+   service: "Gmail",
+   auth: {
+       user: "mail",
+       pass: "pass"
+   }
 });
 
+var mailOptions = {
+   from: "pornthip.wong@gmail.com", // sender address
+   to: "pornthip.wong@gmail.com", // list of receivers
+   subject: "Hello ✔", // Subject line
+   text: "Hello world ✔" // plaintext body
+}
 
-app.get('/auth/google',
-/*
- passport.authenticate('google', { scope:
-    [ 'https://www.googleapis.com/auth/plus.login',
-      'https://www.googleapis.com/auth/plus.profile.emails.read',
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile'] }
+smtpTransport.sendMail(mailOptions, function(error, response){
+   if(error){
+       console.log(error);
+   }else{
+       console.log("Message sent: " + response.message);
+   }
+});
 */
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }),
-  function(req, res){
-     res.redirect(config.site.baseUrl);
-  });
 
-app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect(config.site.baseUrl);
-  });
 
+app.get('/auth/openid', 
+	passport.authenticate('openid', { failureRedirect: '/login' }),
+  		function(req, res) {
+        console.log('Hello');
+    		res.redirect(config.site.baseUrl);
+});
+  
+app.get('/auth/openid/return', 
+	passport.authenticate('openid', { failureRedirect: '/login' }),
+  		function(req, res) {
+    		res.redirect(config.site.baseUrl);
+});
 
 app.get('/user', function(req, res) {
   console.log('get user');
@@ -142,10 +166,6 @@ app.get('/user', function(req, res) {
   } else {
     res.json({'user':null});
   }
-});
-
-app.get('/account', ensureAuthenticated, function(req, res){
-  res.render('account', { user: req.user });
 });
 
 app.get('/logout', function(req, res){
@@ -177,7 +197,7 @@ app.get('/mongo-ac/users/:user', function(req, res) {
 
 app.get('/', function(req, res) {
   console.log('index ');
-  res.render('index', {user: req.user, baseHref:config.site.baseUrl});
+  res.render('index', {baseHref:config.site.baseUrl});
 });
 
 app.get('/currentdate', function(req, res) {
@@ -191,9 +211,7 @@ app.put('/admin/users/:id', admin_role ,userprofile.update_user);
 
 app.get('/db/:collection/:id?', mongo.query);
 app.post('/db/:collection', admin_role,mongo.insert);
-//app.post('/db/:collection', mongo.insert);
 app.put('/db/:collection/:id', admin_role, mongo.update);
-//app.put('/db/:collection/:id',  mongo.update);
 app.del('/db/:collection/:id', admin_role, mongo.delete);
 
 //app.put('/db/:collection/:id', mongo.update);
@@ -223,11 +241,6 @@ app.use(function(err,req,res,next) {
     }
   }
 });
-
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
-}
 
 
 app.listen(config.site.port || 3000);

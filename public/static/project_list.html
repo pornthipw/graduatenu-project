@@ -8,12 +8,21 @@
         {{project.project.name}} 
      </div>
      -->
-<form class="form-inline" role="form">
+<br>
+
   <div class="form-group alert alert-info">
-       <h4>Total Filtered Project: {{filtered.length}}</h4>
+       <h4>จำนวนโครงการ/กิจกรรมรวม: {{filtered.length}} โครงการ</h4>
+  </div>
+<br>
+<form class="form-inline" role="form">
+  <div class="form-group">
+    <select class="form-control"  id="sel" class="input-block-level" ng-model="list_year" ng-options="obj.name for obj in list_years.data" ng-change="updateYear()">
+        <option value="">กรุณาเลือกปีงบประมาณ</option>
+    </select>
+
   </div>
   <div class="btn-group" data-ng-class="{open: open}">
-     <button class="btn">Filter by Status</button>
+     <button class="btn">กรองตามสถานะการดำเนินการ</button>
      <button class="btn dropdown-toggle" data-ng-click="open=!open"><span class="caret"></span>
      </button>
      <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
@@ -37,7 +46,6 @@
 
     <hr/>
      <h3>ข้อมูลโครงการ/กิจกรรม:</h3>
-
     <table class="table table-hover table-striped">
         <thead>
             <tr>
@@ -70,11 +78,23 @@
                 <td>{{$index + 1}}</td>
                 <td><em><a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}}</a></em></td>
                 <td>
-                   <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/">{{project.financeid}}</a></td>
+                   <a href="http://www.db.grad.nu.ac.th/django/finance/financing/{{project.financeid}}/detial/" target="_blank">{{project.financeid}}</a></td>
 
                 <td>{{project.psub}}</td>
                 <td>{{project.owner}}</td>
-                <td>{{project.status}}</td>
+                <td>  
+                      <div class="col-lg-1">
+                        <span ng-show="project.status=='กำลังดำเนินการ'"
+                          class="label label-warning">P</span>
+                        <span ng-show="project.status=='ยกเลิก'"
+                          class="label label-info">C</span>
+                        <span ng-show="project.status=='ดำเนินการแล้ว'"
+                          class="label label-success">F</span>
+                        <span ng-show="project.status=='ยังไม่ได้ดำเนินการ'"
+                          class="label label-danger">N</span>
+                    </div>
+
+                </td> 
             </tr>
         </tbody>
 

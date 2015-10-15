@@ -1,0 +1,408 @@
+<div class="row-fluid" >
+  <p class="lead">ติดตามโครงการ/กิจกรรม</p>  
+  <blockquote>
+    <p><img style="border: 0px" src="img/icon_message1.jpg" alt="With Twitter">
+      {{project.pid}} : <a href="#/project/finance/info/{{project._id}}/{{project.financeid}}">{{project.name}} </a>
+      <a href="#/project/finance/edit/{{project._id}}/{{project.financeid}}"><span class="glyphicon glyphicon-edit"></span></a>
+      <a href=""  ng-click="createMessage()" ><span class="glyphicon glyphicon-plus"></span></a>   
+    </p>
+    <small>ผู้รับผิดชอบ {{project.owner}} </small>
+    <small>สถานะโครงการ {{project.status}} </small>
+    <small>เอกสารขออนุมัติ<a href="{{project.permitdocument}}" target="_blank"> <span class="glyphicon glyphicon-download"></span> </a></small>
+  </blockquote>  
+<div class="row">
+ <div class="col-lg-12">
+ <div class="row">
+ 
+<!-- <div class="col-lg-5" >-->
+<div class="col-lg-5" ng-show="selectMessage">
+    <legend>โครงการ/กิจกรรม</legend>
+    <form class="form-horizontal" >
+      <div class="control-group">
+      <label class="control-label" for="inputName">ชื่อกิจกรรมย่อย/โครงการย่อย: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="ใส่ ชื่อกิจกรรม/โครงการย่อย" ng-model="subproject.subname">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputType">สถานภาพโครงการ</label>
+          <select id="inputStatus" 
+            class="form-control" 
+            placeholder="Status" ng-model="subproject.substatus">
+            <option ng-selected="subproject.substatus=='ยังไม่ได้ดำเนินการ'">ยังไม่ได้ดำเนินการ</option>
+            <option ng-selected="subproject.substatus=='กำลังดำเนินการ'">กำลังดำเนินการ</option>
+            <option ng-selected="subproject.substatus=='ดำเนินการแล้ว'">ดำเนินการแล้ว</option>
+            <option ng-selected="subproject.substatus=='ยกเลิก'">ยกเลิก</option>
+          </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputName">ผู้รับผิดชอบ: </label>
+          <select id="inputName" placeholder="Owner"
+            class="form-control"
+            ng-model="subproject.subhead" >
+            <option ng-selected="subproject.subhead=='รองคณบดีฝ่ายบริหารและวางแผน'">รองคณบดีฝ่ายบริหารและวางแผน</option>
+            <option ng-selected="subproject.subhead=='รองคณบดีฝ่ายวิชาการ'">รองคณบดีฝ่ายวิชาการ</option>
+            <option ng-selected="subproject.subhead=='รองคณบดีฝ่ายวิจัยและวิเทศสัมพันธ์'">รองคณบดีฝ่ายวิจัยและวิเทศสัมพันธ์</option>
+            <option ng-selected="subproject.subhead=='รองคณบดีฝ่ายพัฒนาและประกันคุณภาพอุดมศึกษา'">รองคณบดีฝ่ายพัฒนาและประกันคุณภาพอุดมศึกษา</option>
+            <option ng-selected="subproject.subhead=='ผู้ช่วยคณบดีบัณฑิตวิทยาลัย'">ผู้ช่วยคณบดีบัณฑิตวิทยาลัย</option>
+            <option ng-selected="subproject.subhead=='หัวหน้าสำนักงานเลขานุการบัณฑิตวิทยาลัย'">หัวหน้าสำนักงานเลขานุการบัณฑิตวิทยาลัย</option>
+            <option ng-selected="subproject.subhead=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
+            <option ng-selected="subproject.subhead=='สินีนาฏ พุ่มสอาด'">สินีนาฏ พุ่มสอาด</option>
+            <option ng-selected="subproject.subhead=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
+          </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputName">ผู้ประสานงาน: </label>
+          <select id="inputName" placeholder="Coordinator"
+            class="form-control"
+            ng-model="subproject.subcoordinator" >
+            <option ng-selected="subproject.subcoordinator=='กนกนกานต์ ยาห้องกาศ'">กนกนกานต์ ยาห้องกาศ</option>
+            <option ng-selected="subproject.subcoordinator=='เกียรติธำรง ตระกูลจันทร์'">เกียรติธำรง ตระกูลจันทร์</option>
+            <option ng-selected="subproject.subcoordinator=='กัลยกร เทียมแก้ว'">กัลยกร เทียมแก้ว</option>
+            <option ng-selected="subproject.subcoordinator=='จันทรรัตน์ เหนียมพ่วง'">จันทรรัตน์ เหนียมพ่วง</option>
+            <option ng-selected="subproject.subcoordinator=='จันนิกา ศรีใส'">จันนิกา ศรีใส</option>
+            <option ng-selected="subproject.subcoordinator=='ญารัชนี หม่องนันท์'">ญารัชนี หม่องนันท์</option>
+            <option ng-selected="subproject.subcoordinator=='ณิชาภา ฟักทอง'">ณิชาภา ฟักทอง</option>
+            <option ng-selected="subproject.subcoordinator=='ตรีรัส ดิเรกพิทักษ์'">ตรีรัส ดิเรกพิทักษ์</option>
+            <option ng-selected="subproject.subcoordinator=='ทวีทรัพย์ สุนันตา'">ทวีทรัพย์ สุนันตา</option>
+            <option ng-selected="subproject.subcoordinator=='ธราภรณ์ ธีรภาพวิเศษพงษ์'">ธราภรณ์ ธีรภาพวิเศษพงษ์</option>
+            <option ng-selected="subproject.subcoordinator=='ธิติมา สุบิน'">ธิติมา สุบิน</option>
+            <option ng-selected="subproject.subcoordinator=='นวิพรรณ ตันติพลาผล'">นวิพรรณ ตันติพลาผล</option>
+            <option ng-selected="subproject.subcoordinator=='ปาริชาติ พุ่มชม'">ปาริชาติ พุ่มชม</option>
+            <option ng-selected="subproject.subcoordinator=='ปุณยนุช ภัทรมล'">ปุณยนุช ภัทรมล</option>
+            <option ng-selected="subproject.subcoordinator=='พัฒน์ศักดิ์ กระต่ายน้อย'">พัฒน์ศักดิ์ กระต่ายน้อย</option>
+            <option ng-selected="subproject.subcoordinator=='พิมพ์พาภรณ์ ดวงสาโรจน์'">พิมพ์พาภรณ์ ดวงสาโรจน์</option>
+            <option ng-selected="subproject.subcoordinator=='พรทิพย์ เม่นสิน'">พรทิพย์ เม่นสิน</option>
+            <option ng-selected="subproject.subcoordinator=='ภัคคีณี เทิดสิทธิกุล'">ภัคคีณี เทิดสิทธิกุล</option>
+            <option ng-selected="subproject.subcoordinator=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
+            <option ng-selected="subproject.subcoordinator=='สรญา แสงเย็นพันธ์'">สรญา แสงเย็นพันธ์</option>
+            <option ng-selected="subproject.subcoordinator=='สายพิณ เม่นเกิด'">สายพิณ เม่นเกิด</option>
+            <option ng-selected="subproject.subcoordinator=='สินีนาฏ พุ่มสอาด'">สินีนาฏ พุ่มสอาด</option>
+            <option ng-selected="subproject.subcoordinator=='สุทธิพจน์ ดวงสาโรจน์'">สุทธิพจน์ ดวงสาโรจน์</option>
+            <option ng-selected="subproject.subcoordinator=='อนงค์ มีอาชา'">อนงค์ มีอาชา</option>
+            <option ng-selected="subproject.subcoordinator=='อรอุษา บำรุงไทย'">อรอุษา บำรุงไทย</option>
+            <option ng-selected="subproject.subcoordinator=='อัจจิมา มวลประสิทธิ์พร'">อัจจิมา มวลประสิทธิ์พร</option>
+            <option ng-selected="subproject.subcoordinator=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
+          </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputName">ผู้รายงาน: </label>
+          <select id="inputName" placeholder="Reportor"
+            class="form-control"
+            ng-model="subproject.subreportor">
+            <option ng-selected="subproject.subreportor=='กนกนกานต์ ยาห้องกาศ'">กนกนกานต์ ยาห้องกาศ</option>
+            <option ng-selected="subproject.subreportor=='เกียรติธำรง ตระกูลจันทร์'">เกียรติธำรง ตระกูลจันทร์</option>
+            <option ng-selected="subproject.subreportor=='กัลยกร เทียมแก้ว'">กัลยกร เทียมแก้ว</option>
+            <option ng-selected="subproject.subreportor=='จันทรรัตน์ เหนียมพ่วง'">จันทรรัตน์ เหนียมพ่วง</option>
+            <option ng-selected="subproject.subreportor=='จันนิกา ศรีใส'">จันนิกา ศรีใส</option>
+            <option ng-selected="subproject.subreportor=='ญารัชนี หม่องนันท์'">ญารัชนี หม่องนันท์</option>
+            <option ng-selected="subproject.subreportor=='ณิชาภา ฟักทอง'">ณิชาภา ฟักทอง</option>
+            <option ng-selected="subproject.subreportor=='ตรีรัส ดิเรกพิทักษ์'">ตรีรัส ดิเรกพิทักษ์</option>
+            <option ng-selected="subproject.subreportor=='ทวีทรัพย์ สุนันตา'">ทวีทรัพย์ สุนันตา</option>
+            <option ng-selected="subproject.subreportor=='ธราภรณ์ ธีรภาพวิเศษพงษ์'">ธราภรณ์ ธีรภาพวิเศษพงษ์</option>
+            <option ng-selected="subproject.subreportor=='ธิติมา สุบิน'">ธิติมา สุบิน</option>
+            <option ng-selected="subproject.subreportor=='นวิพรรณ ตันติพลาผล'">นวิพรรณ ตันติพลาผล</option>
+            <option ng-selected="subproject.subeportor=='ปาริชาติ พุ่มชม'">ปาริชาติ พุ่มชม</option>
+            <option ng-selected="subproject.subreportor=='ปุณยนุช ภัทรมล'">ปุณยนุช ภัทรมล</option>
+            <option ng-selected="subproject.subreportor=='พัฒน์ศักดิ์ กระต่ายน้อย'">พัฒน์ศักดิ์ กระต่ายน้อย</option>
+            <option ng-selected="subproject.subreportor=='พิมพ์พาภรณ์ ดวงสาโรจน์'">พิมพ์พาภรณ์ ดวงสาโรจน์</option>
+            <option ng-selected="subproject.subcoordinator=='พรทิพย์ เม่นสิน'">พรทิพย์ เม่นสิน</option>
+            <option ng-selected="subproject.subreportor=='ภัคคีณี เทิดสิทธิกุล'">ภัคคีณี เทิดสิทธิกุล</option>
+            <option ng-selected="subproject.subreportor=='ศุทธภา นันทพฤษา'">ศุทธภา นันทพฤษา</option>
+            <option ng-selected="subproject.subreportor=='สรญา แสงเย็นพันธ์'">สรญา แสงเย็นพันธ์</option>
+            <option ng-selected="subproject.subreportor=='สายพิณ เม่นเกิด'">สายพิณ เม่นเกิด</option>
+            <option ng-selected="subproject.subreportor=='สินีนาฎ พุ่มสอาด'">สินีนาฎ พุ่มสอาด</option>
+            <option ng-selected="subproject.subreportor=='สุทธิพจน์ ดวงสาโรจน์'">สุทธิพจน์ ดวงสาโรจน์</option>
+            <option ng-selected="subproject.subreportor=='อนงค์ มีอาชา'">อนงค์ มีอาชา</option>
+            <option ng-selected="subproject.subreportor=='อรอุษา บำรุงไทย'">อรอุษา บำรุงไทย</option>
+            <option ng-selected="subproject.subreportor=='อัจจิมา มวลประสิทธิ์พร'">อัจจิมา มวลประสิทธิ์พร</option>
+            <option ng-selected="subproject.subreportor=='อัจฉรา อ่อนเส็ง'">อัจฉรา อ่อนเส็ง</option>
+          </select>
+      </div>
+
+
+      <div class="control-group">
+      <label class="control-label" for="inputName">Email ผู้ติดต่อ: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="ใส่ Email ผู้ติดต่อ" ng-model="subproject.contactmail">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">วันเดือนปีที่ขออนุมัติ: </label>
+            <input type="text" ng-model="subproject.date_approval"
+              class="form-control"
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+
+      <div class="control-group">
+      <label class="control-label" for="inputName">เอกสารการขออนุมัติ: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="ที่อยู่ลิงค์ของเอกสารการขออนุมัติโครงการ" ng-model="subproject.permitdocument">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">วันเดือนปีที่จัด: </label>
+            <input type="text" ng-model="subproject.date_manage"
+              class="form-control"
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+  <div class="control-group">
+        <label class="control-label" for="inputName">ถึง วันที่: </label>
+            <input type="text" ng-model="subproject.end_date_manage"
+              class="form-control"
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputName">วันเดือนปีที่รายงานผล: </label>
+            <input type="text" ng-model="subproject.date_report"
+              class="form-control"
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+      </div>
+
+      <div class="control-group">
+      <label class="control-label" for="inputName">สถานที่: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="place" ng-model="subproject.place">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">เป้าหมายผู้เข้าร่วม: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="เป้าหมายผู้เข้าร่วมโครงการ" ng-model="subproject.partytarget">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">จำนวนผู้เข้าร่วม: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="party" ng-model="subproject.party">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">จำนวนผู้ตอบแบบสอบถาม: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="respon" ng-model="subproject.respon">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">ค่าเฉลี่ยของผู้ตอบแบบสอบถาม: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="percent"
+            ng-model="subproject.percent"
+            value = "{{((subproject.respon*100)/subproject.party|number:2).toString()}}">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">ระดับความพึงพอใจ: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="sd" ng-model="subproject.sd">
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputName">ร้อยละค่าเฉลี่ย: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="average"
+            ng-model="subproject.average" >
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">โหลดข้อมูล: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="load" ng-model="subproject.Load">
+          <a href="{{project.load}}" ng-show="project.load"> ไฟล์โครงการ</a>
+      </div>
+      <div class="control-group">
+        <label class="control-label"
+          for="inputName">วัตถุประสงค์ของโครงการ: </label>
+          <textarea class="form-control"
+            rows="3" class="form-control"
+            ng-model="subproject.objectiveinfo"></textarea>
+          <!--
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="sd" ng-model="project.objectiveinfo">
+          -->
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">
+          วัตถุประสงค์ของโครงการ(ผลดำเนินการ): </label>
+          <select id="inputName" placeholder="object"
+            class="form-control"
+            ng-model="subproject.object">
+            <option
+              ng-selected="subproject.object=='บรรลุวัตถุประสงค์'">บรรลุวัตถุประสงค์</option>
+            <option
+              ng-selected="subproject.object=='ไม่บรรลุวัตถุประสงค์'">ไม่บรรลุวัตถุประสงค์</option>
+          </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label"
+          for="inputName">เป้าหมายของโครงการ: </label>
+          <textarea class="form-control"
+            rows="3" class="form-control"
+            ng-model="subproject.targetinfo"></textarea>
+          <!--
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="sd" ng-model="project.objectiveinfo">
+          -->
+      </div>
+
+       <div class="control-group">
+        <label class="control-label" for="inputName">เป้าหมายของโครงการ(ผลดำเนินการ): </label>
+          <select id="inputName" placeholder="goal"
+            class="form-control"
+            ng-model="subproject.goal">
+            <option
+              ng-selected="subproject.goal=='บรรลุเป้าหมาย'">บรรลุเป้าหมาย</option>
+            <option
+              ng-selected="subproject.goal=='ไม่บรรลุเป้าหมาย'">ไม่บรรลุเป้าหมาย</option>
+          </select>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">
+          ตัวชี้วัดของโครงการ(ผลดำเนินการ): </label>
+          <select id="inputName"
+            class="form-control"
+            placeholder="kpi" ng-model="subproject.kpi">
+            <option ng-selected="subproject.kpi=='เป็นไปตามตัวชี้วัด'">เป็นไปตามตัวชี้วัด</option>
+            <option ng-selected="subproject.kpi=='ไม่เป็นไปตามตัวชี้วัด'">ไม่เป็นไปตามตัวชี้วัด</option>
+          </select>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputName">ตัวชี้วัดเชิงปริมาณ: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="กรอกข้อมูลตัวชี้วัดเชิงปริมาณ" ng-model="subproject.kpiquantity">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">ตัวชี้วัดเชิงคุณภาพ: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="กรอกข้อมูลตัวชี้วัดเชิงคุณภาพ" ng-model="subproject.kpiquality">
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="inputName">ประโยชน์ที่ได้รับจากการจัดโครงการ: </label>
+          <input type="text" id="inputName"
+            class="form-control"
+            placeholder="กรอกข้อมูลประโยชน์ที่ได้รับ" ng-model="subproject.advantage">
+      </div>
+
+      <div class="row">&nbsp;</div>
+      <div class="input-append">
+        <button type="button" class="btn btn-danger "
+          ng-click="del()" ng-show="project">
+          <i class="icon-remove icon-white"></i>
+          ลบข้อมูลโครงการ
+        </button>
+        <button type = "button"
+          class="btn btn-primary" type="submit" ng-click="subProjectSave()">
+          <i class="icon-ok"></i> บันทึกข้อมูล
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="col-lg-5">
+        <table class="table table-condensed table-bordered" >
+          <tr>
+              <th >ชื่อโครงการ/กิจกรรมย่อย</th>
+              <th >วันที่ขออนุมัติ</th>
+              <th >วันที่จัด</th>
+              <th>สถานะ</th>
+          </tr>
+          <tr ng-repeat="message in subproject_list" ng-show="message.project_id==project._id">
+            <td><a href="" ng-click="editField(message._id)">{{message.subname}}</a>
+
+          <a href="" ng-click="remove_message(message._id)"><span class="glyphicon glyphicon-remove-circle"></span></a>     
+            </td>
+            <td>{{message.date_approval}}</td>
+            <td>{{message.date_manage}}</td>
+            <td>{{message.substatus}}</td>
+            <!--<td ng-show="user.user"> 
+            <td > 
+              <a href="" ng-click="editField(message._id)">
+                <i class="icon-edit"></i>
+              </a> 
+              <a href="" ng-click="remove_message(message._id)">
+                <i class="icon-remove"></i>
+              </a>
+            </td>
+            -->
+          </tr>
+        </table>
+  </div>
+ </div>
+</div>
+</div>
+</div>
+
+
+ <!------ 
+  <div class="span12">  
+    <div class="row-fluid">
+      <div class="span6" >
+      </div>
+      <div class="span6" ng-show="selectMessage">
+        <div class="row-fluid">
+          <div class="span12">
+            <div class="tabbable"> 
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab1" data-toggle="tab">ผลการดำเนินงาน</a></li>
+                <li><a href="#tab2" data-toggle="tab">รายละเอียดโครงการ</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active"   id="tab1">
+                  <fieldset>
+                    <legend>ผลการดำเนินงาน</legend>
+                    
+                    <label>วันที่: </label>
+                    <div class="input-append" >
+                      <input type="text" ng-model="message.date_record" 
+                        data-date-format="dd/mm/yyyy" bs-datepicker>
+                      <button type="button" class="btn" data-toggle="datepicker">
+                        <i class="icon-calendar"></i>
+                      </button>
+                    </div>
+                    
+                    <label>ผลการดำเนินงาน : </label>
+                    <div ng-model="message.task_name" mode="text"  codemirror="text">
+                      <textarea></textarea>
+                    </div>  
+                    
+                    <span class="pull-left ">  
+                      <a href="" ng-click="messageSave()" class="btn btn-primary" 
+                        ng-show="selectMessage"> <i class="icon-ok icon-white">
+                        </i> Save 
+                      </a>  
+                      <a href="" class="btn" ng-click="createMessage()" >
+                        <i class="icon-plus"></i> New Message
+                      </a>      
+                    </span>  
+                  </fieldset> 
+                </div>
+                <div class="tab-pane"   id="tab2">
+                  <div ng-include src="views.project_form"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+  </div>
+</div>
+    
+-->

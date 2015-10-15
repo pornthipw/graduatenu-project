@@ -8,15 +8,20 @@ var passport = require('passport');
 //var mongoac = require("mongo-ac");
 var mongo_con = require("mongo-connect");
 
+
 var userdb = require('./user_db');
 var routes = require('./routes');
 var config = require('./config');
 var utils = require('./utils');
 
 var app = express();
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var GOOGLE_CLIENT_ID = config.google.google_client_id;
-var GOOGLE_CLIENT_SECRET = config.google.google_client_secret;
+//var OpenIDStrategy = require('passport-openid').Strategy;
+//var GoogleStrategy = require('passport-google').Strategy;
+//var GoogleStrategy = require('passport-google-oauth2').Strategy;
+//var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy
+EBOOK_APP_ID = "483999221780646"
+var FACEBOOK_APP_SECRET = "c247625b323b9fd0ebf6d09b45ab389d";
 
 var userprofile = new userdb.userprofile(config.authorization.mongodb);
 var mongo = mongo_con.Mongo(config.mongo_connect);
@@ -42,39 +47,62 @@ console.log(_.range(10));
 
 passport.serializeUser(function(user, done) {
   console.log("serializing user");
-    console.log(user);
-    userprofile.store(user,function(exists, user){
-      done(null, user.identifier);
-    });
+    //callback(null, user.id);
+    //done(null, user.id);
+    done(null, user);
 });
 
-passport.deserializeUser(function(identifier, done) {
+passport.deserializeUser(function(id, done) {
+  //User.findById(id, function(err, user){
   console.log("deserializing user");
-  console.log(identifier);
-    userprofile.retrieve(identifier, function(exists, profile){
-       if(profile) {
-         done(null, profile);
-       } else {
-         done(null, {identifier:identifier});
-       }
-    });
+    //callback(null, user.id);
+    //done(null, user);
+    done(null, id);
+  });
 });
+
 
 passport.use(new GoogleStrategy({
-  clientID: GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: config.site.baseUrl+'auth/google/callback'
-  //enableProof: false,
 
-  },
-  function(accessToken, refreshToken, profile, done) {
-    console.log(profile);
-    process.nextTick(function () {
-      return done(null, {identifier: profile.id, profile:profile});
+ //authorizationURL: config.site.baseUrl+'oauth2/authorize',
+ //tokenURL: config.site.baseUrl+'oauth2/token',
+ //authorizationURL: 'https://accounts.google.com/o/oauth2/authorize',
+ //tokenURL: 'https://accounts.google.com/o/oaumth2/token',
+  clientID: '727475478893-qehat46tu5tfrsi38mua7flrdkd6s0jm.apps.googleusercontent.com',
+  clientSecret: '2WTl4fdv5SDA-Oj5MQwpLZ_E',
+  //callbackURL: 'http://www.db.grad.nu.ac.th/apps/grad-project/auth/google/callback',
+  //callbackURL: config.site.baseUrl+'auth/google/callback',
+  passReqToCallback : true
+
+  }, 
+   function(token, refreshToken, profile, done) {
+    process.nextTrick(function(){
+      User.findOne({ 'googleId': profile.id }, function (err, user) {
+     //process.nextTick(function () {
+       if (err) 
+          return done(err);
+       if (user){
+           return done(null, user);
+       } else {
+         var newUser          = new User();
+
+                    // set all of the relevant information
+                    newUser.google.id    = profile.id;
+                    newUser.google.token = token;
+                    newUser.google.name  = profile.displayName;
+                    newUser.google.email = profile.emails[0].value; // pull the first email
+
+                    // save the user
+                    newUser.save(function(err) {
+                        if (err)
+                            throw err;
+                        return done(null, newUser);
+                     });
+        }
+
     });
-  }
-));
-
+  });
+}));
 
 app.get('/sendmail', function(req, res) {  
   console.log("test");
@@ -85,16 +113,20 @@ app.get('/sendmail', function(req, res) {
   var smtpTransport = nodemailer.createTransport("SMTP",{
       service: "Gmail",
       auth: {
-          user: config.mail.account,
-          pass: config.mail.password 
+          user: "pornthip.wong@gmail.com",
+          pass: "yod15963"
+          //user: "graduate.nu@gmail.com",
+          //pass: "g,jolbo1979"
       }
   });
  
   var mailOptions = {
-      from: config.mail.account,
+      //from: "graduate.nu@gmail.com",
+      from: "pornthip.wong@gmail.com",
+      //to: "graduate.nu@gmail.com",
       to: JSON.stringify(new1.email),
       subject:  JSON.stringify(new1.name),
-      text: "ส่งข้อความจากระบบอัตโนมัติ ✔"+ JSON.stringify(new1.message)+"✔ กรุณาคลิก Login ที่ปุ่ม Login With facebook ที่เมนูบนขวามือก่อนด้วยค่ะ" // plaintext body // html: "Name: <b>" + req.query.name + "</b><br>Body: " + req.query.message + "<br>Email:" + req.qyery.email
+      text: "ส่งข้อความจากระบบอัตโนมัติ ✔"+ JSON.stringify(new1.message)+"✔ กรุณาคลิก Login ที่ปุ่ม Login With Google ที่เมนูบนขวามือก่อนด้วยค่ะ" // plaintext body // html: "Name: <b>" + req.query.name + "</b><br>Body: " + req.query.message + "<br>Email:" + req.qyery.email
   }
  
   smtpTransport.sendMail(mailOptions, function(error, response){
@@ -110,33 +142,22 @@ app.get('/sendmail', function(req, res) {
 });
 
 
-app.get('/login', function(req, res){
-  res.render('login', { user: req.user });
-});
-
-
 app.get('/auth/google',
-/*
- passport.authenticate('google', { scope:
+  passport.authenticate('google', { scope: 
     [ 'https://www.googleapis.com/auth/plus.login',
       'https://www.googleapis.com/auth/plus.profile.emails.read',
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile'] }
-*/
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }),
-  function(req, res){
-     res.redirect(config.site.baseUrl);
-  });
+));
 
-app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect(config.site.baseUrl);
-  });
-
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { 
+    successRedirect : '/profile',
+    failureRedirect: '/login'})
+);
 
 app.get('/user', function(req, res) {
-  console.log('get user');
+  console.log('get user-------');
   if(req.user) {
     res.json({'user':req.user});
   } else {
@@ -190,10 +211,10 @@ app.get('/admin/users/:id', admin_role ,userprofile.get_user);
 app.put('/admin/users/:id', admin_role ,userprofile.update_user);
 
 app.get('/db/:collection/:id?', mongo.query);
-app.post('/db/:collection', admin_role,mongo.insert);
-//app.post('/db/:collection', mongo.insert);
-app.put('/db/:collection/:id', admin_role, mongo.update);
-//app.put('/db/:collection/:id',  mongo.update);
+//app.post('/db/:collection', admin_role,mongo.insert);
+app.post('/db/:collection', mongo.insert);
+//app.put('/db/:collection/:id', admin_role, mongo.update);
+app.put('/db/:collection/:id',  mongo.update);
 app.del('/db/:collection/:id', admin_role, mongo.delete);
 
 //app.put('/db/:collection/:id', mongo.update);

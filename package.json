@@ -6,11 +6,10 @@
     "express" : "*",
     "hbs" : "*",
     "underscore" : "*",
+    "passport" : "*",
     "mongodb" : "*",
     "underscore" : "*",
     "mongo-ac" : "*",
-    "passport" : "*",
-    "passport-openid":"*",
     "generic-pool":"*",
     "mongo-connect":"*",
     "nodemailer": "0.3.29"

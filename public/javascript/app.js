@@ -51,7 +51,7 @@ app.config(function($routeProvider) {
   });   
   
   $routeProvider.when('/project/list/:year', {
-    controller:ProjectListController, 
+    controller:ProjectSearchController, 
     templateUrl:'static/project_list.html'
   });
 
@@ -65,7 +65,7 @@ app.config(function($routeProvider) {
     templateUrl:'static/project_finance_form.html'
   });    
 
-  $routeProvider.when('/project/finance/list/:id', {
+  $routeProvider.when('/project/finance/list', {
     controller:ProjectFinanceListController, 
     templateUrl:'static/project_finance_list.html'
   });
@@ -111,6 +111,11 @@ app.config(function($routeProvider) {
     templateUrl:'static/project_list_warning.html'
   });   
 
+  $routeProvider.when('/projects/period/:year', {
+    controller:ProjectPeriodController, 
+    templateUrl:'static/project_period.html'
+  });   
+
   $routeProvider.when('/projects/:year', {
     controller:ProjectListByYearController, 
     templateUrl:'static/project_main.html'
@@ -126,7 +131,7 @@ app.config(function($routeProvider) {
     templateUrl:'static/project_status.html'
   });   
 
-  $routeProvider.when('/task/create/:year', {
+  $routeProvider.when('/task/create', {
     controller:CreateTaskByProjectController,  
     templateUrl:'static/task_create.html'
   }); 
@@ -144,127 +149,1074 @@ app.config(function($routeProvider) {
 });
 
 function UserCtrl($scope, User, Logout) {
+  var orig;
+  var role1;
   $scope.user = User.get(function(res) {
-    console.log(res);
+    //console.log(res);
+    if(res.user!=null){
+    var ng_role = [];
+    orig = res.user;
+      if(orig['role']) { 
+        angular.forEach(orig.role, function(value, idx) {
+          ng_role.push({'name':value});
+        });
+      }
+      $scope.user['role'] = ng_role; 
+      role1 = ng_role; 
+      $scope.role = role1.name; 
+      //console.log(role1.name);
+      //console.log($scope.role);
+      
+    }
   });
   
   $scope.logout = function(){
     Logout.get(function(response){
       if(response.success){
         $scope.user = null;
+        $scope.role = null;
         $scope.$broadcast('logout');
       }
     });
   };
 }
 
-function MainController($scope, $filter, GradDB, User,Project ) {   
+function MainController($scope, $filter, GradDB, Logout, User,Project ) {   
+ $scope.user = User.get(function(response) {
+   if (!response.user) {
+      // self.messageAlert("You are not authorized to update content");
+   } else {
+     var year = '2559';
+     console.log($scope.user);
+     if($scope.user.user.role[0]=='plan'){
+       var query = '{"type":"post_project","owner":"งานแผนและสารสนเทศ","year":"'+year+'"}';
+     } else {
+       if($scope.user.user.role[0]=='academic'){
+         var query = '{"type":"post_project","owner":"งานวิชาการ","year":"'+year+'"}';
+       } else {
+         if($scope.user.user.role[0]=='research'){
+           var query = '{"type":"post_project","owner":"งานวิจัยและวิเทศสัมพันธ์","year":"'+year+'"}';
+         } else {
+           if($scope.user.user.role[0]=='press'){
+             var query = '{"type":"post_project","owner":"สำนักพิมพ์มหาวิทยาลัยนเรศวร","year":"'+year+'"}';
+           } else {
+             if($scope.user.user.role[0]=='direct'){
+               var query = '{"type":"post_project","owner":"งานอำนวยการ","year":"'+year+'"}';
+
+             } else {
+               var query = '{"type":"post_project","year":"'+year+'"}';
+             }
+           } 
+         }
+       }
+     }
+     $scope.project_list = Project.query({query:query}, function(res) {
+       //console.log(res);
+     });
+     //test 
+     Project.query({query:'{"type":"post_project","year":"'+year+'"}'}, 
+      function(project_list) {    
+        var dict = {};
+
+        angular.forEach(project_list, function(project) {
+         //console.log(project);
+          if(!(year in dict)){
+            dict[year] = {'projectname':[],'name':{}};
+          } 
+          
+          if(!(project.name in dict[year]['projectname'])){
+            dict[year]['projectname'].push(project.name);
+          }
+          if(!(project.name in dict[year]['name'])){
+            dict[year]['name'][project.name]=project.name;
+          }
+
+        });
+        var result=[];
+        angular.forEach(dict, function(value, idx) {
+          result.push({'year':idx,'project':value});
+        });
+        console.log(result[0]);
+        var c = result[0].project.projectname;
+
+        $(function () {
+           // Define tasks
+/*
+*/
+
+       if($scope.user.user.role[0]=='plan'){
+           
+	   //var c = 'container';
+           var m = 5;
+           var b = ["โครงการประชาสัมพันธ์บัณฑิตศึกษา",
+                 "โครงการติดตามคุณภาพนิสิตระดับบัณฑิตศึกษา",
+                 "โครงการสนับสนุนการผลิตสื่อการสอนในรูปแบบสื่ออิเล็กทรอนิกส์ระดับบัณฑิตศึกษา",
+                 "โครงการสนับสนุนการจัดประชุมวิชาการ",
+                 "โครงการจัดการความรู้ (KM)",
+                 "โครงการประกันคุณภาพการศึกษา"]
+
+            var tasks = [
+             {
+                name: "โครงการประกันคุณภาพการศึกษา",
+                intervals: [{ // From-To pairs
+                    from: Date.UTC(2016,08, 1),
+                    to: Date.UTC(2016, 08, 30),
+                    label: "โครงการประกันคุณภาพการศึกษา",
+                    tooltip_data: 'this data'
+                }]
+             },{
+                name: "โครงการจัดการความรู้ (KM)",
+                intervals: [{ // From-To pairs
+                    from: Date.UTC(2016,04, 1),
+                    to: Date.UTC(2016, 04, 31),
+                    label: "โครงการจัดการความรู้ (KM)",
+                    tooltip_data: 'this data'
+                }]
+             },{
+                name: "โครงการสนับสนุนการจัดประชุมวิชาการ",
+                intervals: [{ // From-To pairs
+                    from: Date.UTC(2015,09, 1),
+                    to: Date.UTC(2016, 08, 30),
+                    label: "โครงการสนับสนุนการจัดประชุมวิชาการ",
+                    tooltip_data: 'this data'
+                }]
+             },{
+                name: "โครงการสนับสนุนการผลิตสื่อการสอนในรูปแบบสื่ออิเล็กทรอนิกส์ระดับบัณฑิตศึกษา",
+                intervals: [{ // From-To pairs
+                    from: Date.UTC(2015,09, 1),
+                    to: Date.UTC(2016, 06, 31),
+                    label: "โครงการสนับสนุนการผลิตสื่อการสอนในรูปแบบสื่ออิเล็กทรอนิกส์ระดับบัณฑิตศึกษา",
+                    tooltip_data: 'this data'
+                }]
+             },{
+                name: "โครงการติดตามคุณภาพนิสิตระดับบัณฑิตศึกษา",
+                intervals: [{ // From-To pairs
+                    from: Date.UTC(2015,09, 1),
+                    to: Date.UTC(2016, 08, 30),
+                    label: "โครงการติดตามคุณภาพนิสิตระดับบัณฑิตศึกษา",
+                    tooltip_data: 'this data'
+                }]
+             },{
+                name: "โครงการประชาสัมพันธ์บัณฑิตศึกษา",
+                intervals: [{ // From-To pairs
+                    from: Date.UTC(2016,06, 1),
+                    to: Date.UTC(2016, 06, 31),
+                    label: "โครงการประชาสัมพันธ์บัณฑิตศึกษา",
+                    tooltip_data: 'this data'
+                }]
+             }
+            ];
+       } else {
+
+           if($scope.user.user.role[0]=='academic' ){
+	       //var c = 'container1';
+               var m = 4;
+               var b =[ "โครงการสัมมนานิสิตบัณฑิตศึกษา",
+                        "โครงการสัมมนาคณาจารย์บัณฑิตศึกษา",
+                        "โครงการติดตามสถานภาพนิสิตบัณฑิตศึกษา",
+                        "โครงการอบรมจริยธรรมการวิจัยระดับบัณฑิตศึกษา",
+                        "โครงการสอบประมวลความรู้นิสิตปริญญาโท แผน ข"]
+
+               var tasks = [
+                   {
+                       name: "โครงการสอบประมวลความรู้นิสิตปริญญาโท แผน ข",
+                       intervals: [{ // From-To pairs
+                           from: Date.UTC(2015,09, 1),
+                           to: Date.UTC(2016, 09, 30),
+                           label: "โครงการสอบประมวลความรู้นิสิตปริญญาโท แผน ข",
+                           tooltip_data: 'this data'
+                       }]
+                    },{
+                       name: "โครงการอบรมจริยธรรมการวิจัยระดับบัณฑิตศึกษา",
+                       intervals: [{ // From-To pairs
+                           from: Date.UTC(2015,09, 1),
+                           to: Date.UTC(2015, 09, 31),
+                           label: "ระยะที่ 1",
+                           tooltip_data: 'this data'
+                       },{ // From-To pairs
+                           from: Date.UTC(2016,02, 1),
+                           to: Date.UTC(2016, 02, 31),
+                           label: "ระยะที่ 2",
+                           tooltip_data: 'this data'
+                       },{ // From-To pairs
+                           from: Date.UTC(2016,05, 1),
+                           to: Date.UTC(2016, 05, 30),
+                           label: "ระยะที่ 3",
+                           tooltip_data: 'this data'
+                       }]
+                    },{
+                       name: "โครงการติดตามสถานภาพนิสิตบัณฑิตศึกษา",
+                       intervals: [{ // From-To pairs
+                           from: Date.UTC(2016,01, 1),
+                           to: Date.UTC(2016, 01, 29),
+                           label: "โครงการติดตามสถานภาพนิสิตบัณฑิตศึกษา",
+                           tooltip_data: 'this data'
+                       }]
+                    },{
+                       name: "โครงการสัมมนาคณาจารย์บัณฑิตศึกษา",
+                       intervals: [{ // From-To pairs
+                           from: Date.UTC(2015,10, 1),
+                           to: Date.UTC(2015, 10, 30),
+                           label: "โครงการสัมมนาคณาจารย์บัณฑิตศึกษา",
+                           tooltip_data: 'this data'
+                       }]
+                    },{
+                       name: "โครงการสัมมนานิสิตบัณฑิตศึกษา",
+                       intervals: [{ // From-To pairs
+                           from: Date.UTC(2016,02, 1),
+                           to: Date.UTC(2016, 02, 31),
+                           label: "โครงการสัมมนานิสิตบัณฑิตศึกษา",
+                           tooltip_data: 'this data'
+                       }]
+                    }
+                   ];
+           } else {
+        //} 
+               if($scope.user.user.role[0]=='direct' ){
+	           //var c = 'container2';
+                   var m = 10;
+                   var b =[ "โครงการประชุมวิชาการเสนอผลงานวิจัยระดับบัณฑิตศึกษาแห่งชาติ ครั้งที่ 38",
+                            "โครงการพัฒนาสุนทรียภาพทางวัฒนธรรม",
+                            "โครงการสืบสานวัฒนธรรม",
+                            "โครงการส่งเสริมกิจกรรมสโมสรนิสิตบัณฑิตศึกษา",
+                            "โครงการปฐมนิเทศระดับบัณฑิตศึกษา (ครู อาจารย์ประจำการ)",
+                            "โครงการปฐมนิเทศระดับบัณฑิตศึกษา",
+                            "โครงการพัฒนาองค์กร",
+                            "โครงการพัฒนาสมรรถนะด้านการสื่อสารภาษาอังกฤษของบุคลากร",
+                            "โครงการเสริมสร้างสุขภาพบุคลากร",
+                            "โครงการศึกษาดูงานและพัฒนาทักษะของผู้บริหารในการจัดการศึกษาระดับบัณฑิตศึกษา"]
+                    var tasks = [
+                        {
+                            name: "โครงการศึกษาดูงานและพัฒนาทักษะของผู้บริหารในการจัดการศึกษาระดับบัณฑิตศึกษา",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2015,12, 1),
+                                to: Date.UTC(2015, 12, 31),
+                                label: "โครงการศึกษาดูงานและพัฒนาทักษะของผู้บริหารฯ",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการเสริมสร้างสุขภาพบุคลากร",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,06, 1),
+                                to: Date.UTC(2016, 06, 31),
+                                label: "โครงการเสริมสร้างสุขภาพฯ",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการพัฒนาสมรรถนะด้านการสื่อสารภาษาอังกฤษของบุคลากร",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,02, 1),
+                                to: Date.UTC(2016, 02, 31),
+                                label: "โครงการพัฒนาสมรรถนะด้านการสื่อสารฯ",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการพัฒนาองค์กร",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,03, 1),
+                                to: Date.UTC(2016, 06, 31),
+                                label: "โครงการพัฒนาองค์กร",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการปฐมนิเทศระดับบัณฑิตศึกษา",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,05, 1),
+                                to: Date.UTC(2016, 05, 31),
+                                label: "โครงการปฐมนิเทศระดับบัณฑิตศึกษา",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการปฐมนิเทศระดับบัณฑิตศึกษา (ครู อาจารย์ประจำการ)",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,02, 1),
+                                to: Date.UTC(2016, 02, 31),
+                                label: "โครงการปฐมนิเทศฯ (ครู อาจารย์ประจำการ)",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการส่งเสริมกิจกรรมสโมสรนิสิตบัณฑิตศึกษา",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2015,09, 1),
+                                to: Date.UTC(2016, 08, 30),
+                                label: "โครงการส่งเสริมกิจกรรมสโมสรนิสิตบัณฑิตศึกษา",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการสืบสานวัฒนธรรม",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,03, 1),
+                                to: Date.UTC(2016, 03, 30),
+                                label: "ระยะที่ 1",
+                                tooltip_data: 'this data'
+                            },{ // From-To pairs
+                                from: Date.UTC(2016,06, 1),
+                                to: Date.UTC(2016, 06, 30),
+                                label: "ระยะที่ 2",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการพัฒนาสุนทรียภาพทางวัฒนธรรม",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,06, 1),
+                                to: Date.UTC(2016, 06, 31),
+                                label: "โครงการพัฒนาสุนทรียภาพทางวัฒนธรรม",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการประชุมวิชาการเสนอผลงานวิจัยระดับบัณฑิตศึกษาแห่งชาติ ครั้งที่ 38",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,01, 1),
+                                to: Date.UTC(2016, 01, 31),
+                                label: "Grad Research 38",
+                                tooltip_data: 'this data'
+                            }]
+                        }
+                    ];
+
+               }else{
+
+                   if($scope.user.user.role[0]=='press' ){
+
+	               //var c = 'container3';
+                       var m = 4;
+                       var b =[ "โครงการอบรมการใช้หลักภาษาที่ถูกต้องเพื่อการจัดทำผลงานวิชาการ",
+                                "โครงการประชาสัมพันธ์สำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                                "โครงการสัมมนากองบรรณาธิการสำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                                "โครงการบริหารจัดการสำนักพิมพ์มหาวิทยาลัยนเรศวร"]
+                       var tasks = [
+                           {
+                               name: "โครงการบริหารจัดการสำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 09, 30),
+                                   label: "โครงการบริหารจัดการสำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการสัมมนากองบรรณาธิการสำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,10, 1),
+                                   to: Date.UTC(2016, 06, 30),
+                                   label: "โครงการสัมมนากองบรรณาธิการสำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการประชาสัมพันธ์สำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 09, 30),
+                                   label: "โครงการประชาสัมพันธ์สำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการอบรมการใช้หลักภาษาที่ถูกต้องเพื่อการจัดทำผลงานวิชาการ",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2016,05, 1),
+                                   to: Date.UTC(2016, 05, 30),
+                                   label: "โครงการอบรมการใช้หลักภาษาที่ถูกต้องเพื่อการจัดทำผลงานวิชาการ",
+                                   tooltip_data: 'this data'
+                               }]
+                           }
+                       ];
+                   }else{
+                       if($scope.user.user.role[0]=='research' ){
+	                   //var c = 'container4';
+                           var m = 5;
+                           var b =["โครงการสนับสนุนทุนการนำเสนอผลงานวิทยานิพนธ์ในเวทีต่างประเทศ",
+                                   "โครงการจัดทำวารสารมหาวิทยาลันนเรศวร: วิทยาศาสตร์และเทคโนโลยี",
+                                   "โครงการจัดทำวารสารการวิจัยเพื่อพัฒนาชุมชน (มนุษยศาสตร์และสังคมศาสตร์)",
+                                   "โครงการอบรมเชิงปฏิบัติการด้านการเขียน การนำเสนอบทความฯ",
+                                   "โครงการส่งเสริม สนับสนุนการจัดการศึกษาสำหรับนิสิตระดับบัณฑิตศึกษา (ต่างชาติ)"]
+                           var tasks =[ 
+                               {
+                                   name: "โครงการส่งเสริม สนับสนุนการจัดการศึกษาสำหรับนิสิตระดับบัณฑิตศึกษา (ต่างชาติ)",
+                                   intervals: [{ // From-To pairs
+                                       from: Date.UTC(2015,12, 1),
+                                       to: Date.UTC(2015, 12, 31),
+                                       label: "โครงการส่งเสริม สนับสนุนการจัดการศึกษาสำหรับนิสิตระดับบัณฑิตศึกษา (ต่างชาติ)",
+                                       tooltip_data: 'this data'
+                                   }]
+                               },{
+                                   name: "โครงการอบรมเชิงปฏิบัติการด้านการเขียน การนำเสนอบทความฯ",
+                                   intervals: [{ // From-To pairs
+                                       from: Date.UTC(2015,11, 1),
+                                       to: Date.UTC(2015, 11, 31),
+                                       label: "โครงการอบรมเชิงปฏิบัติการด้านการเขียน การนำเสนอบทความฯ",
+                                       tooltip_data: 'this data'
+                                   }]
+                               },{
+                                   name: "โครงการจัดทำวารสารการวิจัยเพื่อพัฒนาชุมชน (มนุษยศาสตร์และสังคมศาสตร์)",
+                                   intervals: [{ // From-To pairs
+                                       from: Date.UTC(2015,09, 1),
+                                       to: Date.UTC(2016, 08, 30),
+                                       label: "โครงการจัดทำวารสารการวิจัยเพื่อพัฒนาชุมชน (มนุษยศาสตร์และสังคมศาสตร์)",
+                                       tooltip_data: 'this data'
+                                   }]
+                               },{
+                                   name: "โครงการจัดทำวารสารมหาวิทยาลันนเรศวร: วิทยาศาสตร์และเทคโนโลยี",
+                                   intervals: [{ // From-To pairs
+                                       from: Date.UTC(2015,09, 1),
+                                       to: Date.UTC(2016, 08, 30),
+                                       label: "โครงการจัดทำวารสารมหาวิทยาลันนเรศวร: วิทยาศาสตร์และเทคโนโลยี",
+                                       tooltip_data: 'this data'
+                                   }]
+                               },{
+                                   name: "โครงการสนับสนุนทุนการนำเสนอผลงานวิทยานิพนธ์ในเวทีต่างประเทศ",
+                                   intervals: [{ // From-To pairs
+                                       from: Date.UTC(2015,09, 1),
+                                       to: Date.UTC(2016, 08, 30),
+                                       label: "โครงการสนับสนุนทุนการนำเสนอผลงานวิทยานิพนธ์ในเวทีต่างประเทศ",
+                                       tooltip_data: 'this data'
+                                   }]
+                                }
+
+                           ];
+
+                       }else {
+                       if($scope.user.user.role[0]=='admin' ){
+                 var m = 30;
+                 var b = [
+                 "โครงการสนับสนุนทุนการนำเสนอผลงานวิทยานิพนธ์ในเวทีต่างประเทศ",
+                 "โครงการจัดทำวารสารมหาวิทยาลันนเรศวร: วิทยาศาสตร์และเทคโนโลยี",
+                 "โครงการจัดทำวารสารการวิจัยเพื่อพัฒนาชุมชน (มนุษยศาสตร์และสังคมศาสตร์)",
+                 "โครงการอบรมเชิงปฏิบัติการด้านการเขียน การนำเสนอบทความฯ",
+                 "โครงการส่งเสริม สนับสนุนการจัดการศึกษาสำหรับนิสิตระดับบัณฑิตศึกษา (ต่างชาติ)",
+                 "โครงการประชาสัมพันธ์บัณฑิตศึกษา",
+                 "โครงการติดตามคุณภาพนิสิตระดับบัณฑิตศึกษา",
+                 "โครงการสนับสนุนการผลิตสื่อการสอนในรูปแบบสื่ออิเล็กทรอนิกส์ระดับบัณฑิตศึกษา",
+                 "โครงการสนับสนุนการจัดประชุมวิชาการ",
+                 "โครงการจัดการความรู้ (KM)",
+                 "โครงการประกันคุณภาพการศึกษา",
+                 "โครงการสัมมนานิสิตบัณฑิตศึกษา",
+                 "โครงการสัมมนาคณาจารย์บัณฑิตศึกษา",
+                 "โครงการติดตามสถานภาพนิสิตบัณฑิตศึกษา",
+                 "โครงการอบรมจริยธรรมการวิจัยระดับบัณฑิตศึกษา",
+                 "โครงการประชุมวิชาการเสนอผลงานวิจัยระดับบัณฑิตศึกษาแห่งชาติ ครั้งที่ 38",
+                 "โครงการพัฒนาสุนทรียภาพทางวัฒนธรรม",
+                 "โครงการสืบสานวัฒนธรรม",
+                 "โครงการส่งเสริมกิจกรรมสโมสรนิสิตบัณฑิตศึกษา",
+                 "โครงการปฐมนิเทศระดับบัณฑิตศึกษา (ครู อาจารย์ประจำการ)",
+                 "โครงการปฐมนิเทศระดับบัณฑิตศึกษา",
+                 "โครงการพัฒนาองค์กร",
+                 "โครงการพัฒนาสมรรถนะด้านการสื่อสารภาษาอังกฤษของบุคลากร",
+                 "โครงการเสริมสร้างสุขภาพบุคลากร",
+                 "โครงการศึกษาดูงานและพัฒนาทักษะของผู้บริหารในการจัดการศึกษาระดับบัณฑิตศึกษา",
+                 "โครงการสอบประมวลความรู้นิสิตปริญญาโท แผน ข",
+                 "โครงการอบรมการใช้หลักภาษาที่ถูกต้องเพื่อการจัดทำผลงานวิชาการ",
+                 "โครงการประชาสัมพันธ์สำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                 "โครงการสัมมนากองบรรณาธิการสำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                 "โครงการบริหารจัดการสำนักพิมพ์มหาวิทยาลัยนเรศวร"]
+
+                       var tasks = [
+                           {
+                               name: "โครงการบริหารจัดการสำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 09, 30),
+                                   label: "โครงการบริหารจัดการสำนักพิมพ์ฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการสัมมนากองบรรณาธิการสำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,10, 1),
+                                   to: Date.UTC(2016, 06, 30),
+                                   label: "โครงการสัมมนากองบรรณาธิการฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการประชาสัมพันธ์สำนักพิมพ์มหาวิทยาลัยนเรศวร",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 09, 30),
+                                   label: "โครงการประชาสัมพันธ์สำนักพิมพ์ฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการอบรมการใช้หลักภาษาที่ถูกต้องเพื่อการจัดทำผลงานวิชาการ",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2016,05, 1),
+                                   to: Date.UTC(2016, 05, 30),
+                                   label: "โครงการอบรมการใช้หลักภาษาฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการสอบประมวลความรู้นิสิตปริญญาโท แผน ข",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 09, 30),
+                                   label: "โครงการสอบประมวลความรู้ฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                            name: "โครงการศึกษาดูงานและพัฒนาทักษะของผู้บริหารในการจัดการศึกษาระดับบัณฑิตศึกษา",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2015,12, 1),
+                                to: Date.UTC(2015, 12, 31),
+                                label: "โครงการศึกษาดูงานฯ",
+                                tooltip_data: 'this data'
+                            }]
+                           },{
+                            name: "โครงการเสริมสร้างสุขภาพบุคลากร",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,06, 1),
+                                to: Date.UTC(2016, 06, 31),
+                                label: "โครงการเสริมสร้างสุขภาพฯ",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการพัฒนาสมรรถนะด้านการสื่อสารภาษาอังกฤษของบุคลากร",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,02, 1),
+                                to: Date.UTC(2016, 02, 31),
+                                label: "โครงการพัฒนาสมรรถนะด้านการสื่อสารฯ",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการพัฒนาองค์กร",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,03, 1),
+                                to: Date.UTC(2016, 06, 31),
+                                label: "โครงการพัฒนาองค์กร",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการปฐมนิเทศระดับบัณฑิตศึกษา",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,05, 1),
+                                to: Date.UTC(2016, 05, 31),
+                                label: "โครงการปฐมนิเทศระดับบัณฑิตศึกษา",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการปฐมนิเทศระดับบัณฑิตศึกษา (ครู อาจารย์ประจำการ)",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,02, 1),
+                                to: Date.UTC(2016, 02, 31),
+                                label: "โครงการปฐมนิเทศฯ (ครู อาจารย์ประจำการ)",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการส่งเสริมกิจกรรมสโมสรนิสิตบัณฑิตศึกษา",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2015,09, 1),
+                                to: Date.UTC(2016, 08, 30),
+                                label: "โครงการส่งเสริมกิจกรรมสโมสรนิสิตฯ",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการสืบสานวัฒนธรรม",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,03, 1),
+                                to: Date.UTC(2016, 03, 30),
+                                label: "ระยะที่ 1",
+                                tooltip_data: 'this data'
+                            },{ // From-To pairs
+                                from: Date.UTC(2016,06, 1),
+                                to: Date.UTC(2016, 06, 30),
+                                label: "ระยะที่ 2",
+                                tooltip_data: 'this data'
+                            }]
+                        } ,{
+                            name: "โครงการพัฒนาสุนทรียภาพทางวัฒนธรรม",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,06, 1),
+                                to: Date.UTC(2016, 06, 31),
+                                label: "โครงการพัฒนาสุนทรียภาพทางวัฒนธรรม",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                            name: "โครงการประชุมวิชาการเสนอผลงานวิจัยระดับบัณฑิตศึกษาแห่งชาติ ครั้งที่ 38",
+                            intervals: [{ // From-To pairs
+                                from: Date.UTC(2016,01, 1),
+                                to: Date.UTC(2016, 01, 31),
+                                label: "Grad Research 38",
+                                tooltip_data: 'this data'
+                            }]
+                        },{
+                               name: "โครงการอบรมจริยธรรมการวิจัยระดับบัณฑิตศึกษา",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2015, 09, 31),
+                                   label: "ระยะที่ 1",
+                                   tooltip_data: 'this data'
+                               },{ // From-To pairs
+                                   from: Date.UTC(2016,02, 1),
+                                   to: Date.UTC(2016, 02, 31),
+                                   label: "ระยะที่ 2",
+                                   tooltip_data: 'this data'
+                               },{ // From-To pairs
+                                   from: Date.UTC(2016,05, 1),
+                                   to: Date.UTC(2016, 05, 30),
+                                   label: "ระยะที่ 3",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการติดตามสถานภาพนิสิตบัณฑิตศึกษา",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2016,01, 1),
+                                   to: Date.UTC(2016, 01, 29),
+                                   label: "โครงการติดตามสถานภาพนิสิตบัณฑิตศึกษา",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการสัมมนาคณาจารย์บัณฑิตศึกษา",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,10, 1),
+                                   to: Date.UTC(2015, 10, 30),
+                                   label: "โครงการสัมมนาคณาจารย์ฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการสัมมนานิสิตบัณฑิตศึกษา",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2016,02, 1),
+                                   to: Date.UTC(2016, 02, 31),
+                                   label: "โครงการสัมมนานิสิตฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการประกันคุณภาพการศึกษา",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2016,08, 1),
+                                   to: Date.UTC(2016, 08, 30),
+                                   label: "โครงการประกันคุณภาพฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการจัดการความรู้ (KM)",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2016,04, 1),
+                                   to: Date.UTC(2016, 04, 31),
+                                   label: "โครงการจัดการความรู้ (KM)",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการสนับสนุนการจัดประชุมวิชาการ",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 08, 30),
+                                   label: "โครงการสนับสนุนการจัดประชุมวิชาการ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการสนับสนุนการผลิตสื่อการสอนในรูปแบบสื่ออิเล็กทรอนิกส์ระดับบัณฑิตศึกษา",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 06, 31),
+                                   label: "โครงการสนับสนุนการผลิตสื่อการสอนในรูปแบบสื่ออิเล็กทรอนิกส์ระดับบัณฑิตศึกษา",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการติดตามคุณภาพนิสิตระดับบัณฑิตศึกษา",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 08, 30),
+                                   label: "โครงการติดตามคุณภาพนิสิตระดับบัณฑิตศึกษา",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการประชาสัมพันธ์บัณฑิตศึกษา",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2016,06, 1),
+                                   to: Date.UTC(2016, 06, 31),
+                                   label: "โครงการประชาสัมพันธ์บัณฑิตศึกษา",
+                                   tooltip_data: 'this data'
+                               }]
+                           }, {
+                               name: "โครงการส่งเสริม สนับสนุนการจัดการศึกษาสำหรับนิสิตระดับบัณฑิตศึกษา (ต่างชาติ)",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,12, 1),
+                                   to: Date.UTC(2015, 12, 31),
+                                   label: "โครงการส่งเสริม สนับสนุนฯ นิสิตระดับบัณฑิตศึกษา (ต่างชาติ)",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการอบรมเชิงปฏิบัติการด้านการเขียน การนำเสนอบทความฯ",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,11, 1),
+                                   to: Date.UTC(2015, 11, 31),
+                                   label: "โครงการอบรมเชิงปฏิบัติการด้านการเขียน การนำเสนอบทความฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการจัดทำวารสารการวิจัยเพื่อพัฒนาชุมชน (มนุษยศาสตร์และสังคมศาสตร์)",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 08, 30),
+                                   label: "โครงการจัดทำวารสารการวิจัยเพื่อพัฒนาชุมชน (มนุษยศาสตร์และสังคมศาสตร์)",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการจัดทำวารสารมหาวิทยาลันนเรศวร: วิทยาศาสตร์และเทคโนโลยี",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 08, 30),
+                                   label: "โครงการจัดทำวารสารมหาวิทยาลันนเรศวร: วิทยาศาสตร์และเทคโนโลยี",
+                                   tooltip_data: 'this data'
+                               }]
+                           },{
+                               name: "โครงการสนับสนุนทุนการนำเสนอผลงานวิทยานิพนธ์ในเวทีต่างประเทศ",
+                               intervals: [{ // From-To pairs
+                                   from: Date.UTC(2015,09, 1),
+                                   to: Date.UTC(2016, 08, 30),
+                                   label: "โครงการสนับสนุนทุนการนำเสนอผลงานวิทยานิพนธ์ฯ",
+                                   tooltip_data: 'this data'
+                               }]
+                           }
+                       ];
+
+                        }
+                       }
+
+                   }
+               }
+           }
+       }
+
+	     // re-structure the tasks into line seriesvar series = [];
+	     var series = [];
+	     $.each(tasks.reverse(), function(i, task) {
+	         var item = {
+	             name: task.name,
+	             data: []
+	         };
+	         $.each(task.intervals, function(j, interval) {
+	             item.data.push({
+	                 x: interval.from,
+		         y: i,
+		         label: interval.label,
+		         from: interval.from,
+		         to: interval.to,
+                         tooltip_data: interval.tooltip_data
+	             }, {
+		         x: interval.to,
+		         y: i,
+		         from: interval.from,
+		         to: interval.to,
+                         tooltip_data: interval.tooltip_data
+	             });
+	             // add a null value between intervals
+	             if (task.intervals[j + 1]) {
+                         item.data.push(
+		             [(interval.to + task.intervals[j + 1].from) / 2, null]
+		         );
+	             }
+	         });
+                 series.push(item);
+             });
+
+	     // create the chart
+	     var chart = new Highcharts.Chart({
+	         chart: {
+	             renderTo: 'container',
+	             //renderTo: c,
+	         },
+
+	         title: {
+		     text: 'Category History'
+	         },
+
+	         xAxis: {
+		     type: 'datetime',
+                     gridLineWidth: 0.5,
+                     labels: {
+           	         step: 1,
+        	     },
+                     min: Date.UTC(2015, 08, 1),
+        	     max: Date.UTC(2016, 08, 30),
+                     dateTimeLabelFormats: { // don't display the dummy year
+                         //month: '%b',
+                         month: '%b, %Y',
+                         year: '%Y'
+           	     },
+	         },
+
+	         yAxis: {
+                     min:0,
+                     max:m,
+                     lineWidth: 2,
+		    // categories:keys, 
+		     categories:b, 
+		     //categories:result[0].project.list.p.list, 
+		     tickInterval: 1,            
+		     tickPixelInterval: 200,
+		     labels: {
+                         //enabled: false,
+		         style: {
+		             color: '#525151',
+		   	     font: '11px Helvetica',
+		   	     fontWeight: 'bold'
+		         },
+		   	           /* formatter: function() {
+		   	                if (tasks[this.value]) {
+		   	                    return tasks[this.value].name;
+		   	                }
+		   	            }*/
+		     },
+		     startOnTick: false,
+		     endOnTick: false,
+		     title: {
+		         text: 'ชื่อโครงการ'
+		     },
+		     minPadding: 0.2,
+		     maxPadding: 0.2,
+		     fontSize:'10px'
+		   	        
+	         },
+
+                 legend: {
+                     enabled: false
+	         },
+	         tooltip: {
+                     formatter: function() {
+		         return '<b>'+ tasks[this.y].name + 
+                             '</b><br/>'+this.point.options.tooltip_data +'<br>' +
+		   	     Highcharts.dateFormat('%m-%d-%Y', this.point.options.from)  +
+		   	     ' - ' + Highcharts.dateFormat('%m-%d-%Y', this.point.options.to); 
+		     }
+                 },
+
+	         plotOptions: {
+                     line: {
+		         lineWidth: 5,
+		         marker: {
+		             enabled: false
+		         },
+		         dataLabels: {
+		             enabled: true,
+		   	     align: 'left',
+		   	     formatter: function() {
+		   	         return this.point.options && this.point.options.label;
+		   	     }
+		         }
+		     }
+	         },
+
+	         series: series
+	     });		   
+             console.log(series);
+        });
+     });
+       //$('#container').highcharts({
+         
+
+       //});
+     //});
+     ////
+     /*
+      $(function () {
+        $('#container').highcharts({
+    
+            chart: {
+                type: 'bar'
+            },
+    
+            title: {
+                text: 'PPAP Status'
+            },
+    
+            xAxis: {
+               categories: ['Part1', 'Part2', 'Part3', 'Part4', 'Part5']             
+            },
+    
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                type: 'datetime',
+                title: {
+                    text: 'Time'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+    
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.x +'</b><br/>'+
+                        this.series.name +': '+ Date(this.y) +'<br/>'+
+                        'Total: '+ this.point.stackTotal;
+                }
+            },
+    
+            plotOptions: {
+                bar: {
+                    stacking: 'normal',
+                    dataLabels: {
+                    enabled: true,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black'
+                }
+                },
+                
+            },
+    
+            series: [{
+                name: 'Requested',
+                data: [1384972200000,1385231400000, 1385058600000, 1384972200000, 1385317800000],
+                stack: 'Planned'
+            }, {
+                name: 'Requested',
+                data: [1384972200000, 1385058600000, 1385231400000, 1384972200000, 1385317800000],
+                stack: 'Actual'
+            }, {
+                name: 'Submitted',
+                data: [1385058600000, 1384972200000, 1385058600000, 1385317800000, 1385317800000],
+                stack: 'Planned'
+            }, {
+                name: 'Submitted',
+                data: [1385058600000, 1385231400000, 1384972200000, 1385058600000, 1385317800000],
+                stack: 'Actual'
+            }, {
+                name: 'Approved',
+                data: [1385058600000, 1385231400000, 1385145000000, 1384972200000, 1385317800000],
+                stack: 'Planned'
+            }, {
+                name: 'Approved',
+                data: [1385145000000, 1385058600000, 1385058600000, 1384972200000, 1385231400000],
+                stack: 'Actual'
+            }]
+        });
+    }); 
+    */
+     //
+   }
+ });
 
 };
 
 function CreateTaskByProjectController($scope, $filter, GradDB, User,Project ,$routeParams ) {   
-  $scope.tasktype_list = [
-    {'name':'ติดต่อวิทยากร'},
-    {'name':'ติดต่อสถานที่'},
-    {'name':'ยืมเงิน'},
-    {'name':'ประชาสัมพันธ์'},
-    {'name':'ประสานงานผู้เกี่ยวข้อง'},
-    {'name':'หนังสือเชิญวิทยากร'},
-    {'name':'คำกล่าวรายงาน'},
-    {'name':'ประชุมเตรียมการ'},
-    {'name':'เอกสารประกอบโครงการ'},
-    {'name':'อาหารว่าง/เคร่ืองดื่ม'},
-    {'name':'ป้ายตั้งโต๊ะ'},
-    {'name':'แบบประเมิน'},
-    {'name':'นัดหมายการแต่งกาย'},
 
-  ];
+  User.get(function(response) {
+    $scope.tasktype_list = [
+      {'name':'ติดต่อวิทยากร'},
+      {'name':'ติดต่อสถานที่'},
+      {'name':'ยืมเงิน'},
+      {'name':'ประชาสัมพันธ์'},
+      {'name':'ประสานงานผู้เกี่ยวข้อง'},
+      {'name':'หนังสือเชิญวิทยากร'},
+      {'name':'คำกล่าวรายงาน'},
+      {'name':'ประชุมเตรียมการ'},
+      {'name':'เอกสารประกอบโครงการ'},
+      {'name':'อาหารว่าง/เคร่ืองดื่ม'},
+      {'name':'ป้ายตั้งโต๊ะ'},
+      {'name':'แบบประเมิน'},
+      {'name':'นัดหมายการแต่งกาย'},
 
-      getMoney(GradDB, Project,"52ccee70f564a17d4100002b", function(m, a, b, c ,o,i) {
+    ];
+    getMoney(GradDB, Project,"52ccee70f564a17d4100002b", function(m, a, b, c ,o,i) {
        console.log(m);
         //owner_dict[res.owner]['total_start']+=m;      
+    });
+
+    $scope.user_logon = response.user?true:false;
+    if($scope.user_logon) {
+        $scope.user = response.user;
+        console.log($scope.user);
+       // var year = '2559';
+        if($scope.user.role[0]=='plan'){
+            var query = '{"type":"post_project","status":"กำลังดำเนินการ","owner":"งานแผนและสารสนเทศ"}';
+        } else {
+            if($scope.user.role[0]=='acdemic'){
+              var query = '{"type":"post_project","status":"กำลังดำเนินการ","owner":"งานวิชาการ"}';
+            } else {
+              if($scope.user.role[0]=='research'){
+                var query = '{"type":"post_project","status":"กำลังดำเนินการ","owner":"งานวิจัยและวิเทศสัมพันธ์"}';
+              } else {
+                if($scope.user.role[0]=='press'){
+                  var query = '{"type":"post_project","status":"กำลังดำเนินการ","owner":"สำนักพิมพ์มหาวิทยาลัยนเรศวร"}';
+                } else {
+                  if($scope.user.role[0]=='direct'){
+                    var query = '{"type":"post_project","status":"กำลังดำเนินการ","owner":"งานอำนวยการ"}';
+                  } else {
+                    var query = '{"type":"post_project","status":"กำลังดำเนินการ"}';
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          var query = '{"type":"post_project","status":"กำลังดำเนินการ","year":"'+year+'"}';
+        }
+      //});
+
+  //$scope.project_list = Project.query({query:'{"type":"post_project","status":"กำลังดำเนินการ"}'}, function(res) {
+      $scope.project_list = Project.query({query:query}, function(res) {
+
+        if(res.length>0) {
+          $scope.current_project = res[0];
+          var query = {'type':"post_message",'project_id':$scope.current_project._id};
+          $scope.message_list = Project.query({query:JSON.stringify(query)});          
+        }
       });
-
-  $scope.project_list = Project.query({query:'{"type":"post_project","status":"กำลังดำเนินการ","year":"'+$routeParams.year+'"}'}, function(res) {
-
-    if(res.length>0) {
-      $scope.current_project = res[0];
-      var query = {'type':"post_message",'project_id':$scope.current_project._id,"year":$routeParams.year};
-        $scope.message_list = Project.query({query:JSON.stringify(query)});          
-    }
-  });
       
+      $scope.select_project = function(project) {
+        $scope.current_project = project;
+        var query = {'type':"post_message",'project_id':project._id};
+        $scope.message_list = Project.query({query:JSON.stringify(query)});
+      };
+  
+  
+      $scope.current_message = {'type':"post_message"};
+      $scope.select_message = function(message) {
+        $scope.current_message = message;   
+      }
+  
+      $scope.new_message = function() {
     
-  $scope.select_project = function(project) {
-    $scope.current_project = project;
-    var query = {'type':"post_message",'project_id':project._id};
-    $scope.message_list = Project.query({query:JSON.stringify(query)});
-  };
+        $scope.current_message = {'type':"post_message"};
+        $scope.current_message['date_record'] = $filter('date')(new Date(),"dd/MM/yyyy");
+        $scope.current_message['task_name'] = "[กรุณาเพิ่มข้อมูลส่วนนี้]";
+      }
   
-  
-  $scope.current_message = {'type':"post_message"};
-  
-  $scope.select_message = function(message) {
-    $scope.current_message = message;   
-  }
-  
-  $scope.new_message = function() {
-    
-    $scope.current_message = {'type':"post_message"};
-    $scope.current_message['date_record'] = $filter('date')(new Date(),"dd/MM/yyyy");
-    $scope.current_message['task_name'] = "[กรุณาเพิ่มข้อมูลส่วนนี้]";
-  }
-  
-  $scope.save_message = function() {    
-    if(!$scope.current_message._id) {
-      var x = angular.extend({}, $scope.current_message,{project_id:$scope.current_project._id,owner:$scope.user});
-      //console.log(x);
+      $scope.save_message = function() {    
+        if(!$scope.current_message._id) {
+          var x = angular.extend({}, $scope.current_message,{project_id:$scope.current_project._id});
+          //console.log(x);
       
-      Project.save(angular.extend({}, $scope.current_message,
-       {project_id:$scope.current_project._id,owner:$scope.user}),
-        function(result) {
-          console.log(result);
+          Project.save(angular.extend({}, $scope.current_message,
+            {project_id:$scope.current_project._id
+          }),function(result) {
+            console.log(result);
+            if(result.success) {                
+              var query = {'type':"post_message",'project_id':$scope.current_project._id};
+              $scope.message_list = Project.query({query:JSON.stringify(query)});                        
+            }
+          });
+      
+        } else {
+          Project.update({id:$scope.current_message._id},
+          angular.extend({}, $scope.current_message, {_id:undefined,
+              project_id:$scope.current_project._id
+          }),function(result) {      
+              if(result.success) {
+                var query = {'type':"post_message",'project_id':$scope.current_project._id};
+                $scope.message_list = Project.query({query:JSON.stringify(query)});                        
+              }
+          });
+        }                
+      }
+  
+      //RemoveTask
+      $scope.remove_message = function () {
+        //console.log($scope.current_message._id);
+        Project.delete({
+          id:$scope.current_message._id
+        },function(result) {            
           if(result.success) {                
             var query = {'type':"post_message",'project_id':$scope.current_project._id};
             $scope.message_list = Project.query({query:JSON.stringify(query)});                        
           }
-      });
-      
-    } else {
-      Project.update({id:$scope.current_message._id},
-        angular.extend({}, $scope.current_message, {_id:undefined,
-              project_id:$scope.current_project._id,
-              owner:$scope.user}), 
-        function(result) {      
-           if(result.success) {
-              var query = {'type':"post_message",'project_id':$scope.current_project._id};
-              $scope.message_list = Project.query({query:JSON.stringify(query)});                        
-           }
         });
-    }                
-  }
-  
-    //RemoveTask
-  $scope.remove_message = function () {
-    //console.log($scope.current_message._id);
-    Project.delete({
-      id:$scope.current_message._id
-    },function(result) {            
-      if(result.success) {                
-        var query = {'type':"post_message",'project_id':$scope.current_project._id};
-        $scope.message_list = Project.query({query:JSON.stringify(query)});                        
-      }
-    });
     
-  };
+      };
     
-  User.get(function(response) {    
-    $scope.user_logon = response.user?true:false;
-    if($scope.user_logon) {
-      $scope.user = response.user;
-    }
-  });
-  
+   }); 
 };
 
 function RoleController($scope, Role, User, Logout, Admin) {   
@@ -306,7 +1258,7 @@ function RoleController($scope, Role, User, Logout, Admin) {
   };
 }
 
-function ProjectListController($scope, $routeParams, Project, User, Logout) {
+function ProjectSearchController($scope, $routeParams, Project, User, Logout) {
   /*
   $scope.user = User.get(function(response) {
     console.log("test");
@@ -318,6 +1270,21 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
     }
   });
   */
+
+   $scope.list_years = {
+        data: [
+        {
+            name: '2559'
+        }, {
+            name: '2558'
+        }, {
+            name: '2557'
+        }]
+    };
+    $scope.list_year = '2558';
+  //var thai_year = parseInt($routeParams.id)-543;
+  //$scope.updateYear = function(){
+  $scope.updateYear = function(){
 
   $scope.current_year = $routeParams.year;
   $scope.selectedStatus = [];
@@ -331,7 +1298,8 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
         'status': 'ยกเลิก'
     }];
   //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
-  Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
+  //Project.query({query:'{"type":"post_project", "year":"'+$routeParams.year+'"}'}, function(project_list) {    
+  Project.query({query:'{"type":"post_project", "year":"'+$scope.list_year.name+'"}'}, function(project_list) {    
     $scope.project_list = project_list;
     //$scope.selectedOwner = [];
     console.log("test"); 
@@ -357,7 +1325,7 @@ function ProjectListController($scope, $routeParams, Project, User, Logout) {
  $scope.checkAll = function () {
         $scope.selectedStatus = _.pluck($scope.statusList, 'status');
     };
-
+ }
 
 }
 function getThaiDate(datevalue, cb) {
@@ -419,7 +1387,405 @@ function getMoney(GradDB, Project, projectId, cb) {
    });
 }
 
-function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project,User, Logout) {
+function ProjectPeriodController($scope, GradDB,$routeParams, Project,User, Logout) {
+    $scope.current_year = $routeParams.year;
+    //
+    var t_year = parseInt($routeParams.year)-543;
+    $scope.chk = "";
+    $scope.filterProject = function (valchk) {
+      $scope.chk = parseInt(valchk);
+    }
+      var fstrDate = 03+'/'+31+'/'+t_year;
+      var fstatusDate =  new Date(fstrDate).getTime();
+      var estrDate = 09+'/'+30+'/'+t_year;
+      var estatusDate =  new Date(estrDate).getTime();
+      var d = new Date();
+      var curr_date = d.getDate();
+      var curr_month = d.getMonth()+1;
+      var curr_year = d.getFullYear();
+      var ndateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
+            $scope.dateToday = Date.parse(curr_month + "/" + curr_date + "/" + curr_year);
+
+      
+
+    Project.query({query:'{"type":"post_project","year":"'+$routeParams.year+'"}'}, 
+      function(project_list) {    
+        dict = {}; 
+        dict_late = {}; 
+        owner_dict = {}; 
+        var dict_sum = {};
+        $scope.sum = [];
+        angular.forEach(project_list, function(project) {
+          if(!(project.year in dict)) {
+            dict[project.year] = {
+             'type':{},
+             'alert1':0,
+             'late':0,
+             'owner':{}
+            }
+          }
+
+          if(!(project.owner in owner_dict)) {
+            owner_dict[project.owner] = {'working':0,
+              'finish':0,
+              'cancle':0,
+              'no':0,
+              'all':0,
+              'total_start':0,
+              'total_expend':0,
+              'total_wait':0,
+              'total_receive':0,
+              'total_out':0,
+              'total_in':0,
+              'fund':{}
+            };
+          }      
+          if(!project.fund) {
+            project.fund = 'Z';
+          }
+      
+          if(!(project.fund in owner_dict[project.owner]['fund'])) {
+            owner_dict[project.owner]['fund'][project.fund] = [];
+          } 
+         
+          if(!(project.owner in dict[project.year]['owner'])) {
+            dict[project.year]['owner'][project.owner] = {'late':0,'alert':0};
+          } 
+
+
+          if(!(project.year in dict_sum)) {
+            dict_sum[project.year]={'start':0,
+            'wait':0,'receive':0,'expend':0,'balance':0,'out':0,'in':0};
+            //dict_sum.push(project.year);
+          }
+          owner_dict[project.owner]['fund'][project.fund].push(project);
+          if (project.date_plan){
+            var date_plan = project.date_plan;
+            //var end_date_plan = project.end_date_plan;
+            var dateSplitted = date_plan.split('/');
+            var formattedDate = dateSplitted[1]+'/'+dateSplitted[0]+'/'+dateSplitted[2];
+            var new_date_plan =  new Date(formattedDate).getTime();
+            project.new_date_plan =  new Date(formattedDate).getTime();
+            //console.log(new_date_plan);
+            var formattedDate_check = dateSplitted[1]+'/'+dateSplitted[0]+'/'+dateSplitted[2];
+            var new_date_check =  new Date(formattedDate_check);
+            var day_check = new_date_check.getDate()+30;
+            //console.log(day_check);
+            var formattedDate_new = dateSplitted[1]+'/'+day_check+'/'+dateSplitted[2];
+            //console.log(formattedDate_new);
+            var new_date =  new Date(formattedDate_new).getTime();
+            //console.log(new_date);
+            project.new_date_check =  new_date;
+
+            //console.log($scope.dateToday);
+          if (new_date_plan < ndateToday) {
+            project.type = 'current';
+          }
+
+          if (new_date_plan <= fstatusDate) {
+            project.type = 'first';
+          } else {
+            project.type = 'second';
+          }
+            if(!(project.type in dict[project.year]['type'])) {
+               dict[project.year]['type'][project.type] = {'w':0,
+                 'f':0,
+                 'n':0,
+                 'a':0,
+                 'c':0,
+                 'list_alert':[],
+                 'alertowner':{},
+                 'allowner':{},
+                 'lateowner':{},
+                 'list_late':[],
+                 'list_project':[],
+                 'alert':0,
+                 'late':0};
+            }
+         
+            if(!(project.owner in dict[project.year]['type'][project.type]['alertowner'])) {
+               dict[project.year]['type'][project.type]['alertowner'][project.owner] = 
+                {'list':[]};
+                 //dict[project.year]['type'][project.type]['list_alert'].push(project);
+            }
+            if(!(project.owner in dict[project.year]['type'][project.type]['lateowner'])) {
+               dict[project.year]['type'][project.type]['lateowner'][project.owner] = 
+                {'list':[]};
+                 //dict[project.year]['type'][project.type]['list_alert'].push(project);
+            }
+            if(!(project.owner in dict[project.year]['type'][project.type]['allowner'])) {
+               dict[project.year]['type'][project.type]['allowner'][project.owner] = 
+                {'list':[]};
+                 //dict[project.year]['type'][project.type]['list_alert'].push(project);
+            }
+
+            if( project.new_date_plan < ndateToday && ndateToday < project.new_date_check){
+                 dict[project.year]['type'][project.type]['list_project'].push(project);
+                 dict[project.year]['type'][project.type]['allowner'][project.owner]['list'].push(project);
+            } else {
+              if(project.new_date_plan < ndateToday && ndateToday > project.new_date_check){
+                 dict[project.year]['type'][project.type]['list_project'].push(project);
+                 dict[project.year]['type'][project.type]['allowner'][project.owner]['list'].push(project);
+              } else {
+                if(project.new_date_plan > ndateToday && ndateToday < project.new_date_check){
+                 dict[project.year]['type'][project.type]['list_project'].push(project);
+                 dict[project.year]['type'][project.type]['allowner'][project.owner]['list'].push(project);
+              
+                }
+             }
+              
+            }
+
+            if(project.status == "ยังไม่ได้ดำเนินการ" && project.new_date_plan < ndateToday && ndateToday < project.new_date_check){
+                 dict[project.year]['alert1']+=1;
+                 dict[project.year]['owner'][project.owner]['alert']+=1;
+                 dict[project.year]['type'][project.type]['alert']+=1;
+                 dict[project.year]['type'][project.type]['list_alert'].push(project);
+                 dict[project.year]['type'][project.type]['alertowner'][project.owner]['list'].push(project);
+            }else{
+                if(project.status == "ยังไม่ได้ดำเนินการ" && project.new_date_plan < ndateToday && ndateToday > project.new_date_check){
+                  dict[project.year]['late']+=1;
+                  dict[project.year]['owner'][project.owner]['late']+=1;
+                  dict[project.year]['type'][project.type]['late']+=1;
+                  dict[project.year]['type'][project.type]['list_late'].push(project);
+                  dict[project.year]['type'][project.type]['lateowner'][project.owner]['list'].push(project);
+                }
+            }
+
+            if (project.new_date_plan <= fstatusDate ){
+                dict[project.year]['type'][project.type]['a']+=1;
+                if(project.status == "ยังไม่ได้ดำเนินการ"){  
+                    dict[project.year]['type'][project.type]['n']+=1;
+                }else {
+                    if(project.status == "ดำเนินการแล้ว") {
+                        dict[project.year]['type'][project.type]['f']+=1;
+                    }else{
+                      if(project.status == "กำลังดำเนินการ") {
+                        dict[project.year]['type'][project.type]['w']+=1;
+                      }else{
+                        if(project.status == "ยกเลิก") {
+                          dict[project.year]['type'][project.type]['c']+=1;
+                        //dict[project.year]['type'][project.type]['a']+=1;
+                        }
+                      }
+                    }
+                }
+             }else {
+                if (project.new_date_plan > fstatusDate ){
+                    dict[project.year]['type'][project.type]['a']+=1;
+                    if(project.status == "ยังไม่ได้ดำเนินการ"){  
+                        dict[project.year]['type'][project.type]['n']+=1;
+                    }else {
+                        if(project.status == "ดำเนินการแล้ว") {
+                            dict[project.year]['type'][project.type]['f']+=1;
+                        }else{
+                            if(project.status == "กำลังดำเนินการ") {
+                                dict[project.year]['type'][project.type]['w']+=1;
+                            }else{
+                              if(project.status == "ยกเลิก") {
+                                dict[project.year]['type'][project.type]['c']+=1;
+                              }
+                            }
+                        }
+                    }
+                 }
+             }
+
+
+          }
+          //dict[project.fund]['listproject'].push(project);      
+
+
+          if(project.status == "กำลังดำเนินการ") {
+            owner_dict[project.owner]['working']+=1;
+          }else {
+            if(project.status == "ดำเนินการแล้ว") {
+              owner_dict[project.owner]['finish']+=1;
+             }else{
+               if(project.status == "ยังไม่ได้ดำเนินการ") {
+                 owner_dict[project.owner]['no']+=1;
+               }else{
+                 if(project.status == "ยกเลิก") {
+                   owner_dict[project.owner]['cancle']+=1;
+                 }
+               }
+             }
+          }
+          if((project.status == "กำลังดำเนินการ") ||(project.status == "ดำเนินการแล้ว") ||(project.status == 'ยังไม่ได้ดำเนินการ')||(project.status == 'ยกเลิก')) {
+              owner_dict[project.owner]['all']+=1;
+          }
+
+
+          //console.log(new_date_plan);
+          //console.log(project.new_date_check);
+          if (!(project.year in dict_late)){
+            dict_late[project.year] = {'project':[]}; 
+          }
+          dict_late[project.year]['project'].push(project); 
+
+        });
+        var result = [];
+    
+        angular.forEach(owner_dict, function(value, name) {
+          result.push({'owner':name, 'count':value});
+        });
+    
+        //$scope.result = result;
+        //$scope.project_list =  project_list;
+        $scope.year = $routeParams.year;
+        //console.log(result);
+
+        var result_alert =[];
+        angular.forEach(dict,function (value,key) {
+          result_alert.push({'year':key,'list':value});
+        });
+        //console.log(result_alert);
+
+        var result_late =[];
+        angular.forEach(dict_late,function (value,key) {
+          result_late.push({'year':key,'list':value});
+        });
+      //console.log(result[0].list.project);
+        $scope.project_list = result_late[0].list.project;
+        $scope.project_list_new = result_alert[0].list.type;
+        console.log(result_alert[0]);
+        $(function () {
+    	  // Radialize the colors
+            // Build the chart
+           $('#container1').highcharts({
+              chart: {
+                  plotBackgroundColor: null,
+                  plotBorderWidth: null,
+                  plotShadow: false
+              },
+              title: {
+                //text: 'สรุปสถานภาพโครงการที่"ยังไม่ได้ดำเนินการ"ประจำปี '+$routeParams.year
+                text: 'สรุปสถานภาพโครงการประจำปี '+$routeParams.year
+              },
+              tooltip: {
+        	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+                    percentageDecimals:1 
+              },
+              plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage.toFixed(2) +' %';
+                        }
+                    }
+                }
+              },
+              series: [{
+                type: 'pie',
+                name: 'คิดเป็น',
+                data: [
+                    ['โครงการครึ่งปีแรก',   result_alert[0].list.type.first.a],
+                    ['โครงการครึ่งปีหลัง', result_alert[0].list.type.second.a]
+                ]
+              }]
+           });
+        });
+
+        //niew gedeelte
+        var options = {
+          colors: [],
+          chart: {
+            renderTo: 'container1',
+            defaultSeriesType: 'spline'
+          },
+          series: []
+        };
+        $("#change").click(function(){
+          if ($("#list").val() == "A")
+          {
+            options.series = [{
+                type: 'pie',
+                name: 'คิดเป็น',
+                data: [
+                    ['โครงการครึ่งปีแรก',   result_alert[0].list.type.first.a],
+                    ['โครงการครึ่งปีหลัง', result_alert[0].list.type.second.a]
+                ]
+
+            }]
+          }
+          else
+          
+          {
+           
+            if ($("#list").val() == "B")
+              {
+              options.series = [{
+                  type: 'pie',
+                  name: 'สถานภาพโครงการครึ่งปีแรกปี'+$routeParams.year, 
+                  data: [
+                    ['ยังไม่ได้ดำเนินการ',   result_alert[0].list.type.first.n],
+                    ['อยู่ระหว่างดำเนินการ', result_alert[0].list.type.first.w],
+                    ['ดำเนินการแล้ว', result_alert[0].list.type.first.f],
+                    ['ยกเลิก', result_alert[0].list.type.first.c]
+                  ]
+              }]
+             } 
+            else
+ 
+             {
+            if ($("#list").val() == "C")
+              {
+              options.series = [{
+                  type: 'pie',
+                  name: 'สถานภาพโครงการครึ่งปีหลังปี'+$routeParams.year, 
+                  data: [
+                    ['ยังไม่ได้ดำเนินการ',   result_alert[0].list.type.second.n],
+                    ['อยู่ระหว่างดำเนินการ', result_alert[0].list.type.second.w],
+                    ['ดำเนินการแล้ว', result_alert[0].list.type.second.f],
+                    ['ยกเลิก', result_alert[0].list.type.second.c]
+                  ]
+              }]
+
+             }
+
+             else
+             {
+               options.series = [{
+                  type: 'pie',
+                  name: 'สถานภาพโครงการที่ยังไม่ได้ดำเนินการปี'+$routeParams.year,
+                  data: [
+                    ['โครงการที่ต้องเร่งรัด',   result_alert[0].list.alert1],
+                    ['โครงการที่ล่าช้า(ณ วันที่ปัจจุบัน)',       result_alert[0].list.late]
+                  ]
+                  //data: [3,2,1,2,3]
+              }]
+             }
+           }
+          } 
+          
+          var chart = new Highcharts.Chart(options);    
+       });
+
+       // nieuw gadeelte
+       var options = { 
+         chart: {
+           renderTo: 'container1',
+           defaultSeriesType: 'spline',
+           plotBackgroundColor: null,
+           plotBorderWidth: null,
+           plotShadow: false
+         },
+         series: []
+       };
+
+
+    ////// 
+
+    });
+
+
+}
+function ProjectListWarningByYearController($scope,Sendmail,GradDB,$routeParams, Project,User, Logout) {
     $scope.current_year = $routeParams.year;
     //
     var t_year = parseInt($routeParams.year)-543;
@@ -712,6 +2078,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
         $scope.project_list = result_late[0].list.project;
         $scope.project_list_new = result_alert[0].list.type;
         console.log(result_alert[0]);
+
         $(function () {
     	  // Radialize the colors
             // Build the chart
@@ -871,6 +2238,29 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
     }
     */
    //}
+     $scope.user = User.get(function(response) {
+          if (!response.user) {
+            //self.messageAlert("You are not authorized to update content");
+          } else {
+           console.log(response.user);
+ $scope.trackclick = function(id,name,fid,mail){
+              console.log(mail);
+              var subject = "กรุณาขออนุมัติ"+name;
+              var str = "เข้าสู่ระบบติดตามโครงการ/กิจกรรม เพื่อขออนุมัติโครงการ!";
+              var URL = "http://www.db.grad.nu.ac.th/apps/grad-project/#/project/finance/info/"+id+"/"+fid;
+              var body = str.link(URL);
+              var query_obj = {
+                'name':subject,'message':body,
+                'email':mail};
+              Sendmail.get({query:JSON.stringify(query_obj)},
+                function (result) {
+                  console.log("ok");
+                });
+            }
+          }
+                });
+
+
 }
 
 function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, Logout) {
@@ -1629,7 +3019,6 @@ function ProjectEditController($scope, $routeParams, $location, Project,User, Lo
 }
 
 function ProjectSubController($scope, $routeParams, $location, Project,User, Logout) {
-    console.log("test");
   var self = this;
   self.messageAlert = function(messageAlert) {
     $scope.messageAlert= messageAlert;
@@ -1639,7 +3028,17 @@ function ProjectSubController($scope, $routeParams, $location, Project,User, Log
       });
     }, 3000);
   };
-  $scope.user = User.get(function(response) {
+
+  self.messageValidate = function(messageValidate) {
+    $scope.messageValidate= messageValidate;
+    setTimeout(function() {
+      $scope.$apply(function() {
+        $scope.messageValidate = null;
+      });
+    }, 3000);
+  };
+
+  //$scope.user = User.get(function(response) {
     $scope.views = {
       project_form : 'static/project_form.html'
     }
@@ -1658,9 +3057,9 @@ function ProjectSubController($scope, $routeParams, $location, Project,User, Log
       }
     });
 
-    if (!response.user) {
-      self.messageAlert("You are not authorized to update content");  
-    } else {
+    //if (!response.user) {
+      //self.messageAlert("You are not authorized to update content");  
+    //} else {
       //updateMessage
       $scope.editField = function(mes) {
         $scope.selectMessage = mes;
@@ -1715,30 +3114,34 @@ function ProjectSubController($scope, $routeParams, $location, Project,User, Log
               } else {
                 self.messageAlert("Message don't Saved");
               }
+
               var query_obj = {"project_id":$scope.project._id}; 
               Project.query({query:JSON.stringify(query_obj)}, function (result2) {
                 $scope.subproject_list = result2;
               });
             });
         } else {
-          Project.update({
-            id:$scope.selectMessage
-          }, angular.extend({},
-            $scope.subproject,
-            {_id:undefined,
-              project_id:$routeParams.projectId,
-              //owner:$scope.user.user.profile.name.givenName,
-              type:"post_subproject"}),
-          function(result) {
-            if(result.success) {
-              self.messageAlert("Message Saved");
-              var query_obj = {"project_id":$scope.project._id};
-              Project.query({query:JSON.stringify(query_obj)}, function (result2) {
-                $scope.subproject_list = result2;
-              });
-            }
-          });
-
+          if(!$scope.subproject.ptypeinfo){
+            self.messageValidate("Message don't Saved You Must fill!");
+          }else{
+            Project.update({
+              id:$scope.selectMessage
+            }, angular.extend({},
+              $scope.subproject,
+              {_id:undefined,
+                project_id:$routeParams.projectId,
+                //owner:$scope.user.user.profile.name.givenName,
+                type:"post_subproject"}),
+             function(result) {
+               if(result.success) {
+                 self.messageAlert("Message Saved");
+                 var query_obj = {"project_id":$scope.project._id};
+                 Project.query({query:JSON.stringify(query_obj)}, function (result2) {
+                   $scope.subproject_list = result2;
+                 });
+               }
+             });
+          }
         }
       };
 
@@ -1771,8 +3174,8 @@ function ProjectSubController($scope, $routeParams, $location, Project,User, Log
         });    
       };
 
-    };
-   });
+    //};
+   //});
 
 }
 
@@ -1943,10 +3346,24 @@ function ProjectViewController($scope, $routeParams, $location, Project) {
 }
 
 
-function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout) {
-
-  var thai_year = parseInt($routeParams.id)-543;
-  //console.log(thai_year);
+function ProjectFinanceListController($scope, $routeParams, Project, GradDB, User, Logout) {
+  //var thai_year = parseInt($routeParams.id)-543;
+    $scope.list_categories = {
+        data: [
+        {
+            name: '2559'
+        }, {
+            name: '2558'
+        }, {
+            name: '2557'
+        }]
+    };       
+    $scope.list_category = '2558';
+  //var thai_year = parseInt($routeParams.id)-543;
+  $scope.updateYear = function(){
+  console.log($scope.list_category.name);
+  var thai_year = parseInt($scope.list_category.name)-543;
+  console.log(thai_year);
   
   var where_str = JSON.stringify({
     'str':'year = ? && status = ?',
@@ -1971,6 +3388,7 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
          if(!(entry.id in dict)){
            dict[entry.id] = {
              'name':entry.name,
+             'found':[],
              'id':entry.id,
              'fund':entry.fund,
              'sum_expend':0,
@@ -1983,6 +3401,17 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
       
          }
          dict[entry.id]['finance'].push(entry);
+
+
+        //Project.query({query:'{"type":"post_project","name":"'+entry.name+'", "year":"'+$routeParams.id+'"}'}, function(p) {    
+        Project.query({query:'{"type":"post_project","name":"'+entry.name+'", "year":"'+$scope.list_category.name+'"}'}, function(p) {    
+            if(p[0]){
+               if(entry.name==p[0].name){
+               dict[entry.id]['found'].push(p[0]);
+               }
+            }
+         //});
+
          var where_s = JSON.stringify({
            'str':'financing_id = ?',
            'json' : [entry.id]
@@ -2033,15 +3462,18 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
                
                 //dict[entry.id]['sum_expend']+=record.amount;
              });
+         });
              //dict[entry.id]['end_balance']=record.amount;
          }); 
+
        }); 
        var result = [];
        angular.forEach(dict, function(value, key) {
          result.push({'finance_id':key, 'project':value});
        });
-       //console.log(result);
        $scope.p_list = result;
+       console.log(result);
+
        $scope.currentRole = ['A','B','C','D'];
        $scope.CreateHeader = function(fund) {
          showHeader = (fund!=$scope.currentRole); 
@@ -2052,6 +3484,7 @@ function ProjectFinanceListController($scope, $routeParams, GradDB, User, Logout
 
      }
  }); 
+ };
 };
 
 function ProjectReportController($scope, User,Project, $routeParams, GradDB) {
@@ -2170,6 +3603,7 @@ function ProjectFinanceViewController($scope, Sendmail, User,Project, $routePara
       };
       
       $scope.trackclick = function(){
+      console.log("testtracklick");
       var d = new Date();
       var curr_date = d.getDate();
       var curr_month = d.getMonth()+1;
@@ -2243,6 +3677,7 @@ function ProjectFinanceViewController($scope, Sendmail, User,Project, $routePara
                     'message':body,
                     'email':$scope.project.project.contactmail
                     };
+                console.log(query_obj);
                 Sendmail.get({query:JSON.stringify(query_obj)}, 
                     function (result) {
                         console.log("ok");
@@ -2275,7 +3710,7 @@ function ProjectFinanceViewController($scope, Sendmail, User,Project, $routePara
 
 function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, User, Logout, $location) {
  //var thai_year = parseInt($routeParams.year)-543;
-  
+ /* 
   var self = this;
   self.messageAlert = function(messageAlert) {
     $scope.messageAlert= messageAlert;
@@ -2285,10 +3720,12 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
       });
     }, 3000);
   };
-  $scope.user = User.get(function(response) {
+*/
+  /*$scope.user = User.get(function(response) {
     if (!response.user) {
       self.messageAlert("You are not authorized to update content");  
     } else {
+*/
     
       var where_str = JSON.stringify({
         'str':'id = ?',
@@ -2392,15 +3829,15 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
                  if(result.success) {
                    //console.log("Ok");
                    var thai_year = parseInt($scope.project.year)+543;
-                   $location.path('/project/finance/list/'+$scope.project.year);
+                   $location.path('/project/finance/list/');
                  }
                });
              }
 
       });
-    }
+    //}
     
-  });
+  //});
 };
 
 
@@ -2415,29 +3852,19 @@ function ProjectFinanceController($scope, GradDB, $routeParams, $location, Proje
       });
     }, 3000);
   };
-  $scope.user = User.get(function(response) {
-    if (!response.user) {
-      self.messageAlert("You are not authorized to update content");  
-    } else {
+  //$scope.user = User.get(function(response) {
+    //if (!response.user) {
+     //self.messageAlert("You are not authorized to update content");  
+    //} else {
   
 
-           $scope.project = Project.get({id:$routeParams.projectId},function () {
+         $scope.project = Project.get({id:$routeParams.projectId},function () {
              console.log($scope.project._id);
-             /*
-             getMoney(GradDB, Project, $routeParams.projectId, function(m, a, b, c) {
-               $scope.project.start_balance = m+c;
-               $scope.project.sum_expend = b;
-             });
-             */
-             //var average = $scope.project.average.toString();
-             //var percent = $scope.project.percent.toString();
              var query_obj = {"project_id":$scope.project._id}; 
              Project.query({query:JSON.stringify(query_obj)}, function (result) {
                $scope.message_list = result;
-               //console.log(result);
-             });
+             });  
           });  
-          //console.log($scope.project);
 
           $scope.save = function () {		
             Project.update({      
@@ -2474,8 +3901,8 @@ function ProjectFinanceController($scope, GradDB, $routeParams, $location, Proje
               }
             });
           }
-    }
-   });
+   // }
+   //});nook
 
 }
 
