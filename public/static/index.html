@@ -1,6 +1,18 @@
- <h3>ข้อมูลโครงการ/กิจกรรม {{project_list[0].owner}}</h3>
 
-<div id="container"  style="width: 100%; height: 1000px; margin: 1em; border: 0px solid gray"></div>
+<div ng-show ="user.user">
+ <h3>ข้อมูลโครงการ/กิจกรรม {{project_list[0].owner}} ปี 2559</h3>
+</div>
+
+  <div ng-show="user.user&&user.user.role[0]=='admin'">
+      <div  id="container"  style="width: 100%; height: 1000px; margin: 1em; border: 0px solid gray"></div>
+  </div>
+  <div ng-show="user.user&&user.user.role[0]=='research'||user.user.role[0]=='academic'||user.user.role[0]=='direct'||user.user.role[0]=='press'||user.user.role[0]=='plan'" >
+      <div  id="container1"></div>
+
+  </div>
+
+<div ng-show ="user.user">
+
     <table class="table table-hover table-striped">
         <thead>
             <tr>
@@ -37,5 +49,5 @@
             </tr>
         </tbody>
  </table>
-
+</div>
 

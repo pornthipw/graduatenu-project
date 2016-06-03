@@ -54,6 +54,8 @@
     <script src="javascript/vendor/angular-codemirror.js"></script>
     <script src="javascript/vendor/bootstrap-datepicker.js"></script>
     <script src="javascript/vendor/angular-strap.min.js"></script>
+    <script src="http://jqwidgets.com/public/jqwidgets/jqx-all.js"></script>
+    <script src="http://jqwidgets.com/jquery-widgets-demo/jqwidgets/globalization/globalize.js"></script>
     <!--
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -76,26 +78,22 @@
     <script src="javascript/vendor/bootstrap/js/demo/dashboard-demo.js"></script>
    
 -->
-    <script src="http://jqwidgets.com/jquery-widgets-demo/jqwidgets/globalization/globalize.js"></script>
-    <script src="http://jqwidgets.com/public/jqwidgets/jqx-all.js"></script>
     <script src="javascript/vendor/bootstrap/js/underscore-min.js"></script>
     <script src="javascript/vendor/highcharts.js"></script>
-    <script src="javascript/vendor/exporting.js"></script>
-    <script src="javascript/vendor/data.js"></script>
-    <script src="javascript/vendor/drilldown.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="http://code.highcharts.com/modules/data.js"></script>
+    <script src="http://code.highcharts.com/modules/drilldown.js"></script>
     <script src="javascript/vendor/highcharts-ng.js"></script>
-    <script src="javascript/vendor/highstock.js"></script>
-
+    <script src="http://github.highcharts.com/highstock.js"></script>
    <script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
     <script src="javascript/mongorest_service.js"></script>
    <!-- <script src="javascript/app1.js"></script>
     -->
     <script src="javascript/app.js"></script>
     <script src="javascript/app2.js"></script>
-    <script src="javascript/app_warning.js"></script>
     <script src="javascript/app_manage.js"></script>
+    <script src="javascript/app_warning.js"></script>
     <script src="javascript/app_status.js"></script>
-    <script src="javascript/chart.js"></script>
     
 </head>
     
@@ -112,7 +110,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><h3>GSTS-Projects</h3> <h6>: ระบบสารสารสนเทศเพื่อการติดตามและรายงานความก้าวหน้าผลการดำเนินโครงการตามแผนปฏิบัติการประจำปีของบัณฑิตวิทยาลัย มหาวิทยาลัยนเรศวร</h6></a>
+        <a class="navbar-brand" href="#">e-Project : ระบบสารสารสนเทศเพื่อการติดตามโครงการ/กิจกรรม</a>
       </div>
       <!-- /.navbar-header -->
 
@@ -178,23 +176,16 @@
                         <a href="#/project/list"><i class="fa fa-search fa-fw"></i>สืบค้นข้อมูล</a>
                     </li>
                     
-                    <!--<li ng-show="user.user!=null&&user.user.role[0]=='admin'">
--->
-                    <li >
+                    <li ng-show="user.user!=null&&user.user.role[0]=='admin'">
                         <a href="#"><i class="fa fa-edit fa-fw"></i>จัดการข้อมูล<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           <li>
                             <a href="#/project/finance/list">บรรจุโครงการ</a>
                           </li>
-                          <li>
-                            <a href="#projects/warning/2559">ติดตามความก้าวหน้า</a>
-                          </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
-                    <!--<li ng-show="user.user!=null&&user.user.role[0]!=null">
--->
-                    <li >
+                    <li ng-show="user.user!=null&&user.user.role[0]!=null">
                         <a href="#"><i class="fa fa-pencil fa-fw"></i>บันทึกผลดำเนินการ<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           <li>
@@ -205,9 +196,7 @@
                     </li>
                    <!-- <li ng-controller="YearListController" ng-show="user.user&&user.user.role[0]=='admin'">
                    -->
-                    <!--<li ng-show="user.user&&user.role[0].name=='admin'" ng-controller="YearListController">
--->
-                    <li ng-controller="YearListController">
+                    <li ng-show="user.user&&user.role[0].name=='admin'" ng-controller="YearListController">
                         <a href="#"><i class="fa fa-files-o fa-fw"></i>การติดตามและประเมินผล<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           <li ng-repeat="year in year_list">
@@ -218,7 +207,7 @@
                           </li>
                        </ul>
                     </li>
-                    <li  ng-controller="CalendarCtrl">
+                    <li>
                        <a href=""><div id='jqxCalendar' class="text-center" ></div> 
  </a>
                     </li>

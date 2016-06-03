@@ -34,12 +34,14 @@ app.factory('Sendmail', function($resource) {
 
 app.factory('User', function($resource) {
     var User = $resource(prefix + '/user', {}, {});    
+    //var User = $resource('/apps/grad-project/user', {}, {});    
    // var User  = $resource('user',{}, {});   
     return User;   
 });
 
 app.factory('Admin', function($resource) {
-  var Admin = $resource(prefix + '/admin/users/:id', {
+  //var Admin = $resource(prefix + '/admin/users/:id', {
+  var Admin = $resource('/apps/grad-project/admin/users/:id', {
   },
   {update: { method:'PUT' }});
   return Admin;

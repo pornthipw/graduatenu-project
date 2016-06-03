@@ -203,7 +203,7 @@ app.del('/db/:collection/:id', admin_role, mongo.delete);
 function admin_role(req,res,next) {
   console.log('admin_role');
   if(req.user) {
-    userprofile.check_role(req.user.identifier, ["admin","plan"], function(allow) {
+    userprofile.check_role(req.user.identifier, ["admin","plan","academic","direct","research","press"], function(allow) {
       if(allow) {
           next();
       } else {

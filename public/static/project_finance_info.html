@@ -88,7 +88,7 @@
               <span class="glyphicon glyphicon-download"></span>
            </a>
           </div>
-          <div>
+          <div ng-show="user.user!=null&&user.user.role[0]!=null">
           <a class="alert-link" 
               href="http://www.db.grad.nu.ac.th/django/officers/projectassessment/" target="_blank">
               <button type="button"class="btn btn-info btn-circle">
@@ -177,7 +177,13 @@
                 <strong> ผู้รายงาน  </strong>
               </div>
               <div class="col-md-9 text-left">
-                <a href="" ng-click="trackclick()" type="button" class="btn">{{project.project.reportor}}</a> </div>
+                <span ng-show="user.user!=null&&user.user.role[0]=='admin'">
+                   <a href="" ng-click="trackclick()" type="button" class="btn">{{project.project.reportor}}</a> 
+                </span>
+                 <span ng-hide="user.user!=null&&user.user.role[0]=='admin'">
+                          {{project.project.reportor}}
+                 </span>
+              </div>
             </div>
             <div class="row">
               <div class="col-md-3 text-right">
@@ -202,7 +208,7 @@
                 <strong>งบประมาณโครงการ  </strong>
               </div>
               <div class="col-md-9 text-left">
-               งบประมาณรายได้ = {{project[0].money.total_start+project[0].money.total_receive| currency :""}} บาท
+               งบประมาณรายได้ = {{project[0].money.total_start+project[0].money.total_receive-project[0].money.total_kang| currency :""}} บาท
               </div>
             </div>
           </div>
@@ -220,11 +226,11 @@
                      {{project.project.money_percent}} 
                          <p class="text-danger" 
                            ng-hide="project[0].money.total_expend==0">
-                           {{((project[0].money.total_expend*100)/(project[0].money.total_start++project[0].money.total_receive)) | number:2}}%
+                           {{(((project[0].money.total_expend-project[0].money.total_out)*100)/(project[0].money.total_start+project[0].money.total_receive)) | number:2}}%
                          </p>
                          <p class="text-primary" 
                            ng-hide="project[0].money.total_expend!=0">
-                           {{((project[0].money.total_expend*100)/(project[0].money.total_start+project[0].money.total_receive)) | number:2}}%
+                           {{(((project[0].money.total_expend-project[0].money.total_out)*100)/(project[0].money.total_start+project[0].money.total_receive)) | number:2}}%
                          </p>
                     <!--<div class="huge">12</div>-->
                     </div>

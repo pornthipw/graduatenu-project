@@ -180,6 +180,26 @@
         <form class="form-horizontal">
           <div class="form-group">
             <label class="control-label col-sm-2"
+              for="inputName">ระยะเวลาดำเนินโครงการ: </label>
+            <div class="col-sm-10">
+              <input type="text" ng-model="subproject.date_plan" 
+              class="form-control" 
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-2"
+              for="inputName">ถึงวันที่: </label>
+            <div class="col-sm-10">
+              <input type="text" ng-model="subproject.end_date_plan"
+              class="form-control"
+              data-date-format="dd/mm/yyyy" bs-datepicker>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="control-label col-sm-2"
               for="inputName">วัตถุประสงค์ของโครงการ: </label>
             <div class="col-sm-10">
               <textarea class="form-control"
@@ -187,6 +207,7 @@
                 ng-model="subproject.objectiveinfo"></textarea>
             </div>
           </div>
+
           <div class="form-group">
             <label class="control-label col-sm-2"
               for="inputName">เป้าหมายของโครงการ: </label>

@@ -1,23 +1,17 @@
 <div class="row">
-  <div class="col-lg-12" ng-show="messageAlert">
-    <div class="alert">
-      <button type="button" class="close" data-dismiss="alert">×</button>
-      <strong>Warning!</strong>  {{messageAlert}}
-  
-    </div>
-  </div>
-</div>
-<div class="row">
   <div class="col-lg-12">
     <h1 class="page-header">Project Form</h1>
   </div>
  <!-- /.col-lg-12 -->
 </div>
+
+<div class="row" ng-show="user.user&&user.user.role[0]=='plan'||user.user.role[1]=='plan' || user.user.role[0]=='academic'||user.user.role[0]=='research'||user.user.role[0]=='press'||user.user.role[0]=='direct'">
 <!--
-<div class="row" ng-show="user.user&&user.user.role[0]=='plan'||user.user.role[1]=='plan' || user.user.role[0]=='academic'||user.user.role[0]=='research'||user.user.role[0]=='press'">
+<div class="row" ng-show="user.user">
 -->
-<!--<div class="row-fluid" ng-show="user.user">-->
+<!--
 <div class="row">
+-->
   <div class="col-lg-12">
     <div class="alert alert-warning">
       <div class="row">
@@ -64,7 +58,7 @@
 <br>
 
 
-<div class="row">
+<div class="row" ng-show="user.user&&user.user.role[0]=='plan'||user.user.role[1]=='plan' || user.user.role[0]=='academic'||user.user.role[0]=='research'||user.user.role[0]=='press'||user.user.role[0]=='direct'">
   <div class="col-lg-12">
     <div class="row">
       <div class="col-xs-3">
@@ -82,7 +76,7 @@
   </div>
 </div>
 
-<div class="panel panel-default">
+<div class="panel panel-default" ng-show="user.user&&user.user.role[0]=='plan'||user.user.role[1]=='plan' || user.user.role[0]=='academic'||user.user.role[0]=='research'||user.user.role[0]=='press'||user.user.role[0]=='direct'">
   <div class="panel-heading">
     บันทึกผลการดำเนินงานโครงการ/กิจกรรม 
   </div>
@@ -149,8 +143,9 @@
                class="form-control" 
                ng-model="project.psub">
                <option ng-selected="project.psub=='เดี่ยว'">โครงการเดี่ยว</option>
-               <option ng-selected="project.psub=='กลุ่ม'">กิจกรรมย่อย</option>
-               <option ng-selected="project.psub=='ระยะ'">หลายระยะ</option>
+               <option ng-selected="project.psub=='กลุ่ม'">กลุ่ม</option>
+               <option ng-selected="project.psub=='กิจกรรมย่อย'">กิจกรรมย่อย</option>
+               <option ng-selected="project.psub=='หลายระยะ'">หลายระยะ</option>
              </select>
              <span ng-show="project.psub == 'กลุ่ม'">
                <div class="control-group">
@@ -160,6 +155,19 @@
              </span>
            </div>
          </div>
+         <div class="form-group">
+           <label for="inputName" class="col-sm-2 control-label">ลักษณะโครงการ</label>
+           <div class="col-sm-10">
+             <select id="inputName"
+               class="form-control"
+               ng-model="project.psetup" >
+               <option ng-selected="project.psetup=='ประจำ'">ประจำ</option>
+               <option ng-selected="project.psutup=='โครงการต่อเนื่องปีที่แล้ว'">โครงการต่อเนื่องปีที่แล้ว'</option>
+               <option ng-selected="project.psutup=='โครงการใหม่'">โครงการใหม่</option>
+             </select>
+           </div>
+         </div>
+
 
          <div class="form-group">
            <label for="inputFund" class="col-sm-2 control-label">ชื่อกองทุน</label>
@@ -336,7 +344,7 @@
 </div>
 
 <span ng-show="project.ptypeinfo == 'กรอกข้อมูลพื้นฐาน'">
-<div class="panel panel-default">
+<div class="panel panel-default" >
   <div class="panel-heading">
     <div class="row">
       <div class="col-xs-6">
@@ -386,7 +394,7 @@
 </span>
 
 <span ng-show="project.ptypeinfo == 'กรอกข้อมูลพื้นฐาน'">
-  <div class="panel panel-default">
+<div class="panel panel-default">
     <div class="panel-heading">
       <div class="row">
         <div class="col-xs-6">
@@ -681,8 +689,18 @@
     </div>
   </span> 
 </span> 
+<div class="row">
+  <div class="col-lg-12" ng-show="messageAlert">
+    <div class="alert alert-success" role="alert">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <strong>Warning!</strong>  {{messageAlert}}
 
-<div class="panel panel-default">
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-default" ng-show="user.user&&user.user.role[0]=='plan'||user.user.role[1]=='plan' || user.user.role[0]=='academic'||user.user.role[0]=='research'||user.user.role[0]=='press'||user.user.role[0]=='direct'">
   <div class="panel-footer">
     <button type="button" class="btn btn-danger "
           ng-click="del()" ng-show="project">
@@ -690,8 +708,12 @@
           ลบข้อมูลโครงการ
     </button>
     <button type = "button"
-          class="btn btn-primary" type="submit" ng-click="save()">
+          class="btn btn-primary" type="submit" ng-click="save_form()">
           <i class="icon-ok"></i> บันทึกข้อมูล
+    </button>
+    <button type = "button"
+          class="btn btn-primary" type="submit" ng-click="save()">
+          <i class="icon-ok"></i> บันทึกข้อมูลและกลับไปหน้าแสดงข้อมูลโครงการ
     </button>
   </div>
 </div>

@@ -6,6 +6,7 @@
 
 body {
     background-color: #f8f8f8;
+    
 }
 
 #wrapper {
@@ -305,6 +306,9 @@ table.dataTable thead .sorting:after {
 
 .medi {
     font-size: 20px;
+}
+.sms {
+    font-size: 11px;
 }
 
 .panel-green {

@@ -4,15 +4,14 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li ><a href="#projects/{{year}}">สรุปสถานภาพโครงการภาพรวม</a>
-        <li ><a href="#projects/warning/{{year}}">ติดตามความก้าวหน้า</a>
-</li>
+        <li ><a href="#projects/{{year}}">สรุปสถานภาพโครงการภาพรวม</a></li>
         <li class="dropdown active">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> สรุปรายงานผลดำเนินการ <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> สรุปการดำเนินงานในแผนปฏิบัติการ <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li class="active"><a href="#/projects/{{year}}/status">จำแนกตามกองทุน</a></li>
             <li><a href="#/projects/{{year}}/dept">จำแนกตามหน่วยงานที่รับผิดชอบ</a></li>
-            <li><a href="#/projects/period/{{year}}">จำแนกตามเวลา</a></li>
+            <li><a href="#/projects/budget/{{year}}">สรุปการใช้เงินของแต่ละกองทุน</a></li>
+
           </ul>
         </li>
       </ul>
@@ -36,18 +35,18 @@
 
 
 <ul class="nav nav-tabs">
-  <li><a href="#home" data-toggle="tab">โครงการ</a></li>
-  <li><a href="#profile" data-toggle="tab">สถานภาพของโครงการ</a></li>
-  <li><a href="#settings" data-toggle="tab">โครงการที่ดำเนินการแล้ว</a></li>
-  <li><a href="#messages" data-toggle="tab">โครงการที่กำลังดำเนินการ</a></li>
-  <li><a href="#no" data-toggle="tab">โครงการที่ไม่ได้ดำเนินการ</a></li>
+  <li class="sms"><a href="#home" data-toggle="tab">สรุปการใช้เงินและสถานะดำเนินการของโครงการ</a></li>
+  <li class="sms"><a href="#profile" data-toggle="tab">สรุปสถานภาพของโครงการ</a></li>
+  <li class="sms"><a href="#settings" data-toggle="tab">สรุปโครงการที่ดำเนินการแล้ว</a></li>
+  <li class="sms"><a href="#messages" data-toggle="tab">สรุปโครงการที่กำลังดำเนินการ</a></li>
+  <li class="sms"><a href="#no" data-toggle="tab">สรุปโครงการที่ไม่ได้ดำเนินการ</a></li>
 </ul>
 <div class="tab-content">
 <!--tab1-->
 <div class="tab-pane active" id="home">
   <div class="row">
     <div>
-      <table class="table">
+      <table class="table sms">
         <thead>
           <tr>
             <th colspan="6">จำแนกตามกองทุน</th>
@@ -67,7 +66,8 @@
             </td>
           </tr>
         </thead>
-        <tbody ng-repeat="p in result | filter:result.search | orderBy:'orderProp'" ng-hide="p.docID" >
+        <tbody ng-repeat="p in result | filter:result.search | orderBy:'orderProp'" 
+             ng-show="p.owner=='A'||p.owner=='B'||p.owner=='C'||p.owner=='D'||p.owner=='E'||p.owner=='Z'" >
           <tr class="success">
             <td >
               <span ng-show="p.owner=='A'">กองทุนทั่วไป</span> 
@@ -146,7 +146,7 @@
                     <div class="col-lg-1">
                       <p class="text-danger" 
                         ng-hide="project.sum_expend==0">
-                        {{((project.sum_expend*100)/project.start_balance) | number:2}}
+                        {{(((project.sum_expend-project.sum_out)*100)/project.start_balance) | number:2}}
                       </p>
                       <p class="text-primary" 
                         ng-hide="project.sum_expend!=0">

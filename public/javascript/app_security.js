@@ -385,6 +385,7 @@ function getMoney(GradDB, Project, projectId, cb) {
        var total_receive = 0;
        var total_out = 0;
        var total_in = 0;
+       var total_kang = 0;
        var dict ={};
        if(f_list.length > 0) {
          var finance = f_list[0];
@@ -394,7 +395,7 @@ function getMoney(GradDB, Project, projectId, cb) {
          });
          GradDB.query({'table':'grad_finance_record','where':where_s}, function(record_list) {
            angular.forEach(record_list, function(record,key) {
-             if (record.mode == "O"||record.mode == "E"||record.mode == "U" ) {
+             if (record.mode == "O"||record.mode == "E"||record.mode == "U" ||record.mode == "A") {
                total_expend+=record.amount;
              } else{
                if (record.mode == "W") {
@@ -412,7 +413,7 @@ function getMoney(GradDB, Project, projectId, cb) {
                }
             }
            );
-           cb(finance.amount, total_wait, total_expend, total_receive, total_out, total_in);
+           cb(finance.amount, total_wait, total_expend, total_receive, total_out, total_in, total_kang);
          }); 
        } 
      });
@@ -500,6 +501,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
               'total_receive':0,
               'total_out':0,
               'total_in':0,
+              'total_kang':0,
               'fund':{}
             };
           }      
@@ -518,7 +520,7 @@ function ProjectListWarningByYearController($scope, GradDB,$routeParams, Project
 
           if(!(project.year in dict_sum)) {
             dict_sum[project.year]={'start':0,
-            'wait':0,'receive':0,'expend':0,'balance':0,'out':0,'in':0};
+            'wait':0,'receive':0,'expend':0,'balance':0,'out':0,'in':0, 'kang':0};
             //dict_sum.push(project.year);
           }
           owner_dict[project.owner]['fund'][project.fund].push(project);
@@ -898,6 +900,7 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
             'total_receive':0,
             'total_out':0,
             'total_in':0,
+            'total_kang':0,
             'fund':{},
             'listproject':[]
             };
@@ -912,30 +915,32 @@ function ProjectListByYearController($scope, GradDB,$routeParams, Project,User, 
 
       if(!(project.year in dict_sum)) {
         dict_sum[project.year]={'start':0,
-           'wait':0,'receive':0,'expend':0,'balance':0,'out':0,'in':0,
+           'wait':0,'receive':0,'expend':0,'balance':0,'out':0,'in':0,'kang':0
            'status_working':0,'status_finish':0,'status_no':0,'status_cancle':0};
         //dict_sum.push(project.year);
 
       }
       owner_dict[project.owner]['fund'][project.fund].push(project);
       // console.log(owner_dict);
-      getMoney(GradDB, Project, project._id, function(m, a, b, c, o,i) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o,i ,k) {
         owner_dict[project.owner]['total_start']+=m;      
         owner_dict[project.owner]['total_expend']+=b;      
         owner_dict[project.owner]['total_wait']+=a;      
         owner_dict[project.owner]['total_receive']+=c;      
         owner_dict[project.owner]['total_out']+=o;      
         owner_dict[project.owner]['total_in']+=i;      
+        owner_dict[project.owner]['total_kang']+=k;      
         dict_sum[project.year]['start']+=m;
         dict_sum[project.year]['wait']+=a;
         dict_sum[project.year]['receive']+=c;
         dict_sum[project.year]['out']+=o;
         dict_sum[project.year]['in']+=i;
+        dict_sum[project.year]['kang']+=k;
         dict_sum[project.year]['expend']+=b;
-        dict_sum[project.year]['balance']+=m+c-b;
+        dict_sum[project.year]['balance']+=m+c-b-k;
 
 
-        project.start_balance = m+c-b;
+        project.start_balance = m+c-b-k;
         project.sum_expend = b;
         project.sum_out = o;
         project.sum_in = i;
@@ -2132,6 +2137,7 @@ function ProjectFinanceViewController($scope, Sendmail, User,Project, $routePara
 
     }
   });
+    /*
     var dict = {};
       if(!(project.name in dict)) {
         dict[project.name] = {
@@ -2140,23 +2146,25 @@ function ProjectFinanceViewController($scope, Sendmail, User,Project, $routePara
             'total_wait':0,
             'total_receive':0,
             'total_out':0,
-            'total_in':0
+            'total_in':0,
+            'total_kang':0
             };
       }      
-      getMoney(GradDB, Project, project._id, function(m, a, b, c, o, i) {
+      getMoney(GradDB, Project, project._id, function(m, a, b, c, o, i,k) {
         dict[project.name]['total_start']+=m;      
         dict[project.name]['total_expend']+=b;      
         dict[project.name]['total_wait']+=a;      
         dict[project.name]['total_receive']+=c;      
         dict[project.name]['total_out']+=o;      
         dict[project.name]['total_in']+=i;      
+        dict[project.name]['total_kang']+=k;      
 
       });
-    
+    */ 
       var result = [];
     
       angular.forEach(dict, function(value, key) {
-         result.push({'name':key, 'money':value});
+         result.push({'name':key, 'money1':value});
       });
       $scope.project = result;
       console.log($scope.project);
@@ -2307,6 +2315,7 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
            var total_receive = 0;
            var total_out = 0;
            var total_in = 0;
+           var total_kang = 0;
            var dict ={};
            var balance_start = project_obj.amount;
            var thai_year = parseInt(project_obj.year)+543;
@@ -2340,7 +2349,7 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
                    dict[project_obj.id]['record'][key] = {
                      'balance_start':balance_start
                      ,'total_receive':0,'total_out':0,'total_in':0
-                     ,'total_expend':0,'total_wait':0};
+                     ,'total_expend':0,'total_wait':0, 'total_kang':0};
                  }
 
                  if (record.mode == "I") {
