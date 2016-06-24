@@ -6,7 +6,12 @@
 
  License: www.highcharts.com/license
 */
-(function(f){typeof module==="object"&&module.exports?module.exports=f:f(Highcharts)})(function(f){var t=f.win,k=t.document,C=f.Chart,v=f.addEvent,D=f.removeEvent,E=f.fireEvent,s=f.createElement,u=f.discardElement,x=f.css,l=f.merge,q=f.each,r=f.extend,F=f.splat,G=Math.max,H=f.isTouchDevice,I=f.Renderer.prototype.symbols,A=f.getOptions(),B;r(A.lang,{printChart:"Print chart",downloadPNG:"Download PNG image",downloadJPEG:"Download JPEG image",downloadPDF:"Download PDF document",downloadSVG:"Download SVG vector image",
+(function(f){
+  if (typeof(module) != 'undefined'){
+    typeof module==="object"&&module.exports?module.exports=f:f(Highcharts)
+  }
+ })
+(function(f){var t=f.win,k=t.document,C=f.Chart,v=f.addEvent,D=f.removeEvent,E=f.fireEvent,s=f.createElement,u=f.discardElement,x=f.css,l=f.merge,q=f.each,r=f.extend,F=f.splat,G=Math.max,H=f.isTouchDevice,I=f.Renderer.prototype.symbols,A=f.getOptions(),B;r(A.lang,{printChart:"Print chart",downloadPNG:"Download PNG image",downloadJPEG:"Download JPEG image",downloadPDF:"Download PDF document",downloadSVG:"Download SVG vector image",
 contextButtonTitle:"Chart context menu"});A.navigation={menuStyle:{border:"1px solid #A0A0A0",background:"#FFFFFF",padding:"5px 0"},menuItemStyle:{padding:"0 10px",background:"none",color:"#303030",fontSize:H?"14px":"11px"},menuItemHoverStyle:{background:"#4572A5",color:"#FFFFFF"},buttonOptions:{symbolFill:"#E0E0E0",symbolSize:14,symbolStroke:"#666",symbolStrokeWidth:3,symbolX:12.5,symbolY:10.5,align:"right",buttonSpacing:3,height:22,theme:{fill:"white",stroke:"none"},verticalAlign:"top",width:24}};
 A.exporting={type:"image/png",url:"http://export.highcharts.com/",printMaxWidth:780,buttons:{contextButton:{menuClassName:"highcharts-contextmenu",symbol:"menu",_titleKey:"contextButtonTitle",menuItems:[{textKey:"printChart",onclick:function(){this.print()}},{separator:!0},{textKey:"downloadPNG",onclick:function(){this.exportChart()}},{textKey:"downloadJPEG",onclick:function(){this.exportChart({type:"image/jpeg"})}},{textKey:"downloadPDF",onclick:function(){this.exportChart({type:"application/pdf"})}},
 {textKey:"downloadSVG",onclick:function(){this.exportChart({type:"image/svg+xml"})}}]}}};f.post=function(a,b,e){var c,a=s("form",l({method:"post",action:a,enctype:"multipart/form-data"},e),{display:"none"},k.body);for(c in b)s("input",{type:"hidden",name:c,value:b[c]},null,a);a.submit();u(a)};r(C.prototype,{sanitizeSVG:function(a){return a.replace(/zIndex="[^"]+"/g,"").replace(/isShadow="[^"]+"/g,"").replace(/symbolName="[^"]+"/g,"").replace(/jQuery[0-9]+="[^"]+"/g,"").replace(/url\([^#]+#/g,"url(#").replace(/<svg /,

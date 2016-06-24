@@ -6,7 +6,12 @@
 
  License: www.highcharts.com/license
 */
-(function(g){typeof module==="object"&&module.exports?module.exports=g:g(Highcharts)})(function(g){var u=g.win.document,j=g.each,v=g.pick,r=g.inArray,s=g.isNumber,w=g.splat,k,p=function(b,a){this.init(b,a)};g.extend(p.prototype,{init:function(b,a){this.options=b;this.chartOptions=a;this.columns=b.columns||this.rowsToColumns(b.rows)||[];this.firstRowAsNames=v(b.firstRowAsNames,!0);this.decimalRegex=b.decimalPoint&&RegExp("^(-?[0-9]+)"+b.decimalPoint+"([0-9]+)$");this.rawColumns=[];this.columns.length?
+(function(g){
+   if (typeof(module) != 'undefined'){
+     typeof module==="object"&&module.exports?module.exports=g:g(Highcharts)
+   }
+})
+(function(g){var u=g.win.document,j=g.each,v=g.pick,r=g.inArray,s=g.isNumber,w=g.splat,k,p=function(b,a){this.init(b,a)};g.extend(p.prototype,{init:function(b,a){this.options=b;this.chartOptions=a;this.columns=b.columns||this.rowsToColumns(b.rows)||[];this.firstRowAsNames=v(b.firstRowAsNames,!0);this.decimalRegex=b.decimalPoint&&RegExp("^(-?[0-9]+)"+b.decimalPoint+"([0-9]+)$");this.rawColumns=[];this.columns.length?
 this.dataFound():(this.parseCSV(),this.parseTable(),this.parseGoogleSpreadsheet())},getColumnDistribution:function(){var b=this.chartOptions,a=this.options,e=[],f=function(b){return(g.seriesTypes[b||"line"].prototype.pointArrayMap||[0]).length},d=b&&b.chart&&b.chart.type,c=[],h=[],q=0,i;j(b&&b.series||[],function(b){c.push(f(b.type||d))});j(a&&a.seriesMapping||[],function(b){e.push(b.x||0)});e.length===0&&e.push(0);j(a&&a.seriesMapping||[],function(a){var e=new k,o,n=c[q]||f(d),m=g.seriesTypes[((b&&
 b.series||[])[q]||{}).type||d||"line"].prototype.pointArrayMap||["y"];e.addColumnReader(a.x,"x");for(o in a)a.hasOwnProperty(o)&&o!=="x"&&e.addColumnReader(a[o],o);for(i=0;i<n;i++)e.hasReader(m[i])||e.addColumnReader(void 0,m[i]);h.push(e);q++});a=g.seriesTypes[d||"line"].prototype.pointArrayMap;a===void 0&&(a=["y"]);this.valueCount={global:f(d),xColumns:e,individual:c,seriesBuilders:h,globalPointArrayMap:a}},dataFound:function(){if(this.options.switchRowsAndColumns)this.columns=this.rowsToColumns(this.columns);
 this.getColumnDistribution();this.parseTypes();this.parsed()!==!1&&this.complete()},parseCSV:function(){var b=this,a=this.options,e=a.csv,f=this.columns,d=a.startRow||0,c=a.endRow||Number.MAX_VALUE,h=a.startColumn||0,q=a.endColumn||Number.MAX_VALUE,i,g,t=0;e&&(g=e.replace(/\r\n/g,"\n").replace(/\r/g,"\n").split(a.lineDelimiter||"\n"),i=a.itemDelimiter||(e.indexOf("\t")!==-1?"\t":","),j(g,function(a,e){var g=b.trim(a),x=g.indexOf("#")===0;e>=d&&e<=c&&!x&&g!==""&&(g=a.split(i),j(g,function(b,a){a>=

@@ -61,7 +61,6 @@ function ProjectFinanceListController($scope, $routeParams, Project, GradDB, Use
      var total_receive = 0;
      var total_out = 0;
      var total_in = 0;
-     var total_kang = 0;
      var dict ={};
      if (finance.length > 0) {
        angular.forEach(finance, function(entry) { 
@@ -78,7 +77,6 @@ function ProjectFinanceListController($scope, $routeParams, Project, GradDB, Use
              'sum_wait':0,
              'sum_out':0,
              'sum_in':0,
-             'sum_kang':0,
              'start_balance':balance_start,
              'record':[],
              'finance':[]};
@@ -109,7 +107,7 @@ function ProjectFinanceListController($scope, $routeParams, Project, GradDB, Use
                if(!(dict[entry.id]['record'][key] in dict)){
                  dict[entry.id]['record'][key] = {'balance_start':balance_start
                  ,'total_receive':0,'total_out':0,'total_in':0
-                 ,'total_expend':0,'total_wait':0,'total_kang':0};
+                 ,'total_expend':0,'total_wait':0};
                }
                if (record.mode == "I") {
                  total_out+=record.amount;
@@ -236,7 +234,6 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
            var total_receive = 0;
            var total_out = 0;
            var total_in = 0;
-           var total_kang = 0;
            var dict ={};
            var balance_start = project_obj.amount;
            var thai_year = parseInt(project_obj.year)+543;
@@ -249,7 +246,6 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
                'sum_wait':0,
                'sum_out':0,
                'sum_in':0,
-               'sum_kang':0,
                'start_balance':balance_start,
                'sum_start_balance':0,
                'name':project_obj.name,
@@ -271,7 +267,7 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
                    dict[project_obj.id]['record'][key] = {
                      'balance_start':balance_start
                      ,'total_receive':0,'total_out':0,'total_in':0
-                     ,'total_expend':0,'total_wait':0,'total_kang':0};
+                     ,'total_expend':0,'total_wait':0};
                  }
 
                  if (record.mode == "I") {
@@ -280,13 +276,13 @@ function CreateProjectFinanceController($scope, Project,$routeParams, GradDB, Us
                  if (record.mode == "O") {
                    total_out+=record.amount;
                  }
-                 if (record.mode == "O"||record.mode == "E"||record.mode == "U" ||record.mode == "A") {
+                 if (record.mode == "O"||record.mode == "E"||record.mode == "U" ) {
                    //balance_start-=record.amount;
                    total_expend+=record.amount;
                    dict[project_obj.id]['record'][key]['total_expend']+=record.amount;
                    dict[project_obj.id]['sum_expend']+=record.amount;
                  }else{
-                   if (record.mode == "P") {
+                   if (record.mode == "W") {
                      total_wait+=record.amount;
                      dict[project_obj.id]['sum_wait']+=record.amount;
                      dict[project_obj.id]['record'][key]['total_wait']+=record.amount;

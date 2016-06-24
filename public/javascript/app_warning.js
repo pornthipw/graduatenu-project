@@ -86,7 +86,6 @@ function ProjectListWarningByYearController($scope,Sendmail,GradDB,$routeParams,
               'total_receive':0,
               'total_out':0,
               'total_in':0,
-              'total_kang':0,
               'fund':{}
             };
           }      
